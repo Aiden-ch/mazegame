@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class mazegame {
+public class Mazegame {
   
   private bool w = false;
   private bool a = false;
