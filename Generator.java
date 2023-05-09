@@ -1,105 +1,141 @@
 import java.util.*;
 
-char[][] start = {{'#', '#', '#', '#', '#', '#', '#', '#', '#'}, 
-                  {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                  {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                  {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                  {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                  {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                  {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                  {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                  {'#', '#', '#', '#', '#', '#', '#', '#', '#'}, 
-
-char[][] boss = {{'#', '#', '#', '#', '#', '#', '#', '#', '#'}, 
-                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                 {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                 {'#', ' ', ' ', ' ', '$', ' ', ' ', ' ', '#'}, 
-                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                 {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                 {'#', '#', '#', '#', '#', '#', '#', '#', '#'}, 
-
-char[][] end = {{'#', '#', '#', '#', '#', '#', '#', '#', '#'}, 
-                {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                {'#', ' ', ' ', ' ', 'e', ' ', ' ', ' ', '#'}, 
-                {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                {'#', '#', '#', '#', '#', '#', '#', '#', '#'}, 
-char[][] miniboss = {{'#', '#', '#', '#', '#', '#'}, 
-                     {'#', ' ', ' ', ' ', ' ', '#'}, 
-                     {'#', ' ', ' ', ' ', ' ', '#'}, 
-                     {'#', ' ', ' ', ' ', ' ', '#'}, 
-                     {'#', ' ', ' ', ' ', ' ', '#'}, 
-                     {'#', ' ', ' ', ' ', ' ', '#'}, 
-                     {'#', ' ', ' ', ' ', ' ', '#'}, 
-                     {'#', ' ', ' ', ' ', ' ', '#'}, 
-                     {'#', '#', '#', '#', '#', '#'}, 
-/*
-# # # # # # # # #
-#               #
-#   #       #   #
-#               #
-#       $       #
-#               #
-#   #       #   #
-#               #
-# # # # # # # # #
-
-op_r = maze_section('# # #', '#    ', '# # #', 'r') #right open
-op_l = maze_section('# # #', '    #', '# # #', 'l') #left open
-op_u = maze_section('#   #', '#   #', '# # #', 'u') #up open
-op_d = maze_section('# # #', '#   #', '#   #', 'd') #down open
-four_cr = maze_section('#   #', '     ', '#   #', 'udlr') #all open
-thr_cr_d = maze_section('# # #', '     ', '#   #', 'dlr') #up closed
-thr_cr_r = maze_section('#   #', '#    ', '#   #', 'udr') #left closed
-thr_cr_u = maze_section('#   #', '     ', '# # #', 'ulr') #down closed
-thr_cr_l = maze_section('#   #', '    #', '#   #', 'udl') #right closed
-cor_d_r = maze_section('# # #', '#    ', '#   #', 'dr') #down, right open
-cor_d_l = maze_section('# # #', '    #', '#   #', 'dl') #down, left open
-cor_u_r = maze_section('#   #', '#    ', '# # #', 'dl') #up, right open
-cor_u_l = maze_section('#   #', '    #', '# # #', 'dl') #up, left open
-str_l_r = maze_section('# # #', '     ', '# # #', 'dl') #left, right open
-str_u_d = maze_section('#   #', '#   #', '#   #', 'dl') #up, down open
-ch_op_r = maze_section('# # #', '# $  ', '# # #', 'r') #right open, chest
-ch_op_l = maze_section('# # #', '  $ #', '# # #', 'l') #left open, chest
-ch_op_u = maze_section('#   #', '# $ #', '# # #', 'u') #up open, chest
-ch_op_d = maze_section('# # #', '# $ #', '#   #', 'd') #down open, chest
-four_op = maze_section('     ', '     ', '     ', 'udlr') #all, all open
-
-#special
-ch_four_op = maze_section('     ', '  $  ', '     ', 'udlr') #all, all open, chest
-e_four_op = maze_section('     ', '  e  ', '     ', 'udlr') #all, all open, end
-
-*/
-
-
 
 public class Generator {
-  char[][] maze = new char[99][99];
-  
-  public static void fill(int x, int y, char[][] pattern) {
-    for (int i = x; i < x + pattern.length; i++) {
-      for (int o = y; o < y + pattern[0].length; o++) {
-        maze[i][o] = pattern[i][o];
-      }
+    private static char[][] maze = new char[99][99];
+    private static boolean[][] visited = new boolean[99][99];;
+
+private static char[][] start = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'}, 
+                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                                 {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
+                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                                 {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                                 {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
+                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                                 {'#', '#', '#', '#', ' ', '#', '#', '#', '#'}};
+
+private static char[][] boss = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'}, 
+                                {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                                {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
+                                {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                                {' ', ' ', ' ', ' ', '$', ' ', ' ', ' ', ' '}, 
+                                {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                                {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
+                                {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                                {'#', '#', '#', '#', ' ', '#', '#', '#', '#'}};
+
+private static char[][] end = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'}, 
+                               {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                               {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
+                               {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                               {' ', ' ', ' ', ' ', 'e', ' ', ' ', ' ', '#'}, 
+                               {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                               {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
+                               {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
+                               {'#', '#', '#', '#', '#', '#', '#', '#', '#'}};
+                               
+    public static int min(int a, int b) {
+        if (a < b) return a;
+        return b;
     }
-  }
-  
-  public static char[][] generateMaze() {
-    fill(0, 0
-    fill(45, 45, start); // fill the start section
+    public static int max(int a, int b) {
+        if (a > b) return a;
+        return b;
+    }
     
-    // fill boss rooms
+    public static void fill(int x, int y, char[][] pattern) {
+        for (int i = x; i < x + pattern.length; i++) {
+            for (int o = y; o < y + pattern[0].length; o++) {
+                maze[o][i] = pattern[o - y][i - x];
+                if (pattern[o - y][i - x] != ' ') visited[o][i] = true;
+            }
+        }
+    }
     
+    public static void generateTunnels() {
+        Queue<Pair> bfs = new LinkedList<>();
+        bfs.add(new Pair(48, 48));
+        
+        while(bfs.size() > 0) {
+            Pair curPoint = bfs.poll();
+            maze[curPoint.getY()][curPoint.getX()] = ' ';
+            
+            if (!visited[min(97, curPoint.getY() + 1)][curPoint.getX()]) {
+                if (Math.random() < 0.65) bfs.add(new Pair(curPoint.getX(), curPoint.getY() + 1));
+                visited[curPoint.getY() + 1][curPoint.getX()] = true;
+            }
+            if (!visited[max(1, curPoint.getY() - 1)][curPoint.getX()]) {
+                if (Math.random() < 0.65) bfs.add(new Pair(curPoint.getX(), curPoint.getY() - 1));
+                visited[curPoint.getY() - 1][curPoint.getX()] = true;
+            }
+            if (!visited[curPoint.getY()][min(97, curPoint.getX() + 1)]) {
+                if (Math.random() < 0.65) bfs.add(new Pair(curPoint.getX() + 1, curPoint.getY()));
+                visited[curPoint.getY()][curPoint.getX() + 1] = true;
+            }
+            if (!visited[curPoint.getY()][max(1, curPoint.getX() - 1)]) {
+                if (Math.random() < 0.65) bfs.add(new Pair(curPoint.getX() - 1, curPoint.getY()));
+                visited[curPoint.getY()][curPoint.getX() - 1] = true;
+            }
+        }
+                                 
+        // check for continuity or something
+    }
+                     
+    public static void generateChests(Pair curPoint) {
+        if (visited[curPoint.getY()][curPoint.getX()]) return;
+        visited[curPoint.getY()][curPoint.getX()] = true;
+        
+        int count = 0;
+        if (maze[curPoint.getY() + 1][curPoint.getX()] == '#') count++;
+        if (maze[curPoint.getY() - 1][curPoint.getX()] == '#') count++;
+        if (maze[curPoint.getY()][curPoint.getX() + 1] == '#') count++;
+        if (maze[curPoint.getY()][curPoint.getX() - 1] == '#') count++;
+        
+        if (count == 3 && Math.random() < 0.3) maze[curPoint.getY()][curPoint.getX()] = '$';
+        
+        if (maze[curPoint.getY() + 1][curPoint.getX()] == ' ') generateChests(new Pair(curPoint.getX(), curPoint.getY() + 1));
+        if (maze[curPoint.getY() - 1][curPoint.getX()] == ' ') generateChests(new Pair(curPoint.getX(), curPoint.getY() - 1));
+        if (maze[curPoint.getY()][curPoint.getX() + 1] == ' ') generateChests(new Pair(curPoint.getX() + 1, curPoint.getY()));
+        if (maze[curPoint.getY()][curPoint.getX() - 1] == ' ') generateChests(new Pair(curPoint.getX() - 1, curPoint.getY()));
+    }
     
-    // somehow fill other portions(maybe drill tunnels using bfs)
+    public static char[][] generateMaze() {
+        for (int i = 0; i < 99; i++) {
+            for (int o = 0; o < 99; o++) {
+                maze[o][i] = '#';
+            }
+        }
+        
+        fill(0, 0, boss);
+        fill(0, 90, boss);
+        fill(90, 0, boss);
+        fill(90, 90, end);
+        fill(45, 45, start); // fill the start section + boss rooms
+        for (int i = 0; i < 99; i++) {
+          maze[i][0] = '#';
+          maze[0][i] = '#';
+          maze[i][98] = '#';
+          maze[98][i] = '#';
+        }
+        
+        generateTunnels(); // somehow fill other portions(maybe drill tunnels using bfs)
+        visited = new boolean[99][99];
+        
+        generateChests(new Pair(47, 47)); // do dfs and populate chests/open new passages???
+        
+        return maze;
+    }
     
-    
-    // do dfs and populate chests/open new passages???
-  }
-  
+    public static void main(String[] args) {
+        generateMaze();
+        
+        for (int i = 0; i < 99; i++) {
+            for (int o = 0; o < 99; o++) {
+                System.out.print(maze[o][i] + "");
+            }
+            System.out.println();
+        }
+    }
+
 }
