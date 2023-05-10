@@ -5,15 +5,13 @@ public class Generator {
     private static char[][] maze = new char[99][99];
     private static boolean[][] visited = new boolean[99][99];;
 
-private static char[][] start = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'}, 
-                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                                 {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                                 {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                                 {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                                 {'#', '#', '#', '#', ' ', '#', '#', '#', '#'}};
+private static char[][] start = {{' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+                                 {' ', '#', ' ', ' ', ' ', '#', ' '}, 
+                                 {' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+                                 {' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+                                 {' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+                                 {' ', '#', ' ', ' ', ' ', '#', ' '}, 
+                                 {' ', ' ', ' ', ' ', ' ', ' ', ' '}};
 
 private static char[][] boss = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'}, 
                                 {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
@@ -78,8 +76,20 @@ private static char[][] end = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'},
                 visited[curPoint.getY()][curPoint.getX() - 1] = true;
             }
         }
-                                 
-        // check for continuity or something
+    }
+    
+    public static int checkContinuity(Pair curPoint, int count) {
+        if (visited[curPoint.getY()][curPoint.getX()]) return count;
+        visited[curPoint.getY()][curPoint.getX()] = true;
+        
+        if (maze[curPoint.getY() + 1][curPoint.getX()] == 'e' || maze[curPoint.getY() + 1][curPoint.getX()] == '$') count++;
+        
+        if (maze[curPoint.getY() + 1][curPoint.getX()] != '#') generateChests(new Pair(curPoint.getX(), curPoint.getY() + 1));
+        if (maze[curPoint.getY() - 1][curPoint.getX()] != '#') generateChests(new Pair(curPoint.getX(), curPoint.getY() - 1));
+        if (maze[curPoint.getY()][curPoint.getX() + 1] != '#') generateChests(new Pair(curPoint.getX() + 1, curPoint.getY()));
+        if (maze[curPoint.getY()][curPoint.getX() - 1] != '#') generateChests(new Pair(curPoint.getX() - 1, curPoint.getY()));
+        
+        return count;
     }
                      
     public static void generateChests(Pair curPoint) {
@@ -92,7 +102,7 @@ private static char[][] end = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'},
         if (maze[curPoint.getY()][curPoint.getX() + 1] == '#') count++;
         if (maze[curPoint.getY()][curPoint.getX() - 1] == '#') count++;
         
-        if (count == 3 && Math.random() < 0.3) maze[curPoint.getY()][curPoint.getX()] = '$';
+        if (count == 3 && Math.random() < 0.15) maze[curPoint.getY()][curPoint.getX()] = '$';
         
         if (maze[curPoint.getY() + 1][curPoint.getX()] == ' ') generateChests(new Pair(curPoint.getX(), curPoint.getY() + 1));
         if (maze[curPoint.getY() - 1][curPoint.getX()] == ' ') generateChests(new Pair(curPoint.getX(), curPoint.getY() - 1));
@@ -111,7 +121,7 @@ private static char[][] end = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'},
         fill(0, 90, boss);
         fill(90, 0, boss);
         fill(90, 90, end);
-        fill(45, 45, start); // fill the start section + boss rooms
+        fill(46, 46, start); // fill the start section + boss rooms
         for (int i = 0; i < 99; i++) {
           maze[i][0] = '#';
           maze[0][i] = '#';
@@ -119,8 +129,10 @@ private static char[][] end = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'},
           maze[98][i] = '#';
         }
         
-        generateTunnels(); // somehow fill other portions(maybe drill tunnels using bfs)
-        visited = new boolean[99][99];
+        while (checkContinuity(new Pair(48, 48), 0) < 4) {
+            generateTunnels(); // somehow fill other portions(maybe drill tunnels using bfs)
+            visited = new boolean[99][99];
+        }
         
         generateChests(new Pair(47, 47)); // do dfs and populate chests/open new passages???
         
