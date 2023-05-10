@@ -22,16 +22,6 @@ public class Generator {
                                     {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
                                     {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
                                     {'#', '#', '#', '#', ' ', '#', '#', '#', '#'}};
-
-    private static char[][] end = {{'#', '#', '#', '#', ' ', '#', '#', '#', '#'}, 
-                                   {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                                   {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                                   {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                                   {' ', ' ', ' ', ' ', 'e', ' ', ' ', ' ', '#'}, 
-                                   {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                                   {'#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#'}, 
-                                   {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'}, 
-                                   {'#', '#', '#', '#', '#', '#', '#', '#', '#'}};
                                
     public static int min(int a, int b) {
         if (a < b) return a;
@@ -60,36 +50,47 @@ public class Generator {
             maze[curPoint.getY()][curPoint.getX()] = ' ';
             
             if (!visited[min(97, curPoint.getY() + 1)][curPoint.getX()]) {
-                if (Math.random() < 0.65 || maze[curPoint.getY() + 1][curPoint.getX()] == ' ') bfs.add(new Pair(curPoint.getX(), curPoint.getY() + 1));
+                if (Math.random() < 0.63 || maze[curPoint.getY() + 1][curPoint.getX()] == ' ') bfs.add(new Pair(curPoint.getX(), curPoint.getY() + 1));
                 visited[curPoint.getY() + 1][curPoint.getX()] = true;
             }
             if (!visited[max(1, curPoint.getY() - 1)][curPoint.getX()]) {
-                if (Math.random() < 0.65 || maze[curPoint.getY() - 1][curPoint.getX()] == ' ') bfs.add(new Pair(curPoint.getX(), curPoint.getY() - 1));
+                if (Math.random() < 0.63 || maze[curPoint.getY() - 1][curPoint.getX()] == ' ') bfs.add(new Pair(curPoint.getX(), curPoint.getY() - 1));
                 visited[curPoint.getY() - 1][curPoint.getX()] = true;
             }
             if (!visited[curPoint.getY()][min(97, curPoint.getX() + 1)]) {
-                if (Math.random() < 0.65 || maze[curPoint.getY()][curPoint.getX() + 1] == ' ') bfs.add(new Pair(curPoint.getX() + 1, curPoint.getY()));
+                if (Math.random() < 0.63 || maze[curPoint.getY()][curPoint.getX() + 1] == ' ') bfs.add(new Pair(curPoint.getX() + 1, curPoint.getY()));
                 visited[curPoint.getY()][curPoint.getX() + 1] = true;
             }
             if (!visited[curPoint.getY()][max(1, curPoint.getX() - 1)]) {
-                if (Math.random() < 0.65 || maze[curPoint.getY()][curPoint.getX() - 1] == ' ') bfs.add(new Pair(curPoint.getX() - 1, curPoint.getY()));
+                if (Math.random() < 0.6 || maze[curPoint.getY()][curPoint.getX() - 1] == ' ') bfs.add(new Pair(curPoint.getX() - 1, curPoint.getY()));
                 visited[curPoint.getY()][curPoint.getX() - 1] = true;
             }
         }
-    }
-    
-    public static int checkContinuity(Pair curPoint, int count) {
-        if (visited[curPoint.getY()][curPoint.getX()]) return count;
-        visited[curPoint.getY()][curPoint.getX()] = true;
         
-        if (maze[curPoint.getY()][curPoint.getX()] == 'e' || maze[curPoint.getY()][curPoint.getX()] == '$') count++;
-        
-        if (maze[curPoint.getY() + 1][curPoint.getX()] != '#') count = checkContinuity(new Pair(curPoint.getX(), curPoint.getY() + 1), count);
-        if (maze[curPoint.getY() - 1][curPoint.getX()] != '#') count = checkContinuity(new Pair(curPoint.getX(), curPoint.getY() - 1), count);
-        if (maze[curPoint.getY()][curPoint.getX() + 1] != '#') count = checkContinuity(new Pair(curPoint.getX() + 1, curPoint.getY()), count);
-        if (maze[curPoint.getY()][curPoint.getX() - 1] != '#') count = checkContinuity(new Pair(curPoint.getX() - 1, curPoint.getY()), count);
-        
-        return count;
+        int i = 9;
+        while (maze[i][4] == '#' && maze[4][i] == '#') {
+            maze[i][4] = ' ';
+            maze[4][i] = ' ';
+            i++;
+        }
+        i = 9;
+        while (maze[i][94] == '#' && maze[4][98 - i] == '#') {
+            maze[i][94] = ' ';
+            maze[4][98 - i] = ' ';
+            i++;
+        }
+        i = 9;
+        while (maze[98 - i][4] == '#' && maze[94][i] == '#') {
+            maze[98 - i][4] = ' ';
+            maze[94][i] = ' ';
+            i++;
+        }
+        i = 9;
+        while (maze[98 - i][94] == '#' && maze[94][98 - i] == '#') {
+            maze[98 - i][94] = ' ';
+            maze[94][98 - i] = ' ';
+            i++;
+        }
     }
                      
     public static void generateChests(Pair curPoint) {
@@ -116,44 +117,26 @@ public class Generator {
                 maze[o][i] = '#';
             }
         }
-        while (checkContinuity(new Pair(48, 48), 0) < 4) {
-//             System.out.println(checkContinuity(new Pair(48, 48), 0));
-            for (int i = 0; i < 99; i++) {
-                for (int o = 0; o < 99; o++) {
-                    maze[o][i] = '#';
-                }
-            }
 
-            fill(0, 0, boss);
-            fill(0, 90, boss);
-            fill(90, 0, boss);
-            fill(90, 90, end);
-            fill(46, 46, start); // fill the start section + boss rooms
-            for (int i = 0; i < 99; i++) {
-              maze[i][0] = '#';
-              maze[0][i] = '#';
-              maze[i][98] = '#';
-              maze[98][i] = '#';
-            }
-            generateTunnels(); // somehow fill other portions(maybe drill tunnels using bfs)
-            visited = new boolean[99][99];
+        fill(0, 0, boss);
+        fill(0, 90, boss);
+        fill(90, 0, boss);
+        fill(90, 90, boss);
+        maze[4 + (int)(Math.random() * 2) * 90][4 + (int)(Math.random() * 2) * 90] = 'e';
+        fill(46, 46, start); // fill the start section + boss rooms
+        for (int i = 0; i < 99; i++) {
+          maze[i][0] = '#';
+          maze[0][i] = '#';
+          maze[i][98] = '#';
+          maze[98][i] = '#';
         }
+        
+        generateTunnels(); // somehow fill other portions(maybe drill tunnels using bfs)
         
         visited = new boolean[99][99];
         generateChests(new Pair(47, 47)); // do dfs and populate chests/open new passages???
         
         return maze;
     }
-    
-//     public static void main(String[] args) {
-//         generateMaze();
-        
-//         for (int i = 0; i < 99; i++) {
-//             for (int o = 0; o < 99; o++) {
-//                 System.out.print(maze[o][i] + "");
-//             }
-//             System.out.println();
-//         }
-//     }
 
 }
