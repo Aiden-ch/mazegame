@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
+//player character
 public class Player {
 	//animation
 	Texture still;
@@ -17,6 +18,7 @@ public class Player {
 	int time = 0;
 	String last = "up";
 	
+	//movement
 	private Rectangle box;
 	
 	public Player() {
@@ -39,9 +41,54 @@ public class Player {
 	public void move() {
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			   box.x -= 200 * Gdx.graphics.getDeltaTime();
+			   if(time > 10) {
+				   if(last.equals("up")) {
+					   if(prev == 1) {
+						   player = walkb2;
+						   prev = 2;
+					   } else {
+						   player = walkb1;
+						   prev = 1;
+					   }
+				   } else if(last.equals("down")) {
+					   if(prev == 1) {
+						   player = walkf2;
+						   prev = 2;
+					   } else {
+						   player = walkf1;
+						   prev = 1;
+					   }
+				   }
+				   time = 0;
+			   } else {
+				   time++;
+			   }
+			   
 		   }
 		   if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			   box.x += 200 * Gdx.graphics.getDeltaTime();
+			   if(time > 10) {
+				   if(last.equals("up")) {
+					   if(prev == 1) {
+						   player = walkb2;
+						   prev = 2;
+					   } else {
+						   player = walkb1;
+						   prev = 1;
+					   }
+				   } else if(last.equals("down")) {
+					   if(prev == 1) {
+						   player = walkf2;
+						   prev = 2;
+					   } else {
+						   player = walkf1;
+						   prev = 1;
+					   }
+				   }
+				   time = 0;
+			   } else {
+				   time++;
+			   }
 		   }
 		   
 		   if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
