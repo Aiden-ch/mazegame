@@ -82,12 +82,12 @@ public class Generator {
         if (visited[curPoint.getY()][curPoint.getX()]) return count;
         visited[curPoint.getY()][curPoint.getX()] = true;
         
-        if (maze[curPoint.getY() + 1][curPoint.getX()] == 'e' || maze[curPoint.getY() + 1][curPoint.getX()] == '$') count++;
+        if (maze[curPoint.getY()][curPoint.getX()] == 'e' || maze[curPoint.getY()][curPoint.getX()] == '$') count++;
         
-        if (maze[curPoint.getY() + 1][curPoint.getX()] != '#') generateChests(new Pair(curPoint.getX(), curPoint.getY() + 1));
-        if (maze[curPoint.getY() - 1][curPoint.getX()] != '#') generateChests(new Pair(curPoint.getX(), curPoint.getY() - 1));
-        if (maze[curPoint.getY()][curPoint.getX() + 1] != '#') generateChests(new Pair(curPoint.getX() + 1, curPoint.getY()));
-        if (maze[curPoint.getY()][curPoint.getX() - 1] != '#') generateChests(new Pair(curPoint.getX() - 1, curPoint.getY()));
+        if (maze[curPoint.getY() + 1][curPoint.getX()] != '#') count = checkContinuity(new Pair(curPoint.getX(), curPoint.getY() + 1), count);
+        if (maze[curPoint.getY() - 1][curPoint.getX()] != '#') count = checkContinuity(new Pair(curPoint.getX(), curPoint.getY() - 1), count);
+        if (maze[curPoint.getY()][curPoint.getX() + 1] != '#') count = checkContinuity(new Pair(curPoint.getX() + 1, curPoint.getY()), count);
+        if (maze[curPoint.getY()][curPoint.getX() - 1] != '#') count = checkContinuity(new Pair(curPoint.getX() - 1, curPoint.getY()), count);
         
         return count;
     }
@@ -111,7 +111,13 @@ public class Generator {
     }
     
     public static char[][] generateMaze() {
+        for (int i = 0; i < 99; i++) {
+            for (int o = 0; o < 99; o++) {
+                maze[o][i] = '#';
+            }
+        }
         while (checkContinuity(new Pair(48, 48), 0) < 4) {
+//             System.out.println(checkContinuity(new Pair(48, 48), 0));
             for (int i = 0; i < 99; i++) {
                 for (int o = 0; o < 99; o++) {
                     maze[o][i] = '#';
@@ -133,6 +139,7 @@ public class Generator {
             visited = new boolean[99][99];
         }
         
+        visited = new boolean[99][99];
         generateChests(new Pair(47, 47)); // do dfs and populate chests/open new passages???
         
         return maze;
