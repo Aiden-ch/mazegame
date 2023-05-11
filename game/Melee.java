@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
+//import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -15,12 +15,16 @@ public class Melee {
 	private Image melImg; 
 	
 	private float tick = 0.0f;
-	private float start;
-	
-	private float startAngle;
 	
 	public Melee() {
 		;
+	}
+	
+	public Melee(Image melImg, Texture txte, double speed, float radius, String nothing) {
+		this.txte = txte;
+		this.melImg = melImg;
+		this.speed = speed;
+		this.radius = radius;
 	}
 	
 	public Melee(Image melImg, Texture txte, double speed) {
@@ -29,14 +33,7 @@ public class Melee {
 		this.speed = speed;
 	}
 	
-	public Melee(Image melImg, Texture txte, double speed, float startAngle) {
-		this.txte = txte;
-		this.melImg = melImg;
-		this.speed = speed;
-		this.startAngle = startAngle;
-	}
-	
-	public Melee(double damage, float length, float radius, double speed, Image melImg, Texture txte, float startAngle) {
+	public Melee(double damage, float length, float radius, double speed, Image melImg, Texture txte) {
 		this.damage = damage;
 		
 		this.txte = txte;
@@ -45,8 +42,6 @@ public class Melee {
 		
 		this.length = length;
 		this.radius = radius;
-		
-		this.startAngle = startAngle;
 	}
 	
 	public float getLength() {
@@ -68,20 +63,16 @@ public class Melee {
 		return this.speed;
 	}
 	
-	public boolean swing(float time) {
+	public boolean swing() {
 		//rotate the thing
-		//setImage(projImage.setRotation());
-		if(tick < time-start) {
-			melImg.setRotation(startAngle-(float)(Math.atan2(Gdx.input.getY(), Gdx.input.getX())));
-			tick += speed;
+		if(tick <= speed) {
+			melImg.rotateBy(-(float)(180 / Math.PI * tick));
+			tick += radius/speed;
+			System.out.println(tick);
 			return true;
 		} else {
 			tick = 0;
 			return false;
 		}
-	}
-	
-	public void setStartAngle(float angle) {
-		this.startAngle = angle;
 	}
 }
