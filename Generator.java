@@ -121,7 +121,7 @@ public class Generator {
         fill(0, 0, boss);
         fill(0, 50, boss);
         fill(50, 0, boss);
-        fill(50, 90, boss);
+        fill(50, 50, boss);
         maze[4 + (int)(Math.random() * 2) * 50][4 + (int)(Math.random() * 2) * 50] = 'e';
         fill(26, 26, start); // fill the start section + boss rooms
         for (int i = 0; i < 59; i++) {
