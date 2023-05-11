@@ -10,8 +10,8 @@ public class Mazegame {
 //   private bool d = false;
   
   // map variables
-  private static int xPos = 49;
-  private static int yPos = 49;
+  private static int xPos = 29;
+  private static int yPos = 29;
   private static Scanner sc = new Scanner(System.in);
   
   // fight variables
@@ -141,9 +141,9 @@ public class Mazegame {
   public static void main(String[] args) {
     
     maze = Generator.generateMaze();
-    char[][] visibleMaze = new char[99][99];
-    for (int i = 0; i < 99; i++) { 
-      for (int o = 0; o < 99; o++) {
+    char[][] visibleMaze = new char[59][59];
+    for (int i = 0; i < 59; i++) { 
+      for (int o = 0; o < 59; o++) {
         visibleMaze[i][o] = '*';
       }
     }
@@ -161,7 +161,7 @@ public class Mazegame {
       for (int i = yPos - 4; i <= yPos + 4; i++) {
         for (int o = xPos - 4; o <= xPos + 4; o++) {
           if (i == yPos && o == xPos) System.out.print("@ ");
-          else if (i < 0 || i > 98 || o < 0 || o > 98) System.out.print("* ");
+          else if (i < 0 || i > 58 || o < 0 || o > 58) System.out.print("* ");
           else System.out.print(visibleMaze[i][o] + " ");
         }
         System.out.println();
