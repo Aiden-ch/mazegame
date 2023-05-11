@@ -3,6 +3,7 @@ import java.util.*;
 public class Mazegame {
   
   private static char[][] maze;
+  private static char[][] visibleMaze;
   
 //   private bool w = false;
 //   private bool a = false;
@@ -77,7 +78,8 @@ public class Mazegame {
     // display stuff
     
     
-    char c = sc.next().charAt(0);
+    String s = sc.next();
+    char c = s.charAt(s.length() - 1);
     switch (c) {
       case 'w':
         if (maze[yPos - 1][xPos] != '#') {
@@ -99,6 +101,15 @@ public class Mazegame {
           xPos++;
         }
         break;
+      case 'm':
+        for (int i = 0; i < 59; i++) {
+            for (int o = 0; o < 59; o++) {
+                System.out.print(visibleMaze[i][o] + " ");
+            }
+            System.out.println();
+        }
+        break;
+        
     }
   }
   
@@ -141,7 +152,14 @@ public class Mazegame {
   public static void main(String[] args) {
     
     maze = Generator.generateMaze();
-    char[][] visibleMaze = new char[59][59];
+    // for (int i = 0; i < 59; i++) {
+    //     for (int o = 0; o < 59; o++) {
+    //         System.out.print(maze[o][i] + " ");
+    //     }
+    //     System.out.println();
+    // }
+
+    visibleMaze = new char[59][59];
     for (int i = 0; i < 59; i++) { 
       for (int o = 0; o < 59; o++) {
         visibleMaze[i][o] = '*';
