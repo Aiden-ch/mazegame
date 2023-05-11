@@ -7,10 +7,8 @@ randomly generate a maze with enemies and an exit
 Enemies
 
 Premise
-Stuck in time loop
-Hall of egress inspiration
-Must defeat fears to proceed
-Time will be a very important part of game
+courier who fell in company's coffers
+must get out
 
 Gameplay loop:
 Maze traversal should provide neuron activation
