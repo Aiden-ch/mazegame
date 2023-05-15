@@ -14,6 +14,9 @@ public class Player {
 	private Rectangle box;
 	private double health;
 	private double speed = 1;
+	private float velX = 0;
+	private float velY = 0;
+	private float acceleration = 0.2;
 	private ArrayList<EffectHandler> effects = new ArrayList<EffectHandler>(); 
 	//^^^ for buffs and debuffs
 	
@@ -65,108 +68,108 @@ public class Player {
 		this.speed = speed;
 	}
 	
-	public void move() {
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-			   box.x -= 200 * speed * Gdx.graphics.getDeltaTime();
-			   if(time > 10) {
-				   if(last.equals("left")) {
-					   if(prev == 1) {
-						   player = walkl2;
-						   prev = 2;
-					   } else {
-						   player = walkl1;
-						   prev = 1;
-					   }
-				   } else {
-					   player = walkl1;
-					   last = "left";
-				   }
-				   time = 0;
-			   } else {
-				   time ++;
-			   }
+// 	public void move() {
+// 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+// 			   box.x -= 200 * speed * Gdx.graphics.getDeltaTime();
+// 			   if(time > 10) {
+// 				   if(last.equals("left")) {
+// 					   if(prev == 1) {
+// 						   player = walkl2;
+// 						   prev = 2;
+// 					   } else {
+// 						   player = walkl1;
+// 						   prev = 1;
+// 					   }
+// 				   } else {
+// 					   player = walkl1;
+// 					   last = "left";
+// 				   }
+// 				   time = 0;
+// 			   } else {
+// 				   time ++;
+// 			   }
 			   
-		   }
-		   if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-			   box.x += 200 * speed * Gdx.graphics.getDeltaTime();
-			   if(time > 10) {
-				   if(last.equals("right")) {
-					   if(prev == 1) {
-						   player = walkr2;
-						   prev = 2;
-					   } else {
-						   player = walkr1;
-						   prev = 1;
-					   }
-				   } else {
-					   player = walkr1;
-					   last = "right";
-				   }
-				   time = 0;
-			   } else {
-				   time ++;
-			   }
-		   }
+// 		   }
+// 		   if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
+// 			   box.x += 200 * speed * Gdx.graphics.getDeltaTime();
+// 			   if(time > 10) {
+// 				   if(last.equals("right")) {
+// 					   if(prev == 1) {
+// 						   player = walkr2;
+// 						   prev = 2;
+// 					   } else {
+// 						   player = walkr1;
+// 						   prev = 1;
+// 					   }
+// 				   } else {
+// 					   player = walkr1;
+// 					   last = "right";
+// 				   }
+// 				   time = 0;
+// 			   } else {
+// 				   time ++;
+// 			   }
+// 		   }
 		   
-		   if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-			   box.y += 200 * speed * Gdx.graphics.getDeltaTime();
-			   if(time > 10) {
-				   if(last.equals("up")) {
-					   if(prev == 1) {
-						   player = walkb2;
-						   prev = 2;
-					   } else {
-						   player = walkb1;
-						   prev = 1;
-					   }
-				   } else {
-					   player = walkb1;
-					   last = "up";
-				   }
-				   time = 0;
-			   } else {
-				   time ++;
-			   }
+// 		   if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+// 			   box.y += 200 * speed * Gdx.graphics.getDeltaTime();
+// 			   if(time > 10) {
+// 				   if(last.equals("up")) {
+// 					   if(prev == 1) {
+// 						   player = walkb2;
+// 						   prev = 2;
+// 					   } else {
+// 						   player = walkb1;
+// 						   prev = 1;
+// 					   }
+// 				   } else {
+// 					   player = walkb1;
+// 					   last = "up";
+// 				   }
+// 				   time = 0;
+// 			   } else {
+// 				   time ++;
+// 			   }
 			   
-		   }
-		   if(Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-			  box.y -= 200 * speed * Gdx.graphics.getDeltaTime();
-			   if(time > 10) {
-				   if(last.equals("down")) {
-					   if(prev == 1) {
-						   player = walkf2;
-						   prev = 2;
-					   } else {
-						   player = walkf1;
-						   prev = 1;
-					   }
-				   } else {
-					   player = walkf1;
-					   last = "down";
-				   }
-				   time = 0;
-			   } else {
-				   time++;
-			   }
-		   }
-		   if(!Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-			   if(last.equals("down")) {
-				   player = walkf1;
-			   } else if(last.equals("right")) {
-				   player = walkr1;
-			   } else if(last.equals("left")) {
-				   player = walkl1;
-			   } else {
-				   player = walkb1;
-			   }
-		   }
+// 		   }
+// 		   if(Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
+// 			  box.y -= 200 * speed * Gdx.graphics.getDeltaTime();
+// 			   if(time > 10) {
+// 				   if(last.equals("down")) {
+// 					   if(prev == 1) {
+// 						   player = walkf2;
+// 						   prev = 2;
+// 					   } else {
+// 						   player = walkf1;
+// 						   prev = 1;
+// 					   }
+// 				   } else {
+// 					   player = walkf1;
+// 					   last = "down";
+// 				   }
+// 				   time = 0;
+// 			   } else {
+// 				   time++;
+// 			   }
+// 		   }
+// 		   if(!Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+// 			   if(last.equals("down")) {
+// 				   player = walkf1;
+// 			   } else if(last.equals("right")) {
+// 				   player = walkr1;
+// 			   } else if(last.equals("left")) {
+// 				   player = walkl1;
+// 			   } else {
+// 				   player = walkb1;
+// 			   }
+// 		   }
 		   
-		   pImg = new Image(player);
-		   pImg.setOrigin(player.getWidth()/2, player.getHeight()/2);
-		   pImg.setPosition(box.x, box.x);
-		   //System.out.println(box.x);
-		   //System.out.println(box.y);
-	}
+// 		   pImg = new Image(player);
+// 		   pImg.setOrigin(player.getWidth()/2, player.getHeight()/2);
+// 		   pImg.setPosition(box.x, box.x);
+// 		   //System.out.println(box.x);
+// 		   //System.out.println(box.y);
+// 	}
 	
 	public float getXPos() {
 		return this.box.x;
@@ -190,14 +193,152 @@ public class Player {
 	public void setYPos(float yPos) {
 		this.box.y = yPos;
 	}
-	public void takeDamage(double damage, double time) {
-		//if(time % 2 == 0) {
-			this.health -= damage;
-		//}
-	}
+// 	public void takeDamage(double damage, double time) {
+// 		//if(time % 2 == 0) {
+// 			this.health -= damage;
+// 		//}
+// 	}
 	
 	public void addHealth(int health) {
 		this.health += health;
+	}
+	
+	public void move() {
+		double xTarget = 0;
+		double yTarget = 0;
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
+			xTarget -= 1;
+			if(time > 10) {
+			if(last.equals("left")) {
+			   if(prev == 1) {
+				   player = walkl2;
+				   prev = 2;
+			   } else {
+				   player = walkl1;
+				   prev = 1;
+			   }
+			} else {
+			   player = walkl1;
+			   last = "left";
+			}
+			time = 0;
+			} else {
+			   time ++;
+			}
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
+			xTarget += 1;
+			   if(time > 10) {
+				   if(last.equals("right")) {
+					   if(prev == 1) {
+						   player = walkr2;
+						   prev = 2;
+					   } else {
+						   player = walkr1;
+						   prev = 1;
+					   }
+				   } else {
+					   player = walkr1;
+					   last = "right";
+				   }
+				   time = 0;
+			   } else {
+				   time ++;
+			   }
+		}
+
+		if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+			yTarget += 1;
+			   if(time > 10) {
+				   if(last.equals("up")) {
+					   if(prev == 1) {
+						   player = walkb2;
+						   prev = 2;
+					   } else {
+						   player = walkb1;
+						   prev = 1;
+					   }
+				   } else {
+					   player = walkb1;
+					   last = "up";
+				   }
+				   time = 0;
+			   } else {
+				   time ++;
+			   }
+
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
+			yTarget -= 1;
+			   if(time > 10) {
+				   if(last.equals("down")) {
+					   if(prev == 1) {
+						   player = walkf2;
+						   prev = 2;
+					   } else {
+						   player = walkf1;
+						   prev = 1;
+					   }
+				   } else {
+					   player = walkf1;
+					   last = "down";
+				   }
+				   time = 0;
+			   } else {
+				   time++;
+			   }
+		}
+		if(!Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+		   if(last.equals("down")) {
+			   player = walkf1;
+		   } else if(last.equals("right")) {
+			   player = walkr1;
+		   } else if(last.equals("left")) {
+			   player = walkl1;
+		   } else {
+			   player = walkb1;
+		   }
+		}
+		
+		
+		velX += Math.signum(speed * Math.cos(Math.atan2(yTarget, xTarget) - velX) * 
+			Math.min(fabs(acceleration * Math.cos(Math.atan2(yTarget, xTarget))), 
+				 fabs(speed * Math.cos(Math.atan2(yTarget, xTarget) - velX));
+		velY += Math.signum(speed * Math.sin(Math.atan2(yTarget, xTarget) - velY) * 
+			Math.min(fabs(acceleration * Math.sin(Math.atan2(yTarget, xTarget))), 
+				 fabs(speed * Math.sin(Math.atan2(yTarget, xTarget)) - velY));
+		
+		this.box.x += velX;
+		this.box.y += velY; 
+				    
+		pImg = new Image(player);
+		pImg.setOrigin(player.getWidth()/2, player.getHeight()/2);
+		pImg.setPosition(box.x, box.y);
+	}
+	public float getVelX() {
+		return this.velX;
+	}
+	public float getVelY() {
+		return this.velY;
+	}
+	public float getAcceleration() {
+		return this.acceleration;
+	}
+	public void setVelX(float amount) {
+		this.velX = amount;
+	}
+	public void setVelY(float amount) {
+		this.velY = amount;
+	}
+	
+	public void takeDamage(double damage, float knockback, double angle) {
+		//if (buffer % 3600f == 0) {
+			this.health -= damage;
+		//}
+		
+		this.velX += knockback * Math.cos(angle * Math.PI / 180);
+		this.velY += knockback * Math.sin(angle * Math.PI / 180);
 	}
 	
 }
