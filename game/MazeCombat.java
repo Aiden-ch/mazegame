@@ -103,7 +103,7 @@ public class MazeCombat implements Screen {
 		sword = new Texture("sword.png");
 		swordImage = new Image(sword);
 		swordImage.setOrigin(sword.getWidth()/2,0);
-		Melee swordMelee = new Melee(swordImage, sword, 10d, 5d, 10f, (float)Math.PI/2f);
+		Melee swordMelee = new Melee(swordImage, sword, 3d, 5d, 10f, (float)Math.PI/2f); //smaller speed = faster
 		
 		items.addItem("Sword", swordMelee);
 		
@@ -206,7 +206,7 @@ public class MazeCombat implements Screen {
 				
 				for(int j=0; j<EnemyHandler.getEnemies().size(); j++) {
 					if(temp.getProj().getBox().overlaps(EnemyHandler.getEnemies().get(j).getBox())) {
-						EnemyHandler.getEnemies().get(j).takeDamage(temp.getProj().getDamage());
+						EnemyHandler.getEnemies().get(j).takeDamage(temp.getProj().getDamage(), 0, 0);
 						System.out.println(EnemyHandler.getEnemies().get(j).getHealth());
 						destroy = true;
 					}
@@ -230,33 +230,20 @@ public class MazeCombat implements Screen {
 					
 					for(int j=0; j<EnemyHandler.getEnemies().size(); j++) {
 						Enemy tempem = EnemyHandler.getEnemies(j);
-						/*
-						System.out.println("enemy");
-						System.out.println(tempem.getXPos());
-						System.out.println(tempem.getYPos());
-						System.out.println("player");
-						System.out.println(player.getXPos());
-						System.out.println(player.getYPos());
-						*/
-						
-						System.out.println("start");
-						System.out.println(CMath.changeAngles((float)temp.getMel().getStartAngle()));
-						System.out.println(((float)(-1*temp.getMel().getRadius()*180/Math.PI/2 + CMath.changeAngles((float)temp.getMel().getStartAngle()))));
-						System.out.println("enemy");
-						System.out.println(((float)Math.atan2(tempem.getYPos()-player.getYPos(), tempem.getXPos()-player.getXPos())*180f/(float)Math.PI));
-
+				
 						float enan = -90f + 180f/(float)Math.PI * (float)(Math.atan2(tempem.getYPos()-player.getYPos(), tempem.getXPos()-player.getImage().getWidth()/2-player.getXPos()));
 //						float enan = (float)Math.atan2(tempem.getYPos()-player.getYPos(), tempem.getXPos()-player.getXPos())*180f/(fladoat)Math.PI;
 						
 						if((Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= 10f)
-								|| (Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= 64f)
+								|| (Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= 70f)
 								//add angle check
 								&&
 								(Math.abs(temp.getMel().getStartAngle() - enan + temp.getMel().getRadius() / 2 * 180 / Math.PI) <= temp.getMel().getRadius() / 2 * 180 / Math.PI)
 								) {
 							
-							EnemyHandler.getEnemies().get(j).takeDamage(temp.getMel().getDamage());
-							System.out.println("died");
+							EnemyHandler.getEnemies().get(j).takeDamage(temp.getMel().getDamage(), (float)temp.getMel().getKnockback(), enan);
+							
+							//System.out.println("died");
 						}
 					}
 					
@@ -359,6 +346,7 @@ public class MazeCombat implements Screen {
 		blob.dispose();
 		sword.dispose();
 		arrow.dispose();
+		speedPotion.dispose();
 	}
 
 }
