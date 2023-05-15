@@ -13,12 +13,15 @@ public class Enemy {
 	private ArrayList<EffectHandler> effects = new ArrayList<EffectHandler>(); 
 	private float velX = 0;
 	private float velY = 0;
-	private float acceleration = 5;
+	private float acceleration = 0.5f;
 	
 	private Texture txte;
 	private Image enImg;
 	
 	private float maxSpeed;
+	
+	private boolean tookDamage = false;
+	private float timer = 0.0f;
 	
 	public Enemy(Texture txte, Image enImg, float health, float maxSpeed, double damage) {
 		this.txte = txte;
@@ -48,11 +51,11 @@ public class Enemy {
 // 		float velocityX = maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x));
 // 		float velocityY = maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x));
 		velX += Math.signum(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX) * 
-			Math.min(fabs(acceleration * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
-				 fabs(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX));
+			Math.min(Math.abs(acceleration * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
+					Math.abs(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX));
 		velY += Math.signum(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY) * 
-			Math.min(fabs(acceleration * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
-				 fabs(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY));
+			Math.min(Math.abs(acceleration * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
+				 Math.abs(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY));
 		
 		this.box.x += velX;
 		this.box.y += velY;
@@ -67,6 +70,9 @@ public class Enemy {
 	}
 	public float getYPos() {
 		return this.box.y;
+	}
+	public float getSpeed() {
+		return this.maxSpeed;
 	}
 	public float getHealth() {
 		return this.health;
@@ -89,7 +95,7 @@ public class Enemy {
 	public float getVelY() {
 		return this.velY;
 	}
-	public void getAcceleration() {
+	public float getAcceleration() {
 		return this.acceleration;
 	}
 	public void setVelX(float amount) {
@@ -99,13 +105,24 @@ public class Enemy {
 		this.velY = amount;
 	}
 	
-	public void takeDamage(double damage, float knockback, double angle) {
-		//if (buffer % 3600f == 0) {
-			this.health -= damage;
-		//}
+	public void takeDamage(double damage, float knockback, float angle) {
 		
-		this.velX += knockback * Math.cos(angle * Math.PI / 180);
-		this.velY += knockback * Math.sin(angle * Math.PI / 180);
+		if(!tookDamage) {
+			this.health -= damage;
+
+			//System.out.println(knockback);
+			this.velX += knockback * Math.cos((angle+90f) * Math.PI/180f);
+			this.velY += knockback * Math.sin((angle+90f) * Math.PI/180f);
+			//			this.velX += 50;
+			//			this.velY += 50;
+			tookDamage = true;
+		} else {
+			if(timer >= 3.0f) {
+				tookDamage = false;
+			} else {
+				timer += 0.5f;
+			}
+		}
 	}
 	
 }
