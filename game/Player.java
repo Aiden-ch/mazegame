@@ -16,7 +16,7 @@ public class Player {
 	private double speed = 1;
 	private float velX = 0;
 	private float velY = 0;
-	private float acceleration = 0.2;
+	private float acceleration = 0.2f;
 	private ArrayList<EffectHandler> effects = new ArrayList<EffectHandler>(); 
 	//^^^ for buffs and debuffs
 	
@@ -67,109 +67,6 @@ public class Player {
 	public void setSpeed(double speed) {
 		this.speed = speed;
 	}
-	
-// 	public void move() {
-// 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-// 			   box.x -= 200 * speed * Gdx.graphics.getDeltaTime();
-// 			   if(time > 10) {
-// 				   if(last.equals("left")) {
-// 					   if(prev == 1) {
-// 						   player = walkl2;
-// 						   prev = 2;
-// 					   } else {
-// 						   player = walkl1;
-// 						   prev = 1;
-// 					   }
-// 				   } else {
-// 					   player = walkl1;
-// 					   last = "left";
-// 				   }
-// 				   time = 0;
-// 			   } else {
-// 				   time ++;
-// 			   }
-			   
-// 		   }
-// 		   if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-// 			   box.x += 200 * speed * Gdx.graphics.getDeltaTime();
-// 			   if(time > 10) {
-// 				   if(last.equals("right")) {
-// 					   if(prev == 1) {
-// 						   player = walkr2;
-// 						   prev = 2;
-// 					   } else {
-// 						   player = walkr1;
-// 						   prev = 1;
-// 					   }
-// 				   } else {
-// 					   player = walkr1;
-// 					   last = "right";
-// 				   }
-// 				   time = 0;
-// 			   } else {
-// 				   time ++;
-// 			   }
-// 		   }
-		   
-// 		   if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-// 			   box.y += 200 * speed * Gdx.graphics.getDeltaTime();
-// 			   if(time > 10) {
-// 				   if(last.equals("up")) {
-// 					   if(prev == 1) {
-// 						   player = walkb2;
-// 						   prev = 2;
-// 					   } else {
-// 						   player = walkb1;
-// 						   prev = 1;
-// 					   }
-// 				   } else {
-// 					   player = walkb1;
-// 					   last = "up";
-// 				   }
-// 				   time = 0;
-// 			   } else {
-// 				   time ++;
-// 			   }
-			   
-// 		   }
-// 		   if(Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-// 			  box.y -= 200 * speed * Gdx.graphics.getDeltaTime();
-// 			   if(time > 10) {
-// 				   if(last.equals("down")) {
-// 					   if(prev == 1) {
-// 						   player = walkf2;
-// 						   prev = 2;
-// 					   } else {
-// 						   player = walkf1;
-// 						   prev = 1;
-// 					   }
-// 				   } else {
-// 					   player = walkf1;
-// 					   last = "down";
-// 				   }
-// 				   time = 0;
-// 			   } else {
-// 				   time++;
-// 			   }
-// 		   }
-// 		   if(!Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-// 			   if(last.equals("down")) {
-// 				   player = walkf1;
-// 			   } else if(last.equals("right")) {
-// 				   player = walkr1;
-// 			   } else if(last.equals("left")) {
-// 				   player = walkl1;
-// 			   } else {
-// 				   player = walkb1;
-// 			   }
-// 		   }
-		   
-// 		   pImg = new Image(player);
-// 		   pImg.setOrigin(player.getWidth()/2, player.getHeight()/2);
-// 		   pImg.setPosition(box.x, box.x);
-// 		   //System.out.println(box.x);
-// 		   //System.out.println(box.y);
-// 	}
 	
 	public float getXPos() {
 		return this.box.x;
@@ -301,13 +198,14 @@ public class Player {
 		   }
 		}
 		
-		
-		velX += Math.signum(speed * Math.cos(Math.atan2(yTarget, xTarget) - velX) * 
-			Math.min(fabs(acceleration * Math.cos(Math.atan2(yTarget, xTarget))), 
-				 fabs(speed * Math.cos(Math.atan2(yTarget, xTarget) - velX));
-		velY += Math.signum(speed * Math.sin(Math.atan2(yTarget, xTarget) - velY) * 
-			Math.min(fabs(acceleration * Math.sin(Math.atan2(yTarget, xTarget))), 
-				 fabs(speed * Math.sin(Math.atan2(yTarget, xTarget)) - velY));
+		float angle = (float)Math.atan2(yTarget, xTarget);
+		if (yTarget == 0 && xTarget == 0) 
+		velX += Math.signum(speed * Math.cos(Math.atan2(yTarget, xTarget)) - velX) * 
+			Math.min(Math.abs(acceleration * Math.cos(Math.atan2(yTarget, xTarget))), 
+					Math.abs(speed * Math.cos(Math.atan2(yTarget, xTarget)) - velX));
+		velY += Math.signum(speed * Math.sin(Math.atan2(yTarget, xTarget)) - velY) * 
+			Math.min(Math.abs(acceleration * Math.sin(Math.atan2(yTarget, xTarget))), 
+					Math.abs(speed * Math.sin(Math.atan2(yTarget, xTarget)) - velY));
 		
 		this.box.x += velX;
 		this.box.y += velY; 
