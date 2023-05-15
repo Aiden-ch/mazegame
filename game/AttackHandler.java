@@ -25,7 +25,6 @@ public class AttackHandler {
 		//System.out.println(buffer);
 		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && buffer <= 0.0f) {
 			Image projImage = new Image(item.getProj().getTexture());
-//			projImage.setOrigin(item.getProj().txte.getWidth()/2.0f, item.getProj().txte.getHeight()/2.0f);
 			projImage.setOrigin(item.getProj().getTexture().getWidth()/2.0f, 0);
 			Projectile proj = new Projectile((float)player.getXPos(), (float)player.getYPos(), item.getProj().getDamage(), 
 					Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos(), Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), item.getProj().getSpeed(), projImage);
@@ -33,20 +32,7 @@ public class AttackHandler {
 			proj.setImage(projImage);
 			Item temp = new Item(item.getName(), proj);
 			cards.add(temp);
-			
-			//System.out.println(Gdx.input.getX()-player.getXPos());
-			
-			/*
-			System.out.println("player (x,y): ");
-			System.out.print(player.getXPos());
-			System.out.print(",");
-			System.out.println(player.getYPos());
-			System.out.println("mouse (x,y): ");
-			System.out.println(Gdx.input.getX());
-			System.out.print(",");
-			System.out.print(Gdx.input.getY());
-			*/
-			
+
 			return 2.2f;
 		}
 		return buffer;
@@ -59,24 +45,12 @@ public class AttackHandler {
 			Image meleeImage = new Image(item.getMel().getTexture());
 			meleeImage.setOrigin((float)item.getMel().getTexture().getWidth()/2, 0);
 			Float angle = -90f + 180f/(float)Math.PI * (float)(Math.atan2(Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos()) - item.getMel().getRadius() / 2);
-			//thing: 90f - (float)(180 / Math.PI * item.getMel().getRadius()/2)
 			meleeImage.setRotation(angle);
-			//meleeImage.setRotation((float) (90 + (float)(180 / Math.PI * item.getMel().getRadius()) + Math.atan2((Gdx.input.getX()-player.getXPos()) * 180 / (Math.PI), Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos())));
+			//System.out.println(item.getMel().getKnockback());
 			Melee mel = new Melee(player.getXPos(), player.getYPos(), item.getMel().getDamage(), item.getMel().getLength(), 
 					item.getMel().getRadius(), item.getMel().getSpeed(), item.getMel().getKnockback(), angle, meleeImage, item.getMel().getTexture());
 			Item temp = new Item(item.getName(), mel);
 			cards.add(temp);
-			
-			/*
-			System.out.println("player (x,y): ");
-			System.out.print(player.getXPos());
-			System.out.print(",");
-			System.out.print(player.getYPos());
-			System.out.println("mouse (x,y): ");
-			System.out.print(Gdx.input.getX());
-			System.out.print(",");
-			System.out.print(Gdx.input.getY());
-			*/
 			
 			return (float)mel.getSpeed();
 		}
@@ -92,7 +66,6 @@ public class AttackHandler {
 		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && buffer <= 0.0f) {
 			Misc temp = item.getMisc();
 			Image newImage;
-			//System.out.println(item.getMisc().getType());
 			switch (item.getMisc().getType()) {
 			case "speedpotion":
 				newImage = new Image(item.getMisc().getTexture());
