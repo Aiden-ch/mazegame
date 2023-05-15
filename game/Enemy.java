@@ -11,25 +11,28 @@ public class Enemy {
 	private float health;
 	private double damage;
 	private ArrayList<EffectHandler> effects = new ArrayList<EffectHandler>(); 
+	private float velX = 0;
+	private float velY = 0;
+	private float acceleration = 5;
 	
 	private Texture txte;
 	private Image enImg;
 	
-	private float speed;
+	private float maxSpeed;
 	
-	public Enemy(Texture txte, Image enImg, float health, float speed, double damage) {
+	public Enemy(Texture txte, Image enImg, float health, float maxSpeed, double damage) {
 		this.txte = txte;
 		this.enImg = enImg;
 		this.health = health;
-		this.speed = speed;
+		this.maxSpeed = maxSpeed;
 		this.damage = damage;
 	}
 	
-	public Enemy(float xPos, float yPos, float health, float speed, double damage, Texture txte, Image enImg) {
+	public Enemy(float xPos, float yPos, float health, float maxSpeed, double damage, Texture txte, Image enImg) {
 		this.box = new Rectangle();
 		this.box.x = xPos;
 		this.box.y = yPos;
-		this.speed = speed;
+		this.maxSpeed = maxSpeed;
 		this.health = health;
 		this.damage = damage;
 		
@@ -42,16 +45,21 @@ public class Enemy {
 	}
 	
 	public void move(Player player) {
-		this.box.x += speed*Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x));
-		this.box.y += speed*Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x));
+// 		float velocityX = maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x));
+// 		float velocityY = maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x));
+		velX += Math.signum(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX) * 
+			Math.min(fabs(acceleration * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
+				 fabs(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX));
+		velY += Math.signum(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY) * 
+			Math.min(fabs(acceleration * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
+				 fabs(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY));
+		
+		this.box.x += velX;
+		this.box.y += velY;
 	}
 	
 	public ArrayList<EffectHandler> getEffects() {
 		return this.effects;
-	}
-
-	public void setSpeed(double speed) {
-		this.speed = (float)speed;
 	}
 	
 	public float getXPos() {
@@ -62,9 +70,6 @@ public class Enemy {
 	}
 	public float getHealth() {
 		return this.health;
-	}
-	public float getSpeed() {
-		return this.speed;
 	}
 	public Texture getTexture() {
 		return this.txte;
@@ -78,11 +83,29 @@ public class Enemy {
 	public double getDamage() {
 		return this.damage;
 	}
+	public float getVelX() {
+		return this.velX;
+	}
+	public float getVelY() {
+		return this.velY;
+	}
+	public void getAcceleration() {
+		return this.acceleration;
+	}
+	public void setVelX(float amount) {
+		this.velX = amount;
+	}
+	public void setVelY(float amount) {
+		this.velY = amount;
+	}
 	
-	public void takeDamage(double damage) {
+	public void takeDamage(double damage, float knockback, double angle) {
 		//if (buffer % 3600f == 0) {
 			this.health -= damage;
 		//}
+		
+		this.velX += knockback * Math.cos(angle * Math.PI / 180);
+		this.velY += knockback * Math.sin(angle * Math.PI / 180);
 	}
 	
 }
