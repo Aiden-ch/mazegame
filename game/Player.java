@@ -203,11 +203,11 @@ public class Player {
 		yConst = Math.sin(Math.atan2(yTarget, xTarget));
 		
 		velX += Math.signum(speed * xConst - velX) * 
-			Math.min(Math.abs(acceleration * xConst), 
-					Math.abs(speed * xConst - velX));
+			Math.min(acceleration, 
+				 Math.abs(speed * xConst - velX));
 		velY += Math.signum(speed * yConst - velY) * 
-			Math.min(Math.abs(acceleration * yConst), 
-					Math.abs(speed * yConst - velY));
+			Math.min(acceleration, 
+				 Math.abs(speed * yConst - velY));
 		
 		this.box.x += velX;
 		this.box.y += velY; 
