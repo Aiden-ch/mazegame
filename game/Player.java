@@ -198,14 +198,16 @@ public class Player {
 		   }
 		}
 		
-		float angle = (float)Math.atan2(yTarget, xTarget);
-		if (yTarget == 0 && xTarget == 0) 
-		velX += Math.signum(speed * Math.cos(Math.atan2(yTarget, xTarget)) - velX) * 
-			Math.min(Math.abs(acceleration * Math.cos(Math.atan2(yTarget, xTarget))), 
-					Math.abs(speed * Math.cos(Math.atan2(yTarget, xTarget)) - velX));
-		velY += Math.signum(speed * Math.sin(Math.atan2(yTarget, xTarget)) - velY) * 
-			Math.min(Math.abs(acceleration * Math.sin(Math.atan2(yTarget, xTarget))), 
-					Math.abs(speed * Math.sin(Math.atan2(yTarget, xTarget)) - velY));
+		xConst = Math.cos(Math.atan2(yTarget, xTarget));
+		if (xTarget == 0) xConst = 0;
+		yConst = Math.sin(Math.atan2(yTarget, xTarget));
+		
+		velX += Math.signum(speed * xConst - velX) * 
+			Math.min(Math.abs(acceleration * xConst), 
+					Math.abs(speed * xConst - velX));
+		velY += Math.signum(speed * yConst - velY) * 
+			Math.min(Math.abs(acceleration * yConst), 
+					Math.abs(speed * yConst - velY));
 		
 		this.box.x += velX;
 		this.box.y += velY; 
