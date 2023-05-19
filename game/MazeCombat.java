@@ -79,6 +79,13 @@ public class MazeCombat implements Screen {
 	
 	int handIndex = 0;
 	
+	int numSummons = 10;
+	
+	Texture ruler;
+	Image rulerImg;
+	Texture rulerBlade;
+	Image rulerBladeImg;
+	
 	//create
 	public MazeCombat(MazeGame gaeme) {
 		this.gaeme = gaeme;
@@ -123,14 +130,24 @@ public class MazeCombat implements Screen {
 //		
 //		items.addItem("Sword", swordMelee, 1);
 		
+		ruler = new Texture("melee/ruler.png");
+		rulerImg = new Image(ruler);
+		rulerBlade = new Texture("trinkets/ruler.png");
+		rulerBladeImg = new Image(rulerBlade);
+		
+		rulerImg.setOrigin(ruler.getWidth()/2,0);
+		Melee rulerMelee = new Melee(rulerImg, ruler, 5d, 35d, 10f, (float)Math.PI/2f); //smaller speed = faster
+		
+		items.addItem("Ruler Slash", rulerMelee, 1, rulerBladeImg);
 		
 		items.testing();
+		InventoryHandler.testing();
 		
 		Gdx.input.setInputProcessor(scroll);
 	
 		blob = new Texture("enemies/blob.png");
 		blobImage = new Image(blob);
-		blobEnemy = new Enemy(blob, blobImage, 5f, 2f, 2d);
+		blobEnemy = new Enemy(blob, blobImage, 15f, 2f, 2d);
 
 		bimg = new Texture("background.png");
 		
@@ -155,10 +172,9 @@ public class MazeCombat implements Screen {
 
 	@Override
 	public void render(float delta) {
-		//System.out.println("mouse" + Gdx.input.getX() + ", " + Gdx.input.getY());
-		//System.out.println("graphic" + Gdx.graphics.getWidth() + ", " + Gdx.graphics.getHeight());
+		//game timer
 		time += 0.2;
-		// TODO Auto-generated method stub
+		
 		//reset screen
 		ScreenUtils.clear(255, 255, 255, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -169,24 +185,29 @@ public class MazeCombat implements Screen {
 		mouse_position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mouse_position);
         
-        
+        //handle initial hand
         if(time == 0.2f) {
-        	ItemHandler.addToHand();
+        	InventoryHandler.activate();
         	AttackHandler.chooseCard(ItemHandler.collected.get(0));
         	//System.out.println(AttackHandler.inHand.getType());
+        } else {
+        	InventoryHandler.activate();
+        	//System.out.println("restocking");
         }
-        
 		//attacking
         //System.out.println(AttackHandler.inHand.getUses());
         
 		//change items collected thing to connect to card draw and inventory
-        if(AttackHandler.inHand.getType() == 'p') {
-        	buffer = AttackHandler.shoot(player, AttackHandler.inHand, buffer);
-		} else if(AttackHandler.inHand.getType() == 'm') {
-			buffer = AttackHandler.use(player, AttackHandler.inHand, buffer);
-		} else if(AttackHandler.inHand.getType() == 's') {
-			buffer = AttackHandler.melee(player, AttackHandler.inHand, buffer);
-		}
+        if(AttackHandler.hand.size() > 0 && AttackHandler.inHand != null) {
+        	//System.out.println(AttackHandler.hand.size());
+        	if(AttackHandler.inHand.getType() == 'p') {
+        		buffer = AttackHandler.shoot(player, AttackHandler.inHand, buffer);
+        	} else if(AttackHandler.inHand.getType() == 'm') {
+        		buffer = AttackHandler.use(player, AttackHandler.inHand, buffer);
+        	} else if(AttackHandler.inHand.getType() == 's') {
+        		buffer = AttackHandler.melee(player, AttackHandler.inHand, buffer);
+        	}
+        }
 		//System.out.println(items.collected.get(1));
 		//if(!meleed) {
 		//buffer = AttackHandler.melee(player, ItemHandler.collected.get(1), buffer);
@@ -197,9 +218,11 @@ public class MazeCombat implements Screen {
 		buffer -= 0.2;
 		
 		//enemy spawn
-		if(time % 20 <= 0.6) { //change num after mod to change spawn speed
+		if(time % 20 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
 			//if(time == 1) {
-		EnemyHandler.spawn(blobEnemy);//}
+			EnemyHandler.spawn(blobEnemy);//}
+			numSummons--;
+			//System.out.println(numSummons);
 		}
 
 		//player movement
@@ -285,11 +308,15 @@ public class MazeCombat implements Screen {
 				}
 			}
 			if(AttackHandler.hand.size() >= 0 && AttackHandler.inHand != null) {
-				System.out.println(AttackHandler.inHand);
+				//System.out.println(AttackHandler.inHand);
 				AttackHandler.consumeCard(AttackHandler.inHand.getUses(), handIndex);
 			} //TODO: add system so that game wont crash if you have nothing in hand and try to activate card
 			//TODO: card draw / gain thing
 			//TODO: update card image in hand 
+			
+			if(AttackHandler.inHand == null && AttackHandler.hand.size() >= 1) {
+				AttackHandler.inHand = ItemHandler.checkHand(1f);
+			}
 		}
 		
 		if(player.getEffects().size() > 0) {
@@ -322,6 +349,8 @@ public class MazeCombat implements Screen {
 				//EnemyHandler.getEnemies().remove(i);
 				//i--;
 			}
+			
+			
 		}
 
 		//System.out.println(AttackHandler.getCards().size());
@@ -335,18 +364,23 @@ public class MazeCombat implements Screen {
 			//System.out.println("dead");
 		}
 		
-		//UIHandler.displayStats(player);
-		
-//		String health = "health: \n" + player.getHealth();
-//		font.draw(gaeme.batch, health, 13, Gdx.graphics.getHeight() - 30);
-//		
-		//for projectiles
+		//for drawing
 		stage.act();
 		stage.draw();
 		
+		//ending combat encounter
+		if(numSummons <= 0 && EnemyHandler.getEnemies().size() <= 0) {
+			numSummons = 20;
+			for(int i=0; i<AttackHandler.getActive().size(); i++) {
+				AttackHandler.getActive().remove(i);
+			}
+			dispose();
+			InventoryHandler.setStart(true);
+			gaeme.mazeScreen();
+		}
+		
 
 		gaeme.batch.end();
-
 		
 	}
 
@@ -375,14 +409,14 @@ public class MazeCombat implements Screen {
 
 	@Override
 	public void dispose() {
-		potion.dispose();
+		//potion.dispose();
 		bomb.dispose();
 		batch.dispose();
 		stage.dispose();
 		blob.dispose();
-		sword.dispose();
-		arrow.dispose();
-		speedPotion.dispose();
+		//sword.dispose();
+		//arrow.dispose();
+		//speedPotion.dispose();
 		heartTxte.dispose();
 		bombLauncher.dispose();
 	}

@@ -3,7 +3,7 @@ package com.mygdx.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import java.lang.Math;
+//import java.lang.Math;
 //import com.badlogic.gdx.Gdx;
 
 //import com.badlogic.gdx.graphics.Texture;
@@ -47,14 +47,8 @@ public class ItemHandler {
 		} else {
 			cardNum--;
 		}
-		System.out.println(collected.get(cardNum).getName());
+		//System.out.println(collected.get(cardNum));
 		return collected.get(cardNum);
 	}
 	
-	//checks trinkets in inventory and adds cards accordingly
-	public static void addToHand() {
-		//add for loop to add 5 something cards to hand
-		int randomCard = (int)Math.random() * collected.size();
-		AttackHandler.hand.add(collected.get(randomCard));
-	}
 }

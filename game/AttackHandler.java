@@ -27,9 +27,15 @@ public class AttackHandler {
 		System.out.println(hand.size());
 		if(uses < 1) {
 			//hand.remove(index); //This is a problem
-			if(hand.size() >= 1) {
+			if(hand.size() > 1) {
+				System.out.println("next");
 				hand.remove(index); //This is a problem
-				inHand = ItemHandler.checkHand(1);
+				
+				//System.out.println(inHand);
+			} else if(hand.size() == 1) {
+				hand.remove(0);
+				inHand = null;
+				//System.out.println(hand.size());
 			}
 		}
 	}
@@ -43,7 +49,7 @@ public class AttackHandler {
 					Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos(), Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), item.getProj().getSpeed(), item.getProj().getPierce(), projImage);
 			projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
 			proj.setImage(projImage);
-			Item temp = new Item(item.getName(), proj, item.getUses(), item.getImage());
+			Item temp = new Item(item.getName(), proj, item.getImage());
 			item.used();
 			active.add(temp);
 
@@ -64,7 +70,7 @@ public class AttackHandler {
 			//System.out.println(item.getMel().getKnockback());
 			Melee mel = new Melee(player.getXPos(), player.getYPos(), item.getMel().getDamage(), item.getMel().getLength(), 
 					item.getMel().getRadius(), item.getMel().getSpeed(), item.getMel().getKnockback(), angle, meleeImage, item.getMel().getTexture());
-			Item temp = new Item(item.getName(), mel, item.getUses(), item.getImage());
+			Item temp = new Item(item.getName(), mel, item.getImage());
 			active.add(temp);
 
 			return (float)mel.getSpeed();
@@ -97,7 +103,7 @@ public class AttackHandler {
 				break;
 
 			}
-			Item tempItem = new Item(item.getName(), temp, item.getUses(), item.getImage());
+			Item tempItem = new Item(item.getName(), temp, item.getImage());
 			active.add(tempItem);
 			return 2.2f;
 
@@ -110,5 +116,11 @@ public class AttackHandler {
 	}
 	public static ArrayList<Item> getHand() {
 		return hand;
+	}
+	public static Item getInHand() {
+		return inHand;
+	}
+	public static void setInHand(Item temp) {
+		inHand = temp;
 	}
 }

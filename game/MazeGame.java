@@ -17,6 +17,13 @@ public class MazeGame extends Game {
 		//Gdx.graphics.setWindowedMode(800, 480);
 		this.setScreen(new MazeTraversal(this));
 	}
+	
+	public void combatScreen() {
+		this.setScreen(new MazeCombat(this));
+	}
+	public void mazeScreen() {
+		this.setScreen(new MazeTraversal(this));
+	}
 
 	public void render() {
 		super.render(); // important!

@@ -28,6 +28,15 @@ public class Item {
 		
 		this.itemImg = img;
 	}
+	//for copies
+	public Item(String name, Projectile proj, Image img) {
+		this.name = name;
+		this.proj = proj;
+		//p for projectile
+		this.type = 'p';
+		
+		this.itemImg = img;
+	}
 	public Item(String name, Melee mel, int uses, Image img) {
 		this.name = name;
 		this.mel = mel;
@@ -37,12 +46,30 @@ public class Item {
 		
 		this.itemImg = img;
 	}
+	//for copies
+	public Item(String name, Melee mel, Image img) {
+		this.name = name;
+		this.mel = mel;
+		//s for swing
+		this.type = 's';
+		
+		this.itemImg = img;
+	}
 	public Item(String name, Misc misc, int uses, Image img) {
 		this.name = name;
 		this.misc = misc;
 		//s for swing
 		this.type = 'm';
 		this.uses = uses;
+		
+		this.itemImg = img;
+	}
+	//for copies
+	public Item(String name, Misc misc, Image img) {
+		this.name = name;
+		this.misc = misc;
+		//s for swing
+		this.type = 'm';
 		
 		this.itemImg = img;
 	}
@@ -65,7 +92,10 @@ public class Item {
 	public int getUses() {
 		return this.uses;
 	}
-	
+	//should NEVER USE ON ROOT ITEM
+	public void setUses(int uses) {
+		this.uses = uses;
+	}
 	public void used() {
 		this.uses--;
 	}

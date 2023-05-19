@@ -48,7 +48,7 @@ public class UIHandler {
 			alpha2 = 1f;
 		}
 		
-		if(AttackHandler.hand.size() > 0) {
+		if(AttackHandler.hand.size() > 0 && AttackHandler.inHand != null) {
 			AttackHandler.inHand.getImage().setPosition(cardbox.x, cardbox.y);
 			AttackHandler.inHand.getImage().draw(batch, alpha2);
 		}
