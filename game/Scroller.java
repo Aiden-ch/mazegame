@@ -17,8 +17,10 @@ public class Scroller extends InputAdapter {
 		switch (keycode) {
 		case Keys.Q:
 			AttackHandler.chooseCard(ItemHandler.checkHand(-1f));
+			break;
 		case Keys.E:
 			AttackHandler.chooseCard(ItemHandler.checkHand(1f));
+			break;
 		}
 		return false;
 	}

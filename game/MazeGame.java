@@ -19,6 +19,7 @@ public class MazeGame extends Game {
 	}
 	
 	public void combatScreen() {
+		InventoryHandler.setStart(true);
 		this.setScreen(new MazeCombat(this));
 	}
 	public void mazeScreen() {

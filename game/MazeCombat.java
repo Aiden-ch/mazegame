@@ -123,12 +123,12 @@ public class MazeCombat implements Screen {
 //		
 //		items.addItem("Speed Potion", speedPotionMisc, 1);
 		
-//		sword = new Texture("melee/sword.png");
-//		swordImage = new Image(sword);
-//		swordImage.setOrigin(sword.getWidth()/2,0);
-//		Melee swordMelee = new Melee(swordImage, sword, 20d, 15d, 10f, (float)Math.PI/2f); //smaller speed = faster
-//		
-//		items.addItem("Sword", swordMelee, 1);
+		sword = new Texture("melee/sword.png");
+		swordImage = new Image(sword);
+		swordImage.setOrigin(sword.getWidth()/2,0);
+		Melee swordMelee = new Melee(swordImage, sword, 20d, 15d, 10f, (float)Math.PI/2f); //smaller speed = faster
+		
+		items.addItem("Sword", swordMelee, 1, new Image(new Texture("trinkets/basicblade.png")));
 		
 		ruler = new Texture("melee/ruler.png");
 		rulerImg = new Image(ruler);
@@ -136,7 +136,7 @@ public class MazeCombat implements Screen {
 		rulerBladeImg = new Image(rulerBlade);
 		
 		rulerImg.setOrigin(ruler.getWidth()/2,0);
-		Melee rulerMelee = new Melee(rulerImg, ruler, 5d, 35d, 10f, (float)Math.PI/2f); //smaller speed = faster
+		Melee rulerMelee = new Melee(rulerImg, ruler, 3d, 15d, 3f, (float)Math.PI/2f); //smaller speed = faster
 		
 		items.addItem("Ruler Slash", rulerMelee, 1, rulerBladeImg);
 		
@@ -162,6 +162,8 @@ public class MazeCombat implements Screen {
 		camera.position.x = Gdx.graphics.getWidth()/2; 
 	    camera.position.y = Gdx.graphics.getHeight()/2;
 		stage = new Stage(new ScreenViewport());
+		
+		//InventoryHandler.setStart(false);
 	}
 
 	@Override
@@ -188,10 +190,11 @@ public class MazeCombat implements Screen {
         //handle initial hand
         if(time == 0.2f) {
         	InventoryHandler.activate();
-        	AttackHandler.chooseCard(ItemHandler.collected.get(0));
+        	handIndex = AttackHandler.chooseCard(ItemHandler.collected.get(0));
         	//System.out.println(AttackHandler.inHand.getType());
         } else {
         	InventoryHandler.activate();
+        	//TODO: handIndex change
         	//System.out.println("restocking");
         }
 		//attacking
@@ -283,7 +286,7 @@ public class MazeCombat implements Screen {
 //						float enan = (float)Math.atan2(tempem.getYPos()-player.getYPos(), tempem.getXPos()-player.getXPos())*180f/(fladoat)Math.PI;
 						
 						if((Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= 10f)
-								|| (Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= 90f)
+								|| (Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= temp.getMel().getTexture().getHeight()+10)
 								//add angle check
 								&&
 								(Math.abs(temp.getMel().getStartAngle() - enan + temp.getMel().getRadius() / 2 * 180 / Math.PI) <= temp.getMel().getRadius() / 2 * 180 / Math.PI)
@@ -296,6 +299,7 @@ public class MazeCombat implements Screen {
 				} else {
 					temp.getMel().getImage().remove();
 					temp.used();
+					System.out.println("used");
 					AttackHandler.getActive().remove(i);
 					i--;
 				}
@@ -312,11 +316,8 @@ public class MazeCombat implements Screen {
 				AttackHandler.consumeCard(AttackHandler.inHand.getUses(), handIndex);
 			} //TODO: add system so that game wont crash if you have nothing in hand and try to activate card
 			//TODO: card draw / gain thing
-			//TODO: update card image in hand 
 			
-			if(AttackHandler.inHand == null && AttackHandler.hand.size() >= 1) {
-				AttackHandler.inHand = ItemHandler.checkHand(1f);
-			}
+			
 		}
 		
 		if(player.getEffects().size() > 0) {
@@ -329,6 +330,11 @@ public class MazeCombat implements Screen {
 
 			temp.getImage().setPosition(temp.getXPos(), temp.getYPos());
 			temp.move(player);
+			
+			if(temp.getXPos() < 0) temp.setXPos(0);
+			if(temp.getXPos() > Gdx.graphics.getWidth() - 64) temp.setXPos(Gdx.graphics.getWidth() - 64);
+			if(temp.getYPos() < 0) temp.setYPos(0);
+			if(temp.getYPos() > Gdx.graphics.getHeight() - 64) temp.setYPos(Gdx.graphics.getHeight() - 64);
 
 			stage.addActor(temp.getImage());
 			

@@ -19,23 +19,29 @@ public class AttackHandler {
 		;
 	}
 	
-	public static void chooseCard(Item item) {
+	public static int chooseCard(Item item) {
 		//System.out.println("chose");
 		inHand = item;
+		for(int i=0; i<hand.size(); i++) {
+			if(hand.get(i).getName().equals(item.getName())) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	public static void consumeCard(int uses, int index) {
-		System.out.println(hand.size());
-		if(uses < 1) {
-			//hand.remove(index); //This is a problem
-			if(hand.size() > 1) {
-				System.out.println("next");
-				hand.remove(index); //This is a problem
-				
-				//System.out.println(inHand);
-			} else if(hand.size() == 1) {
-				hand.remove(0);
-				inHand = null;
-				//System.out.println(hand.size());
+		//System.out.println(hand.size());
+		if(uses <= 0) {		
+			//System.out.println("next");
+			//System.out.println(); //This is a problem
+			hand.remove(index);
+			inHand = null;
+			//System.out.println(inHand);
+			//System.out.println(inHand == null);
+			//System.out.println(hand.size());
+			if(inHand == null && hand.size() >= 1) {
+				System.out.println("new");
+				AttackHandler.inHand = ItemHandler.checkHand(1f);
 			}
 		}
 	}

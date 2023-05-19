@@ -57,24 +57,5 @@ public class Trinket {
 	}
 	public void resupply() {
 		//extender
-		if(getBuffer() >= getRefresh()) {
-			if(InventoryHandler.getStart()) {
-				System.out.println("supplied");
-				AttackHandler.getHand().add(new Item(getItem().getName(), getItem().getProj(), getItem().getUses(), getItem().getImage()));
-			} else if(AttackHandler.getInHand() == null) {
-				//might not work
-				System.out.println("resupplied");
-				getItem().setUses(1);
-				System.out.println(getItem().getUses());
-				AttackHandler.getHand().add(new Item(getItem().getName(), getItem().getProj(), getItem().getUses(), getItem().getImage()));
-				if(AttackHandler.getHand().size() == 1) {
-					AttackHandler.setInHand(AttackHandler.getHand().get(0));
-				}
-			}
-			setBuffer(0.0f);
-		} else {
-			//System.out.println(getBuffer());
-			tick();
-		}
 	}
 }

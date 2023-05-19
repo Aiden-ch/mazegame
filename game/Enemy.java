@@ -107,6 +107,12 @@ public class Enemy {
 	public void setVelY(float amount) {
 		this.velY = amount;
 	}
+	public void setXPos(float amount) {
+		this.box.x = amount;
+	}
+	public void setYPos(float amount) {
+		this.box.y = amount;
+	}
 	
 	public void takeDamage(double damage, float knockback, float angle) {
 		

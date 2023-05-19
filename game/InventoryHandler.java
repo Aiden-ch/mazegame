@@ -40,9 +40,11 @@ public class InventoryHandler {
 	
 	public static void testing() {
 		Trinket BombLauncher = new BombLauncher(ItemHandler.collected.get(0), 40f);
-		Trinket RulerBlade = new RulerBlade(ItemHandler.collected.get(1), 50f);
+		Trinket RulerBlade = new RulerBlade(ItemHandler.collected.get(2), 20f);
+		Trinket BasicBlade = new BasicBlade(ItemHandler.collected.get(1), 40f);
 		activeTrinkets.add(BombLauncher);
 		activeTrinkets.add(RulerBlade);
+		activeTrinkets.add(BasicBlade);
 	}
 	
 	public static void arrangeByPrecedence() {
@@ -62,12 +64,16 @@ public class InventoryHandler {
 	public static void activate() {
 		if(start) {
 			//arrangeByPrecedence();
-			start = false;
 		}
-		for(int i=0; i< activeTrinkets.size(); i++) {
+		//System.out.println(activeTrinkets.size());
+		for(int i=0; i<activeTrinkets.size(); i++) {
 			//add ifs and what not for different trinket abilities
 			activeTrinkets.get(i).resupply();
 			//System.out.println(activeTrinkets.get(i).getItem().getName());
+		}
+		if(start) {
+			//arrangeByPrecedence();
+			start = false;
 		}
 	}
 }
