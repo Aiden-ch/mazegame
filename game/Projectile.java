@@ -9,106 +9,87 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import java.lang.Math;
 
 public class Projectile {
-	private double damage;
-	private ArrayList<Double> velocity = new ArrayList<Double>();
 	private double speed = 0.0;
-	private int pierce;
+	private ArrayList<Double> velocity = new ArrayList<Double>();
 	
+	private double damage;
+	private double pierce;
+	private double knockback;
 	private Rectangle box;
 	
 	private Image projImage;
-	private Texture txte;
+	private Texture projTexture;
 	
-	public Projectile() {
-		;
-	}
-	
-	public Projectile(Texture txte, Image img, double speed, double damage, int pierce) {
-		projImage = img;
-		this.txte = txte;
+	public Projectile(Texture txte, double speed, double damage, int pierce) {
+		projImage = new Image(txte);
+		this.projTexture = txte;
 		this.speed = speed;
 		this.damage = damage;
 		this.pierce = pierce;
 	}
 	
-	public Projectile(double xPos, double yPos, double damage, double velx, double vely, double speed, int pierce, Image img) {
-		this.damage = damage;
-		
+	//use this constructor when making projectiles in RangedItem classes
+	public Projectile(Texture txte, double xPos, double yPos, double velx, double vely, double speed, double damage, double pierce, double knockback) {	
+		//movement
 		double mag = Math.sqrt(velx*velx + vely*vely);
-		
 		this.velocity.add(velx/mag);
 		this.velocity.add(vely/mag);
 		this.speed = speed;
-		this.pierce = pierce;
 		
-		projImage = img;
-		
+		//damage
+		this.pierce = pierce; //how many enemies goes through before destroyed
+		this.damage = damage;
+		this.knockback = knockback;
+		//hitbox
 		this.box = new Rectangle();
-		box.x = (float)xPos;
-		box.y = (float)yPos;
-		box.width = img.getWidth()/4;
-		box.height = img.getHeight()/4;
+		this.box.x = (float)xPos;
+		this.box.y = (float)yPos;
+		this.box.width = txte.getWidth()/4;
+		this.box.height = txte.getHeight()/4;
 	}
 	
-//	public Projectile(double xPos, double yPos, double damage, double velx, double vely, double speed, Texture txte, Image img) {
-//		this.damage = damage;
-//		
-//		double mag = Math.sqrt(velx*velx + vely*vely);
-//		
-//		this.velocity.add(velx/mag);
-//		this.velocity.add(vely/mag);
-//		this.speed = speed;
-//		
-//		projImage = img;
-//		this.txte = txte;
-//		
-//		this.box = new Rectangle();
-//		box.x = (float)xPos;
-//		box.y = (float)yPos;
-//		box.width = img.getWidth()/4;
-//		box.height = img.getHeight()/4;
-//	}
-	
-	public double getXPos() {
-		return box.x;
-	}
-	public double getYPos() {
-		return box.y;
-	}
 	public double getDamage() {
 		return damage;
 	}
-	public ArrayList<Double> getVelocity() {
-		return velocity;
+	public double getPierce() {
+		return this.pierce;
 	}
-	public double getSpeed() {
-		return speed;
-	}
-	public Image getImage() {
-		return projImage;
-	}
-	public Texture getTexture() {
-		return txte;
+	public double getKnockback() {
+		return this.knockback;
 	}
 	public Rectangle getBox() {
 		return this.box;
 	}
-	public int getPierce() {
-		return this.pierce;
+	public float getXPos() {
+		return this.box.x;
+	}
+	public float getYPos() {
+		return this.box.y;
+	}
+	public double getSpeed() {
+		return this.speed;
+	}
+	public ArrayList<Double> getVelocity() {
+		return velocity;
+	}
+	public Image getImage() {
+		return this.projImage;
+	}
+	public Texture getTexture() {
+		return this.projTexture;
+	}
+	public void setImage(Image temp) {
+		this.projImage = temp;
 	}
 	
 	public void move() {
 		this.box.x += this.velocity.get(0) * speed;
 		this.box.y += this.velocity.get(1) * speed;
+		this.projImage.setPosition(this.box.x, this.box.y);
 	}
-	
-	public void setImage(Image img) {
-		projImage = img;
-	}
-	protected void setXPos(double xPos) {
+	public void setPos(double xPos, double yPos) {
 		this.box.x = (float)xPos;
-	}
-	protected void setYPos(double yPos) {
 		this.box.y = (float)yPos;
+		this.projImage.setPosition(this.box.x, this.box.y);
 	}
 }
