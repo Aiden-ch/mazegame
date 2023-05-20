@@ -1,16 +1,16 @@
 package com.mygdx.game.trinkets;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.AttackHandler;
 import com.mygdx.game.InventoryHandler;
-import com.mygdx.game.Item;
+import com.mygdx.game.Card;
+import com.mygdx.game.CardHandler;
 import com.mygdx.game.Trinket;
 
 public class BasicBlade extends Trinket {
-	public BasicBlade(Texture txte, Item item, float refreshTime) {
+	public BasicBlade(Texture txte, Card item, float refreshTime) {
 		super(txte, item, refreshTime);
 	}
-	public BasicBlade(Item item, float refreshTime) {
+	public BasicBlade(Card item, float refreshTime) {
 		super(item, refreshTime);
 	}
 	
@@ -18,29 +18,29 @@ public class BasicBlade extends Trinket {
 	public void resupply() {
 		if(getBuffer() >= getRefresh()) {
 			//System.out.println(InventoryHandler.getStart());
-			int index = AttackHandler.getHand().size()-1;
-			for(int i=0; i<AttackHandler.getHand().size(); i++) {
-				if(AttackHandler.getHand().get(i).getName().contains("Sword")) {
+			int index = CardHandler.getHand().size()-1;
+			for(int i=0; i<CardHandler.getHand().size(); i++) {
+				if(CardHandler.getHand().get(i).getName().contains("Sword")) {
 					index = i;
 				}
 			}
 			
 			if(InventoryHandler.getStart()) {
 				//System.out.println("supplied");
-				AttackHandler.getHand().add(new Item(getItem().getName(), getItem().getMel(), getItem().getUses(), getItem().getImage()));
-			} else if(AttackHandler.getInHand() == null && AttackHandler.getHand().size() == 0) {
+				CardHandler.getHand().add(new Card(getItem().getName(), getItem().getMel(), getItem().getUses(), getItem().getImage()));
+			} else if(CardHandler.getHeld() == null && CardHandler.getHand().size() == 0) {
 				//might not work
 				//System.out.println("resupplied");
 				getItem().setUses(1);
 				//System.out.println(getItem().getUses());
-				AttackHandler.getHand().add(new Item(getItem().getName(), getItem().getMel(), getItem().getUses(), getItem().getImage()));
-				if(AttackHandler.getHand().size() == 1) {
-					AttackHandler.setInHand(AttackHandler.getHand().get(0));
+				CardHandler.getHand().add(new Card(getItem().getName(), getItem().getMel(), getItem().getUses(), getItem().getImage()));
+				if(CardHandler.getHand().size() == 1) {
+					CardHandler.chooseCard(CardHandler.getHand().get(0));
 				}
-			} else if(getItem().getUses() <= 0 && AttackHandler.getHand().size() > 0) { 
+			} else if(getItem().getUses() <= 0 && CardHandler.getHand().size() > 0) { 
 				System.out.println("add");
 				getItem().setUses(1);
-				AttackHandler.getHand().get(index).setUses(getItem().getUses());
+				CardHandler.getHand().get(index).setUses(getItem().getUses());
 			}
 			setBuffer(0.0f);
 		} else {

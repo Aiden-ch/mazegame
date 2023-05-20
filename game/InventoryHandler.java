@@ -39,9 +39,9 @@ public class InventoryHandler {
 	}
 	
 	public static void testing() {
-		Trinket BombLauncher = new BombLauncher(ItemHandler.collected.get(0), 40f);
-		Trinket RulerBlade = new RulerBlade(ItemHandler.collected.get(2), 20f);
-		Trinket BasicBlade = new BasicBlade(ItemHandler.collected.get(1), 40f);
+		Trinket BombLauncher = new BombLauncher(CardHandler.allItems.get(0), 40f);
+		Trinket RulerBlade = new RulerBlade(CardHandler.allItems.get(2), 20f);
+		Trinket BasicBlade = new BasicBlade(CardHandler.allItems.get(1), 40f);
 		activeTrinkets.add(BombLauncher);
 		activeTrinkets.add(RulerBlade);
 		activeTrinkets.add(BasicBlade);

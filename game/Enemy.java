@@ -50,8 +50,6 @@ public class Enemy {
 	}
 	
 	public void move(Player player) {
-// 		float velocityX = maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x));
-// 		float velocityY = maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x));
 		velX += Math.signum(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX) * 
 			Math.min(Math.abs(acceleration * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
 					Math.abs(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX));

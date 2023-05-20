@@ -6,19 +6,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class Trinket {
 	//inventory things that give items to use in combat
 	private Image trkImg;
-	private Item item;
+	private Card item;
 	
 	private int perkPrecedence;
 	private float refreshTime;
 	private float buffer = 0.0f;
 	
-	public Trinket(Texture txte, Item item, float refreshTime) {
+	public Trinket(Texture txte, Card item, float refreshTime) {
 		trkImg = new Image(txte);
 		this.item = item;
 		this.refreshTime = refreshTime;
 		this.buffer = refreshTime;
 	}
-	public Trinket(Item item, float refreshTime) {
+	public Trinket(Card item, float refreshTime) {
 		this.item = item;
 		this.refreshTime = refreshTime;
 		this.buffer = refreshTime;
@@ -27,7 +27,7 @@ public class Trinket {
 	public Image getImage() {
 		return this.trkImg;
 	}
-	public Item getItem() {
+	public Card getItem() {
 		return this.item;
 	}
 	public void setPrecedence(int num) {

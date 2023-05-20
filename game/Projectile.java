@@ -22,6 +22,7 @@ public class Projectile {
 	
 	public Projectile(Texture txte, double speed, double damage, int pierce) {
 		projImage = new Image(txte);
+		projImage.setOrigin(txte.getWidth()/2, txte.getHeight()/2);
 		this.projTexture = txte;
 		this.speed = speed;
 		this.damage = damage;
@@ -91,5 +92,11 @@ public class Projectile {
 		this.box.x = (float)xPos;
 		this.box.y = (float)yPos;
 		this.projImage.setPosition(this.box.x, this.box.y);
+	}
+	
+	//what happens when projectile hits
+	//effects and what not
+	public void hit() {
+		//extender
 	}
 }

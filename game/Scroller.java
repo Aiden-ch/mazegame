@@ -7,7 +7,7 @@ public class Scroller extends InputAdapter {
 	@Override
 	public boolean scrolled (float amountX, float amountY) {
 		//System.out.println(amountY);
-		AttackHandler.chooseCard(ItemHandler.checkHand(amountY));
+		CardHandler.chooseCard(CardHandler.checkHand(amountY));
 		//System.out.println("checked");
 		return false;
 	}
@@ -16,10 +16,10 @@ public class Scroller extends InputAdapter {
 	public boolean keyDown (int keycode) {
 		switch (keycode) {
 		case Keys.Q:
-			AttackHandler.chooseCard(ItemHandler.checkHand(-1f));
+			CardHandler.chooseCard(CardHandler.checkHand(-1f));
 			break;
 		case Keys.E:
-			AttackHandler.chooseCard(ItemHandler.checkHand(1f));
+			CardHandler.chooseCard(CardHandler.checkHand(1f));
 			break;
 		}
 		return false;

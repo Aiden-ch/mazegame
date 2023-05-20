@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Misc {
@@ -32,6 +33,9 @@ public class Misc {
 	}
 	
 	public boolean consume(Player player, int index) {
+		return false;
+	}
+	public boolean update(Player player, Stage stage) {
 		return false;
 	}
 }

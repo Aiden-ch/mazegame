@@ -8,10 +8,10 @@ public class BombLauncher extends Trinket {
 	//shoot Bombs
 	//low count, low fire rate
 	//inventory item > adds bomb card
-	public BombLauncher(Texture txte, Item item, float refreshTime) {
+	public BombLauncher(Texture txte, Card item, float refreshTime) {
 		super(txte, item, refreshTime);
 	}
-	public BombLauncher(Item item, float refreshTime) {
+	public BombLauncher(Card item, float refreshTime) {
 		super(item, refreshTime);
 	}
 
@@ -21,30 +21,30 @@ public class BombLauncher extends Trinket {
 		//System.out.println("restocking");
 		//aaaa
 		if(getBuffer() >= getRefresh()) {
-			int index = AttackHandler.getHand().size()-1;
-			for(int i=0; i<AttackHandler.getHand().size(); i++) {
-				if(AttackHandler.getHand().get(i).getName().contains("Bomb")) {
+			int index = CardHandler.getHand().size()-1;
+			for(int i=0; i<CardHandler.getHand().size(); i++) {
+				if(CardHandler.getHand().get(i).getName().contains("Bomb")) {
 					index = i;
 				}
 			}
 			
 			if(InventoryHandler.getStart()) {
 				//System.out.println("supplied");
-				AttackHandler.getHand().add(new Item(getItem().getName(), getItem().getProj(), getItem().getUses(), getItem().getImage()));
-			} else if(AttackHandler.getInHand() == null && AttackHandler.getHand().size() == 0) {
+				CardHandler.getHand().add(new Card(getItem().getName(), getItem().getRanged(), getItem().getUses(), getItem().getImage()));
+			} else if(CardHandler.getHand() == null && CardHandler.getHand().size() == 0) {
 				//might not work
 				//System.out.println("resupplied");
 				getItem().setUses(2);
 				//System.out.println(getItem().getUses());
-				AttackHandler.getHand().add(new Item(getItem().getName(), getItem().getProj(), getItem().getUses(), getItem().getImage()));
-				if(AttackHandler.getHand().size() == 1) {
-					AttackHandler.setInHand(AttackHandler.getHand().get(0));
+				CardHandler.getHand().add(new Card(getItem().getName(), getItem().getRanged(), getItem().getUses(), getItem().getImage()));
+				if(CardHandler.getHand().size() == 1) {
+					CardHandler.chooseCard(CardHandler.getHand().get(0));
 				}
-			} else if(getItem().getUses() < 2 && AttackHandler.getHand().size() > 0) { 
+			} else if(getItem().getUses() < 2 && CardHandler.getHand().size() > 0) { 
 				//slow restock
 				System.out.println("add");
 				getItem().setUses(getItem().getUses()+1);
-				AttackHandler.getHand().get(index).setUses(getItem().getUses());
+				CardHandler.getHand().get(index).setUses(getItem().getUses());
 			}
 			setBuffer(0.0f);
 		} else {
