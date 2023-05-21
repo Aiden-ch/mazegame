@@ -28,15 +28,6 @@ public class Card {
 		
 		this.itemImg = img;
 	}
-	//for copies
-	public Card(String name, RangedItem rait, Image img) {
-		this.name = name;
-		this.rait = rait;
-		//p for projectile
-		this.type = 'p';
-		
-		this.itemImg = img;
-	}
 	public Card(String name, Melee mel, int uses, Image img) {
 		this.name = name;
 		this.mel = mel;
@@ -46,30 +37,12 @@ public class Card {
 		
 		this.itemImg = img;
 	}
-	//for copies
-	public Card(String name, Melee mel, Image img) {
-		this.name = name;
-		this.mel = mel;
-		//s for swing
-		this.type = 's';
-		
-		this.itemImg = img;
-	}
 	public Card(String name, Misc misc, int uses, Image img) {
 		this.name = name;
 		this.misc = misc;
 		//s for swing
 		this.type = 'm';
 		this.uses = uses;
-		
-		this.itemImg = img;
-	}
-	//for copies
-	public Card(String name, Misc misc, Image img) {
-		this.name = name;
-		this.misc = misc;
-		//s for swing
-		this.type = 'm';
 		
 		this.itemImg = img;
 	}

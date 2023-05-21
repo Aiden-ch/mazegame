@@ -1,29 +1,31 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import java.lang.Math;
 import java.util.ArrayList;
 
 public class Enemy {
 	private Rectangle box;
-	private float health;
+	private double health;
 	private double damage;
 	private ArrayList<EffectHandler> effects = new ArrayList<EffectHandler>(); 
-	private float velX = 0;
-	private float velY = 0;
-	private float acceleration = 0.5f;
+	private double velX = 0;
+	private double velY = 0;
+	private double acceleration = 0.5;
 	
 	private Texture txte;
 	private Image enImg;
 	
-	private float maxSpeed;
+	private double maxSpeed;
 	
 	private boolean tookDamage = false;
-	private float timer = 0.0f;
+	private double timer = 0.0f;
 	
-	private float enKnockback = 10f;
+	private double enKnockback = 10f;
 	
 	public Enemy(Texture txte, Image enImg, float health, float maxSpeed, double damage) {
 		this.txte = txte;
@@ -33,7 +35,7 @@ public class Enemy {
 		this.damage = damage;
 	}
 	
-	public Enemy(float xPos, float yPos, float health, float maxSpeed, double damage, Texture txte, Image enImg) {
+	public Enemy(float xPos, float yPos, double health, double maxSpeed, double damage, Texture txte, Image enImg) {
 		this.box = new Rectangle();
 		this.box.x = xPos;
 		this.box.y = yPos;
@@ -49,16 +51,38 @@ public class Enemy {
 		this.box.height = enImg.getHeight()/2;
 	}
 	
-	public void move(Player player) {
-		velX += Math.signum(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX) * 
-			Math.min(Math.abs(acceleration * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
-					Math.abs(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX));
-		velY += Math.signum(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY) * 
-			Math.min(Math.abs(acceleration * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
-				 Math.abs(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY));
+	public void update(Player player, Stage stage, int index) {
+		if(health <= 0) {
+			enImg.remove();
+			EnemyHandler.getEnemies().remove(index);
+			index--;
+		} else {
+			velX += Math.signum(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX) * 
+					Math.min(Math.abs(acceleration * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
+							Math.abs(maxSpeed * Math.cos(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velX));
+			velY += Math.signum(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY) * 
+					Math.min(Math.abs(acceleration * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
+							Math.abs(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY));
+
+			this.box.x += velX;
+			this.box.y += velY;
+
+			if(player.getBox().overlaps(box) && health > 0) {
+				player.takeDamage(damage);
+
+				knockback(-90f + 180f/(float)Math.PI * (float)(Math.atan2(box.y-player.getYPos(), box.x-player.getImage().getWidth()/2-player.getXPos())));
+			}
+			
+			if(box.x < 0) box.x = 0;
+			if(box.x > Gdx.graphics.getWidth() - 64) box.x = (Gdx.graphics.getWidth() - 64);
+			if(box.y < 0) box.y = 0;
+			if(box.y > Gdx.graphics.getHeight() - 64) box.y = (Gdx.graphics.getHeight() - 64);
+
+			enImg.setPosition(box.x, box.y);
+
+			stage.addActor(enImg);
+		}
 		
-		this.box.x += velX;
-		this.box.y += velY;
 		timer += 0.5f;
 	}
 	
@@ -72,10 +96,10 @@ public class Enemy {
 	public float getYPos() {
 		return this.box.y;
 	}
-	public float getSpeed() {
+	public double getSpeed() {
 		return this.maxSpeed;
 	}
-	public float getHealth() {
+	public double getHealth() {
 		return this.health;
 	}
 	public Texture getTexture() {
@@ -90,19 +114,25 @@ public class Enemy {
 	public double getDamage() {
 		return this.damage;
 	}
-	public float getVelX() {
+	public double getTime() {
+		return this.timer;
+	}
+	public void tickTime() {
+		this.timer += 0.5f;
+	}
+	public double getVelX() {
 		return this.velX;
 	}
-	public float getVelY() {
+	public double getVelY() {
 		return this.velY;
 	}
-	public float getAcceleration() {
+	public double getAcceleration() {
 		return this.acceleration;
 	}
-	public void setVelX(float amount) {
+	public void setVelX(double amount) {
 		this.velX = amount;
 	}
-	public void setVelY(float amount) {
+	public void setVelY(double amount) {
 		this.velY = amount;
 	}
 	public void setXPos(float amount) {

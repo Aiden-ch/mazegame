@@ -123,7 +123,8 @@ public class MazeCombat implements Screen {
 		
 		sword = new Texture("melee/sword.png");
 		Melee swordMelee = new Melee(10.0, (float)Math.PI/2f, 3.0, 5.0, 5.0f, sword); 
-		items.addCard("Sword", swordMelee, 1, new Image(new Texture("trinkets/basicblade.png")));
+		Image swordImage = new Image(new Texture("trinkets/basicblade.png"));
+		items.addCard("Sword", swordMelee, 1, swordImage);
 		
 		ruler = new Texture("melee/ruler.png");	
 		Melee rulerMelee = new Melee(1.0, (float)Math.PI, 10.0, 4.0, 5.0f, ruler); //smaller speed = faster
@@ -168,19 +169,23 @@ public class MazeCombat implements Screen {
 		camera.update();
 		gaeme.batch.setProjectionMatrix(camera.combined);
 		mouse_position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(mouse_position);
-        
-        //handle initial hand
+        camera.unproject(mouse_position);        
+		
+		//make sure to add actors and stuff after batch begins
+		gaeme.batch.begin();
+		//background
+		gaeme.batch.draw(bimg, 0, 0);
+		UIHandler.displayStats(player, gaeme.batch, stage);
+		
+		//handle initial hand
         if(time == 0.2f) {
         	handIndex = 0;
-        	//System.out.println(AttackHandler.inHand.getType());
         }
         InventoryHandler.activate();
         //TODO: handIndex change
-        //System.out.println("restocking");
+
 		//attacking
 
-        
 		//change items collected thing to connect to card draw and inventory
         if(CardHandler.getHand().size() > 0 && CardHandler.getHeld() != null) {
         	//System.out.println(AttackHandler.hand.size());
@@ -192,14 +197,6 @@ public class MazeCombat implements Screen {
         		CardHandler.getHeld().getMel().update(player, stage);
         	}
         }
-		//System.out.println(items.collected.get(1));
-		//if(!meleed) {
-		//buffer = AttackHandler.melee(player, ItemHandler.collected.get(1), buffer);
-		//System.out.println("swunk");
-		//}
-		//TODO: add bolt
-		//TODO: add misc card
-		buffer -= 0.2;
 		
 		//enemy spawn
 		if(time % 20 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
@@ -211,17 +208,6 @@ public class MazeCombat implements Screen {
 
 		//player movement
 		player.move();
-		//limit where player goes
-		if(player.getXPos() < 0) player.setXPos(0);
-		if(player.getXPos() > Gdx.graphics.getWidth() - 64) player.setXPos(Gdx.graphics.getWidth() - 64);
-		if(player.getYPos() < 0) player.setYPos(0);
-		if(player.getYPos() > Gdx.graphics.getHeight() - 64) player.setYPos(Gdx.graphics.getHeight() - 64);
-		
-		//"actual" rendering
-		gaeme.batch.begin();
-		//background
-		gaeme.batch.draw(bimg, 0, 0);
-		UIHandler.displayStats(player, gaeme.batch, stage);
 		
 		//renders each projectile
 //		for(int i=0; i<AttackHandler.getActive().size(); i++) {
@@ -248,44 +234,12 @@ public class MazeCombat implements Screen {
 			EffectHandler.playerEffects(player);
 		}
 		
-		//render enemies
+		//render and update enemies
 		for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
-			Enemy temp = EnemyHandler.getEnemies().get(i);
-
-			temp.getImage().setPosition(temp.getXPos(), temp.getYPos());
-			temp.move(player);
-			
-			if(temp.getXPos() < 0) temp.setXPos(0);
-			if(temp.getXPos() > Gdx.graphics.getWidth() - 64) temp.setXPos(Gdx.graphics.getWidth() - 64);
-			if(temp.getYPos() < 0) temp.setYPos(0);
-			if(temp.getYPos() > Gdx.graphics.getHeight() - 64) temp.setYPos(Gdx.graphics.getHeight() - 64);
-
-			stage.addActor(temp.getImage());
-			
-			if(temp.getHealth() <= 0) {
-				temp.getImage().remove();
-				EnemyHandler.getEnemies().remove(i);
-				i--;
-			} else 
-//				remove blobs that touch player
-			if(player.getBox().overlaps(temp.getBox()) && temp.getHealth() > 0) {
-				player.takeDamage(temp.getDamage()); //add back
-				
-				temp.knockback(-90f + 180f/(float)Math.PI * (float)(Math.atan2(temp.getYPos()-player.getYPos(), temp.getXPos()-player.getImage().getWidth()/2-player.getXPos())));
-				
-				//System.out.println(player.getHealth());
-				
-				//temp.getImage().remove();
-				//EnemyHandler.getEnemies().remove(i);
-				//i--;
-			}
-			
-			
+			EnemyHandler.getEnemies().get(i).update(player, stage, i);			
 		}
 
-		//System.out.println(AttackHandler.getCards().size());
-		
-		//player
+		//render player
 		if(player.getHealth() > 0) {
 			gaeme.batch.draw(player.player, player.getXPos(), player.getYPos());
 			//System.out.println(player.getXPos());

@@ -27,20 +27,20 @@ public class BasicBlade extends Trinket {
 			
 			if(InventoryHandler.getStart()) {
 				//System.out.println("supplied");
-				CardHandler.getHand().add(new Card(getItem().getName(), getItem().getMel(), getItem().getUses(), getItem().getImage()));
+				CardHandler.getHand().add(new Card(getCard().getName(), getCard().getMel(), getCard().getUses(), getCard().getImage()));
 			} else if(CardHandler.getHeld() == null && CardHandler.getHand().size() == 0) {
 				//might not work
 				//System.out.println("resupplied");
-				getItem().setUses(1);
+				getCard().setUses(1);
 				//System.out.println(getItem().getUses());
-				CardHandler.getHand().add(new Card(getItem().getName(), getItem().getMel(), getItem().getUses(), getItem().getImage()));
+				CardHandler.getHand().add(new Card(getCard().getName(), getCard().getMel(), getCard().getUses(), getCard().getImage()));
 				if(CardHandler.getHand().size() == 1) {
 					CardHandler.chooseCard(CardHandler.getHand().get(0));
 				}
-			} else if(getItem().getUses() <= 0 && CardHandler.getHand().size() > 0) { 
+			} else if(getCard().getUses() <= 0 && CardHandler.getHand().size() > 0) { 
 				System.out.println("add");
-				getItem().setUses(1);
-				CardHandler.getHand().get(index).setUses(getItem().getUses());
+				getCard().setUses(1);
+				CardHandler.getHand().get(index).setUses(getCard().getUses());
 			}
 			setBuffer(0.0f);
 		} else {

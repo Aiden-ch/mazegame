@@ -226,6 +226,11 @@ public class Player {
 		
 		this.box.x += velX;
 		this.box.y += velY; 
+		
+		if(box.x < 0) box.x = (0);
+		if(box.x > Gdx.graphics.getWidth() - 64) box.x = (Gdx.graphics.getWidth() - 64);
+		if(box.y < 0) box.y = (0);
+		if(box.y > Gdx.graphics.getHeight() - 64) box.y = (Gdx.graphics.getHeight() - 64);
 				    
 		pImg = new Image(player);
 		pImg.setOrigin(player.getWidth()/2, player.getHeight()/2);

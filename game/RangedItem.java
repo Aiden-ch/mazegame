@@ -21,7 +21,7 @@ public class RangedItem {
 		this.projectile = proj;
 		this.maxReload = maxReload;
 		this.maxShots = shots;
-		this.tick = maxReload;
+		this.tick = 0;
 	}
 	
 	public boolean update(Player player, Stage stage) {

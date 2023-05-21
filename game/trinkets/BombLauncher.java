@@ -8,11 +8,11 @@ public class BombLauncher extends Trinket {
 	//shoot Bombs
 	//low count, low fire rate
 	//inventory item > adds bomb card
-	public BombLauncher(Texture txte, Card item, float refreshTime) {
-		super(txte, item, refreshTime);
+	public BombLauncher(Texture txte, Card card, float refreshTime) {
+		super(txte, card, refreshTime);
 	}
-	public BombLauncher(Card item, float refreshTime) {
-		super(item, refreshTime);
+	public BombLauncher(Card card, float refreshTime) {
+		super(card, refreshTime);
 	}
 
 	
@@ -29,22 +29,22 @@ public class BombLauncher extends Trinket {
 			}
 			
 			if(InventoryHandler.getStart()) {
-				//System.out.println("supplied");
-				CardHandler.getHand().add(new Card(getItem().getName(), getItem().getRanged(), getItem().getUses(), getItem().getImage()));
+				System.out.println("supplied");
+				CardHandler.getHand().add(new Card(getCard().getName(), getCard().getRanged(), getCard().getUses(), getCard().getImage()));
 			} else if(CardHandler.getHand() == null && CardHandler.getHand().size() == 0) {
 				//might not work
 				//System.out.println("resupplied");
-				getItem().setUses(2);
+				getCard().setUses(2);
 				//System.out.println(getItem().getUses());
-				CardHandler.getHand().add(new Card(getItem().getName(), getItem().getRanged(), getItem().getUses(), getItem().getImage()));
+				CardHandler.getHand().add(new Card(getCard().getName(), getCard().getRanged(), getCard().getUses(), getCard().getImage()));
 				if(CardHandler.getHand().size() == 1) {
 					CardHandler.chooseCard(CardHandler.getHand().get(0));
 				}
-			} else if(getItem().getUses() < 2 && CardHandler.getHand().size() > 0) { 
+			} else if(getCard().getUses() < 2 && CardHandler.getHand().size() > 0) { 
 				//slow restock
 				System.out.println("add");
-				getItem().setUses(getItem().getUses()+1);
-				CardHandler.getHand().get(index).setUses(getItem().getUses());
+				getCard().setUses(getCard().getUses()+1);
+				CardHandler.getHand().get(index).setUses(getCard().getUses());
 			}
 			setBuffer(0.0f);
 		} else {
