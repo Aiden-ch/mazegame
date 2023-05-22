@@ -13,9 +13,8 @@ public class Misc {
 		;
 	}
 	
-	public Misc(Image mImg, Texture txte) {
-		this.mImg = mImg;
-		this.texture = txte;
+	public Misc(Texture txte) {
+		this.mImg = new Image(txte);
 	}
 	
 	public Image getImage() {

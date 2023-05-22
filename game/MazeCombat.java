@@ -10,11 +10,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-//import com.mygdx.game.miscItems.*; //add back later
+import com.mygdx.game.miscItems.*;
 
 //import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+//import com.badlogic.gdx.Input;
 //import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -76,8 +77,6 @@ public class MazeCombat implements Screen {
 	Texture bombLauncher;
 	Image bombLauncherImg;
 	
-	int handIndex = 0;
-	
 	int numSummons = 10;
 	
 	Texture ruler;
@@ -97,7 +96,7 @@ public class MazeCombat implements Screen {
 		bombProj = new Projectile(bomb, 10d, 15d, 0);
 		RangedItem bombCard = new RangedItem(bombProj, 10d, 1);
 		
-		bombLauncher = new Texture("trinkets/bomblauncher.png");
+		bombLauncher = new Texture("cards/bomblauncher.png");
 		bombLauncherImg = new Image(bombLauncher);
 		
 		items.addCard("Bomb", bombCard, 3, bombLauncherImg);
@@ -109,11 +108,11 @@ public class MazeCombat implements Screen {
 //		
 //		items.addItem("Arrow", arrowProj, 5);
 //		
-//		potion = new Texture("misc/heartpotion.png");
-//		potionImg = new Image(potion);
-//		Misc potionMisc = new HealthPot(potion, potionImg);
-//		
-//		items.addItem("Health Potion", potionMisc, 2);
+		potion = new Texture("misc/heartpotion.png");
+		Texture potionCard = new Texture("cards/heartpotion.png");
+		Misc potionMisc = new HealthPot(potion);
+		
+		items.addCard("Health Potion", potionMisc, 2, new Image(potionCard));
 //		
 //		speedPotion = new Texture("misc/speedpotion.png");
 //		speedPotionImg = new Image(speedPotion);
@@ -123,11 +122,12 @@ public class MazeCombat implements Screen {
 		
 		sword = new Texture("melee/sword.png");
 		Melee swordMelee = new Melee(10.0, (float)Math.PI/2f, 3.0, 5.0, 5.0f, sword); 
-		Image swordImage = new Image(new Texture("trinkets/basicblade.png"));
+		Image swordImage = new Image(new Texture("cards/basicblade.png"));
 		items.addCard("Sword", swordMelee, 1, swordImage);
 		
 		ruler = new Texture("melee/ruler.png");	
 		Melee rulerMelee = new Melee(1.0, (float)Math.PI, 10.0, 4.0, 5.0f, ruler); //smaller speed = faster
+		rulerBladeImg = new Image(new Texture("cards/ruler.png"));
 		items.addCard("Ruler Slash", rulerMelee, 1, rulerBladeImg);
 		
 		InventoryHandler.testing();
@@ -145,7 +145,7 @@ public class MazeCombat implements Screen {
 		
 		camera = new OrthographicCamera();
 		mouse_position = new Vector3(0,0,0);
-		camera.setToOrtho(false, Gdx.graphics.getWidth()-50, Gdx.graphics.getHeight()-50);
+		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.position.x = Gdx.graphics.getWidth()/2; 
 	    camera.position.y = Gdx.graphics.getHeight()/2;
 		stage = new Stage(new ScreenViewport());
@@ -175,27 +175,29 @@ public class MazeCombat implements Screen {
 		gaeme.batch.begin();
 		//background
 		gaeme.batch.draw(bimg, 0, 0);
-		UIHandler.displayStats(player, gaeme.batch, stage);
 		
 		//handle initial hand
+		InventoryHandler.activate();
         if(time == 0.2f) {
-        	handIndex = 0;
+        	CardHandler.chooseCard(CardHandler.checkHand(1));
         }
-        InventoryHandler.activate();
         //TODO: handIndex change
 
 		//attacking
-
 		//change items collected thing to connect to card draw and inventory
         if(CardHandler.getHand().size() > 0 && CardHandler.getHeld() != null) {
-        	//System.out.println(AttackHandler.hand.size());
+        	boolean used = false;
         	if(CardHandler.getHeld().getType() == 'p') {
-        		CardHandler.getHeld().getRanged().update(player, stage);
+        		used = CardHandler.getHeld().getRanged().update(player, stage);
         	} else if(CardHandler.getHeld().getType() == 'm') {
         		//buffer = AttackHandler.use(player, AttackHandler.inHand, buffer);
+        		used = CardHandler.getHeld().getMisc().consume(player, numSummons);
         	} else if(CardHandler.getHeld().getType() == 's') {
-        		CardHandler.getHeld().getMel().update(player, stage);
+        		used = CardHandler.getHeld().getMel().update(player, stage);
         	}
+        	if(used) {
+    			CardHandler.consumeCard(CardHandler.getHeld(), CardHandler.getIndex());
+    		}
         }
 		
 		//enemy spawn
@@ -248,6 +250,8 @@ public class MazeCombat implements Screen {
 			//System.out.println("dead");
 		}
 		
+		UIHandler.displayStats(player, gaeme.batch, stage);
+		
 		//for drawing
 		stage.act();
 		stage.draw();
@@ -260,9 +264,7 @@ public class MazeCombat implements Screen {
 			gaeme.mazeScreen();
 		}
 		
-
 		gaeme.batch.end();
-		
 	}
 
 	@Override

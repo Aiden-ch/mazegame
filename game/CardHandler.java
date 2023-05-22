@@ -19,9 +19,10 @@ public class CardHandler {
 	//all cards in hand
 	private static ArrayList<Card> hand = new ArrayList<Card>();
 	//to get the held card in hand
-	private static int cardNum = 0;
+	private static int cardNum;
 	
 	public CardHandler() {
+		cardNum = 0;
 		allItems = new ArrayList<Card>();
 	}
 	
@@ -49,14 +50,16 @@ public class CardHandler {
 		}
 		return -1;
 	}
-	public static void consumeCard(int uses, int index) {
-		if(uses <= 0) {		
+	public static void consumeCard(Card card, int index) {
+		if(card.getUses() <= 0) {		
 			hand.remove(index);
 			held = null;
 			if(held == null && hand.size() >= 1) {
 				System.out.println("new");
 				held = CardHandler.checkHand(1f);
 			}
+		} else {
+			card.used();
 		}
 	}
 	
@@ -71,7 +74,7 @@ public class CardHandler {
 			} else {
 				cardNum--;
 			}
-
+			System.out.println(cardNum);
 			return hand.get(cardNum);
 		}
 		return null;
@@ -82,5 +85,8 @@ public class CardHandler {
 	}
 	public static ArrayList<Card> getHand() {
 		return hand;
+	}
+	public static int getIndex() {
+		return cardNum;
 	}
 }

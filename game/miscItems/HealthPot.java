@@ -1,16 +1,14 @@
 package com.mygdx.game.miscItems;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mygdx.game.AttackHandler;
 import com.mygdx.game.Misc;
 import com.mygdx.game.Player;
 
 public class HealthPot extends Misc {
 	private float tick = 0.0f;
 	
-	public HealthPot(Texture txte, Image mImg) {
-		super(mImg, txte);
+	public HealthPot(Texture txte) {
+		super(txte);
 		this.getImage().setOrigin(txte.getWidth()/2,txte.getHeight()/2);
 		setType("healthpotion");
 	}
@@ -22,7 +20,7 @@ public class HealthPot extends Misc {
 			player.addHealth(10);
 			System.out.println("health: " + player.getHealth());
 			this.getImage().remove();
-			AttackHandler.getActive().remove(index);
+			tick = 0;
 			return true;
 		} 
 		if(tick <= 6.1f) {

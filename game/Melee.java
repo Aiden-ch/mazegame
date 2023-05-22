@@ -43,8 +43,7 @@ public class Melee {
 				Enemy tempem = EnemyHandler.getEnemies(i);
 				float enan = -90f + 180f/(float)Math.PI * (float)(Math.atan2(tempem.getYPos()-player.getYPos(), tempem.getXPos()-player.getImage().getWidth()/2-player.getXPos()));
 
-				if((Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= 10f)
-				   || (Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= melImg.getHeight()+10)
+				if((Math.sqrt(Math.pow(tempem.getXPos()-player.getXPos(), 2) + Math.pow(tempem.getYPos() - player.getYPos(),2)) <= melImg.getHeight()+10)
 		        	   && (Math.abs(this.startAngle - enan + swingRange / 2 * 180 / Math.PI) <= swingRange / 2 * 180 / Math.PI)) {
 
 					EnemyHandler.getEnemies().get(i).takeDamage(damage, (float)knockback, enan);
@@ -59,7 +58,8 @@ public class Melee {
 		// decrement coolDown
 		coolDown = Math.max(coolDown -= 0.2f, 0);
 		// check whether to start attack
-		if(coolDown == 0 && Gdx.input.isKeyPressed(Input.Buttons.LEFT)) {
+		if(coolDown == 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+			
 			float angle = -90f + 180f/(float)Math.PI * (float)(Math.atan2(Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos()) - swingRange / 2);
 			melImg.setRotation(angle);
 			startAngle = angle; 
@@ -73,9 +73,10 @@ public class Melee {
 		
 		setPosition(player.getXPos(), player.getYPos() + 20);
 		
-		if(tick >= swingTime) {
+		if(tick >= swingRange) {
 			swinging = false;
 			melImg.remove();
+			tick = 0;
 			return true;
 		}
 		return false; //use to tick down uses on card

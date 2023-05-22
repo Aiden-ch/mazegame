@@ -27,8 +27,8 @@ public class SpeedPot extends Misc {
 				System.out.println("speed up!");
 				return true;
 			}
+			tick = 0;
 			this.getImage().remove();
-			AttackHandler.getActive().remove(index);
 		} 
 		if(tick <= 6.1f) {
 			getImage().rotateBy((float)Math.PI/14f * 180f/(float)Math.PI);

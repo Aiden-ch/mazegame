@@ -7,18 +7,19 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class RangedItem {
+public class RangedItem {	
 	private double maxReload; //fire rate
 	private int maxShots; //how many projectiles fired at a time
 	private double tick;
 	
-	private boolean shooting;
+	private boolean shooting = false;
 	
 	private Projectile projectile;
 	private ArrayList<Projectile> projectiles;
 	
 	public RangedItem(Projectile proj, double maxReload, int shots) {
 		this.projectile = proj;
+		this.projectiles = new ArrayList<Projectile>();
 		this.maxReload = maxReload;
 		this.maxShots = shots;
 		this.tick = 0;
@@ -37,7 +38,6 @@ public class RangedItem {
 					
 					if(temp.getBox().overlaps(EnemyHandler.getEnemies().get(j).getBox())) {
 						EnemyHandler.getEnemies().get(j).takeDamage((float)temp.getDamage(), (float)temp.getKnockback(), enan);
-						
 						destroy = true;
 					}
 				}
@@ -46,6 +46,8 @@ public class RangedItem {
 				if(temp.getXPos()<0-64-10 || temp.getYPos()<0-64-10 || temp.getXPos()>Gdx.graphics.getWidth()+64+10 
 						|| temp.getYPos()>Gdx.graphics.getHeight()+64+10 || destroy) {
 					temp.getImage().remove();
+					projectiles.remove(i);
+					i--;
 				} else {
 					projectiles.get(i).move();
 					stage.addActor(projectiles.get(i).getImage());
@@ -54,11 +56,11 @@ public class RangedItem {
 		}
 		
 		tick = Math.max(tick -= 0.2f, 0);
-		if(tick == 0 && Gdx.input.isKeyPressed(Input.Buttons.LEFT)) {
+		if(tick == 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			for(int i=0; i<maxShots; i++) {
 				Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
 						Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos(), Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
-				Image projImage = new Image(projectile.getTexture());
+				Image projImage = new Image(this.projectile.getTexture());
 				projImage.setOrigin(projImage.getWidth()/2.0f, 0);
 				projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
 				proj.setImage(projImage);
@@ -72,7 +74,6 @@ public class RangedItem {
 		if(projectiles.size() == 0) {
 			shooting = false;
 		}
-		tick += 0.2f;
 		
 		return false; //use to tick down uses on card
 	}
