@@ -98,7 +98,7 @@ public class Player {
 	}
 	
 	public void move() {
-		invulTimer = Math.max(invulTimer-1/60f, 0);
+		invulTimer = Math.max(invulTimer-30/60f, 0);
 		
 		double xTarget = 0;
 		double yTarget = 0;

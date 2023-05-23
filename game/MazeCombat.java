@@ -84,6 +84,8 @@ public class MazeCombat implements Screen {
 	Texture rulerBlade;
 	Image rulerBladeImg;
 	
+	Enemy trangle;
+	
 	//create
 	public MazeCombat(MazeGame gaeme) {
 		this.gaeme = gaeme;
@@ -94,7 +96,7 @@ public class MazeCombat implements Screen {
 		
 		bomb = new Texture("projectiles/bomb.png");
 		bombProj = new Projectile(bomb, 10d, 15d, 0);
-		RangedItem bombCard = new RangedItem(bombProj, 10d, 1, 3, 5);
+		RangedItem bombCard = new RangedItem(bombProj, 4d, 1, 3, 5);
 		
 		bombLauncher = new Texture("cards/bomblauncher.png");
 		bombLauncherImg = new Image(bombLauncher);
@@ -138,6 +140,8 @@ public class MazeCombat implements Screen {
 		blob = new Texture("enemies/blob.png");
 		blobImage = new Image(blob);
 		blobEnemy = new Enemy(blob, blobImage, 15f, 2f, 2d);
+		
+		trangle = new BossName(new Texture("enemies/triangle.png"), new Image(new Texture("enemies/triangle.png")), 50f, 3, 5);
 
 		bimg = new Texture("background.png");
 		
@@ -204,9 +208,9 @@ public class MazeCombat implements Screen {
         }
 		
 		//enemy spawn
-		if(time % 20 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
+		if(time % 50 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
 			//if(time == 1) {
-			EnemyHandler.spawn(blobEnemy);//}
+			EnemyHandler.spawn(trangle);//}
 			numSummons--;
 			//System.out.println(numSummons);
 		}
