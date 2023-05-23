@@ -1,6 +1,7 @@
 package com.mygdx.game.miscItems;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.*;
 
@@ -8,14 +9,14 @@ public class SpeedPot extends Misc {
 	private float tick = 0.0f;
 	private boolean canActivate = true;
 	
-	public SpeedPot(Texture txte, Image mImg) {
-		super(mImg, txte);
+	public SpeedPot(Texture txte) {
+		super(txte);
 		this.getImage().setOrigin(txte.getWidth()/2,txte.getHeight()/2);
 		setType("speedpotion");
 	}
 	
 	@Override
-	public boolean consume(Player player, int index) {
+	public boolean update(Player player, Stage stage) {
 		if(tick >= 12.2f) {
 			for(int i=0; i<player.getEffects().size(); i++) {
 				if(player.getEffects().get(i).getEffect().equals("speed+")) {

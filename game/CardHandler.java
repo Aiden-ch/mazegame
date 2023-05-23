@@ -67,7 +67,7 @@ public class CardHandler {
 		if(hand.size() > 0) {
 			if(cardNum == 0 && direction <= 0f) {
 				cardNum = hand.size()-1;
-			} else if(cardNum == hand.size()-1 && direction >= 0f) {
+			} else if(cardNum >= hand.size()-1 && direction >= 0f) {
 				cardNum = 0;
 			} else if(direction >= 0f) {
 				cardNum++;

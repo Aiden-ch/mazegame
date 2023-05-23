@@ -108,12 +108,6 @@ public class MazeCombat implements Screen {
 //		
 //		items.addItem("Arrow", arrowProj, 5);
 //		
-		potion = new Texture("misc/heartpotion.png");
-		Texture potionCard = new Texture("cards/heartpotion.png");
-		Misc potionMisc = new HealthPot(potion);
-		
-		items.addCard("Health Potion", potionMisc, 2, new Image(potionCard));
-//		
 //		speedPotion = new Texture("misc/speedpotion.png");
 //		speedPotionImg = new Image(speedPotion);
 //		Misc speedPotionMisc = new SpeedPot(speedPotion, speedPotionImg);
@@ -129,6 +123,12 @@ public class MazeCombat implements Screen {
 		Melee rulerMelee = new Melee(1.0, (float)Math.PI, 10.0, 4.0, 5.0f, ruler); //smaller speed = faster
 		rulerBladeImg = new Image(new Texture("cards/ruler.png"));
 		items.addCard("Ruler Slash", rulerMelee, 1, rulerBladeImg);
+		
+		potion = new Texture("misc/heartpotion.png");
+		Texture potionCard = new Texture("cards/heartpotion.png");
+		Misc potionMisc = new HealthPot(potion);
+		
+		items.addCard("Health Potion", potionMisc, 2, new Image(potionCard));
 		
 		InventoryHandler.testing();
 		
@@ -191,7 +191,7 @@ public class MazeCombat implements Screen {
         		used = CardHandler.getHeld().getRanged().update(player, stage);
         	} else if(CardHandler.getHeld().getType() == 'm') {
         		//buffer = AttackHandler.use(player, AttackHandler.inHand, buffer);
-        		used = CardHandler.getHeld().getMisc().consume(player, numSummons);
+        		used = CardHandler.getHeld().getMisc().update(player, stage);
         	} else if(CardHandler.getHeld().getType() == 's') {
         		used = CardHandler.getHeld().getMel().update(player, stage);
         	}

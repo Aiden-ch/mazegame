@@ -42,9 +42,11 @@ public class InventoryHandler {
 		Trinket BombLauncher = new BombLauncher(CardHandler.allItems.get(0), 40f);
 		Trinket RulerBlade = new RulerBlade(CardHandler.allItems.get(2), 20f);
 		Trinket BasicBlade = new BasicBlade(CardHandler.allItems.get(1), 40f);
+		Trinket PotionStand = new SimplePotionStand(CardHandler.allItems.get(3), 40f);
 		activeTrinkets.add(BombLauncher);
 		activeTrinkets.add(RulerBlade);
 		activeTrinkets.add(BasicBlade);
+		activeTrinkets.add(PotionStand);
 	}
 	
 	public static void arrangeByPrecedence() {

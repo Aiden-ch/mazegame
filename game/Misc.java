@@ -31,10 +31,10 @@ public class Misc {
 		this.type = type;
 	}
 	
-	public boolean consume(Player player, int index) {
+	public boolean update(Player player, Stage stage) {
 		return false;
 	}
-	public boolean update(Player player, Stage stage) {
+	public boolean consume(Player player) {
 		return false;
 	}
 }
