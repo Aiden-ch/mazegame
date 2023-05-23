@@ -75,7 +75,7 @@ public class RangedItem {
 				projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
 				proj.setImage(projImage);
 				projectiles.add(proj);
-				magsize--;
+				magazine--;
 			}
 			tick = shootSpeed;
 			shooting = true;
@@ -85,9 +85,9 @@ public class RangedItem {
 		if(projectiles.size() == 0) {
 			shooting = false;
 		}
-		if(magazine < magsize && reloadTick == maxReload) {
+		if(magazine < magsize && reloadTick == 0) {
 			magazine++;
-			reloadTick = 0;
+			reloadTick = maxReload;
 		}
 		
 		return false; //use to tick down uses on card
