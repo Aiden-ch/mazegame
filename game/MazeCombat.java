@@ -94,12 +94,12 @@ public class MazeCombat implements Screen {
 		
 		bomb = new Texture("projectiles/bomb.png");
 		bombProj = new Projectile(bomb, 10d, 15d, 0);
-		RangedItem bombCard = new RangedItem(bombProj, 10d, 1);
+		RangedItem bombCard = new RangedItem(bombProj, 10d, 1, 3, 5);
 		
 		bombLauncher = new Texture("cards/bomblauncher.png");
 		bombLauncherImg = new Image(bombLauncher);
 		
-		items.addCard("Bomb", bombCard, 3, bombLauncherImg);
+		items.addCard("Bomb", bombCard, bombLauncherImg);
 		
 //		arrow = new Texture("projectiles/arrow.png");
 //		arrowImage = new Image(arrow);
@@ -109,28 +109,27 @@ public class MazeCombat implements Screen {
 //		items.addItem("Arrow", arrowProj, 5);
 //		
 		
-		
 		sword = new Texture("melee/sword.png");
-		Melee swordMelee = new Melee(10.0, (float)Math.PI/2f, 3.0, 5.0, 5.0f, sword); 
+		Melee swordMelee = new Melee(10.0, (float)Math.PI/2f, 15.0, 1.0, 5.0f, sword); 
 		Image swordImage = new Image(new Texture("cards/basicblade.png"));
-		items.addCard("Sword", swordMelee, 1, swordImage);
+		items.addCard("Sword", swordMelee, swordImage);
 		
 		ruler = new Texture("melee/ruler.png");	
 		Melee rulerMelee = new Melee(1.0, (float)Math.PI, 10.0, 14.0, 5.0f, ruler); //smaller speed = faster
 		rulerBladeImg = new Image(new Texture("cards/ruler.png"));
-		items.addCard("Ruler Slash", rulerMelee, 1, rulerBladeImg);
+		items.addCard("Ruler Slash", rulerMelee, rulerBladeImg);
 		
 		potion = new Texture("misc/heartpotion.png");
 		Texture potionCard = new Texture("cards/heartpotion.png");
 		Misc potionMisc = new HealthPot(potion);
 		
-		items.addCard("Health Potion", potionMisc, 2, new Image(potionCard));
+		items.addCard("Health Potion", potionMisc, new Image(potionCard));
 		
 		speedPotion = new Texture("misc/speedpotion.png");
 		speedPotionImg = new Image(new Texture("cards/speedpotion.png"));
 		Misc speedPotionMisc = new SpeedPot(speedPotion);
 		
-		items.addCard("Speed Potion", speedPotionMisc, 1, speedPotionImg);
+		items.addCard("Speed Potion", speedPotionMisc, speedPotionImg);
 		
 		InventoryHandler.testing();
 		
@@ -188,18 +187,20 @@ public class MazeCombat implements Screen {
 		//attacking
 		//change items collected thing to connect to card draw and inventory
         if(CardHandler.getHand().size() > 0 && CardHandler.getHeld() != null) {
-        	boolean used = false;
         	if(CardHandler.getHeld().getType() == 'p') {
-        		used = CardHandler.getHeld().getRanged().update(player, stage);
+        		CardHandler.getHeld().getRanged().update(player, stage);
         	} else if(CardHandler.getHeld().getType() == 'm') {
-        		//buffer = AttackHandler.use(player, AttackHandler.inHand, buffer);
-        		used = CardHandler.getHeld().getMisc().update(player, stage);
+        		if(CardHandler.getHeld().getMisc().update(player, stage)) {
+        			CardHandler.consumeCard(CardHandler.getHeld());
+        		}
         	} else if(CardHandler.getHeld().getType() == 's') {
-        		used = CardHandler.getHeld().getMel().update(player, stage);
+        		CardHandler.getHeld().getMel().update(player, stage);
         	}
-        	if(used) {
-    			CardHandler.consumeCard(CardHandler.getHeld(), CardHandler.getIndex());
-    		}
+        }
+        for(int i=0; i<CardHandler.getALL().size(); i++) {
+        	if(CardHandler.getALL().get(i).getType() == 'p') {
+        		CardHandler.getALL().get(i).getRanged().rendoor(player, stage);
+        	}
         }
 		
 		//enemy spawn
@@ -212,27 +213,6 @@ public class MazeCombat implements Screen {
 
 		//player movement
 		player.move();
-		
-		//renders each projectile
-//		for(int i=0; i<AttackHandler.getActive().size(); i++) {
-//			Card temp = AttackHandler.getActive().get(i);
-//			
-//			if(temp.getType() == 'm') {
-//				stage.addActor(temp.getMisc().getImage());
-//				if(temp.getMisc().consume(player, i)) {
-//					EffectHandler.playerEffects(player);
-//					temp.used();
-//					i--;
-//				}
-//			}
-//			if(CardHandler.getHand().size() >= 0 && CardHandler.getHeld() != null) {
-//				//System.out.println(AttackHandler.inHand);
-//				CardHandler.consumeCard(CardHandler.getHeld().getUses(), handIndex);
-//			} //TODO: add system so that game wont crash if you have nothing in hand and try to activate card
-//			//TODO: card draw / gain thing
-//			
-//			
-//		}
 		
 		if(player.getEffects().size() > 0) {
 			EffectHandler.playerEffects(player);

@@ -8,8 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class RangedItem {	
-	private double maxReload; //fire rate
+	private double shootSpeed; //fire rate
 	private int maxShots; //how many projectiles fired at a time
+	private int magazine;
+	private int magsize;
+	private double maxReload; //time takes to add new ammo
+	private double reloadTick;
 	private double tick;
 	
 	private boolean shooting = false;
@@ -17,31 +21,34 @@ public class RangedItem {
 	private Projectile projectile;
 	private ArrayList<Projectile> projectiles;
 	
-	public RangedItem(Projectile proj, double maxReload, int shots) {
+	public RangedItem(Projectile proj, double shootSpeed, int shots, int magsize, double maxReload) {
 		this.projectile = proj;
 		this.projectiles = new ArrayList<Projectile>();
-		this.maxReload = maxReload;
+		this.shootSpeed = shootSpeed;
 		this.maxShots = shots;
+		this.magsize = magsize;
+		magazine = magsize;
+		this.maxReload = maxReload;
 		this.tick = 0;
 	}
 	
-	public boolean update(Player player, Stage stage) {
+	public void rendoor(Player player, Stage stage) {
 		if(shooting) {
 			for(int i=0; i<projectiles.size(); i++) {
 				boolean destroy = false;
 				Projectile temp = projectiles.get(i);
-				
+
 				//hit detection
 				for(int j=0; j<EnemyHandler.getEnemies().size(); j++) {
 					Enemy tempem = EnemyHandler.getEnemies(i);
 					float enan = -90f + 180f/(float)Math.PI * (float)(Math.atan2(tempem.getYPos()-player.getYPos(), tempem.getXPos()-player.getImage().getWidth()/2-player.getXPos()));
-					
+
 					if(temp.getBox().overlaps(EnemyHandler.getEnemies().get(j).getBox())) {
 						EnemyHandler.getEnemies().get(j).takeDamage((float)temp.getDamage(), (float)temp.getKnockback(), enan);
 						destroy = true;
 					}
 				}
-				
+
 				//out-of-bounds detection
 				if(temp.getXPos()<0-64-10 || temp.getYPos()<0-64-10 || temp.getXPos()>Gdx.graphics.getWidth()+64+10 
 						|| temp.getYPos()>Gdx.graphics.getHeight()+64+10 || destroy) {
@@ -54,9 +61,12 @@ public class RangedItem {
 				}
 			}
 		}
-		
-		tick = Math.max(tick -= 0.2f, 0);
-		if(tick == 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+	}
+	
+	public boolean update(Player player, Stage stage) {
+		tick = Math.max(tick - 0.2f, 0);
+		reloadTick = Math.max(reloadTick - 0.2f, 0);
+		if(tick == 0 && magazine/maxShots > 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			for(int i=0; i<maxShots; i++) {
 				Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
 						Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos(), Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
@@ -65,14 +75,19 @@ public class RangedItem {
 				projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
 				proj.setImage(projImage);
 				projectiles.add(proj);
+				magsize--;
 			}
-			tick = maxReload;
+			tick = shootSpeed;
 			shooting = true;
 			return true;
 		}
 		
 		if(projectiles.size() == 0) {
 			shooting = false;
+		}
+		if(magazine < magsize && reloadTick == maxReload) {
+			magazine++;
+			reloadTick = 0;
 		}
 		
 		return false; //use to tick down uses on card

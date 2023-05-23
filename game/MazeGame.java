@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MazeGame extends Game {
 
+	boolean start = true;
+	
 	public SpriteBatch batch;
 	public BitmapFont font;
 

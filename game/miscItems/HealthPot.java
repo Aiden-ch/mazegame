@@ -21,19 +21,19 @@ public class HealthPot extends Misc {
 	
 	@Override 
 	public boolean consume(Player player) {
-		if(tick >= 12.25f) {
+		if(tick >= 3.0f) {
 			temp.setPosition(player.getXPos(), player.getYPos());
 			player.addHealth(10);
 			System.out.println("health: " + player.getHealth());
 			tick = 0;
 			return true;
 		} 
-		if(tick <= 6.1f) {
+		if(tick <= 1.5f) {
 			temp.rotateBy((float)Math.PI/14f * 180f/(float)Math.PI);
-			temp.setPosition(player.getXPos(), player.getYPos() + 10*tick);
-		} else if(tick < 12.2f) {
+			temp.setPosition(player.getXPos(), player.getYPos() + 10*tick*60f*0.1f);
+		} else if(tick < 3.0f) {
 			temp.rotateBy((float)Math.PI/14f * 180f/(float)Math.PI);
-			temp.setPosition(player.getXPos(), player.getYPos() + 10f*6.2f - 10*(tick-6.1f));
+			temp.setPosition(player.getXPos(), player.getYPos() + 10f*1.5f*60*0.1f - 10*(tick-1.5f)*60*0.1f);
 		}
 
 		return false;
@@ -45,10 +45,11 @@ public class HealthPot extends Misc {
 			boolean ret = consume(player);
 			if(!ret) {
 				stage.addActor(temp);
-				tick+=0.35;
+				tick+=3*1f/60f;
 			} else {
 				temp.remove();
 				temp = null;
+				using = false;
 			}
 			return ret;
 		}

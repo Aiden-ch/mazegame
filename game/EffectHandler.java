@@ -24,16 +24,14 @@ public class EffectHandler {
 		for(int i=0; i<player.getEffects().size(); i++) {
 			switch (player.getEffects().get(i).getEffect()) {
 			case "speed+":
-				if(player.getEffects().get(i).getDuration() > 0) {
-					player.setSpeed(player.getSpeed() + 0.3);
-					//player.setAcceleration(player.getAcceleration() * 1.85f);
+				if(player.getEffects().get(i).getDuration() == 0) {
+					player.setSpeed(player.getSpeed() + 5.5f);
+					//player.setAcceleration(player.getAcceleration() + 0.085f);
 					player.getEffects().get(i).setDuration(player.getEffects().get(i).getDuration() - 1f/60f);
-					System.out.println(player.getEffects().get(i).getDuration());
-				} else {
-					player.setSpeed(player.getSpeed() - 0.3);
-					//player.setAcceleration(player.getAcceleration() / 1.85f);
-					player.setVelX(0);
-					player.setVelX(0);
+					System.out.println(player.getAcceleration());
+				} else if(player.getEffects().get(i).getDuration() >= 10) {
+					player.setSpeed(player.getSpeed() - 5.5f);
+					//player.setAcceleration(player.getAcceleration() - 0.085f);
 					System.out.println("no longer speedy");
 					player.getEffects().remove(i);
 					i--;

@@ -8,7 +8,6 @@ public class Card {
 	private RangedItem rait;
 	private Melee mel;
 	private Misc misc;
-	private int uses;
 	
 	private Image itemImg;
 	
@@ -19,31 +18,28 @@ public class Card {
 		//m for misc
 		this.type = 'm';
 	}
-	public Card(String name, RangedItem rait, int uses, Image img) {
+	public Card(String name, RangedItem rait, Image img) {
 		this.name = name;
 		this.rait = rait;
 		//p for projectile
 		this.type = 'p';
-		this.uses = uses;
-		
+
 		this.itemImg = img;
 	}
-	public Card(String name, Melee mel, int uses, Image img) {
+	public Card(String name, Melee mel, Image img) {
 		this.name = name;
 		this.mel = mel;
 		//s for swing
 		this.type = 's';
-		this.uses = uses;
-		
+
 		this.itemImg = img;
 	}
-	public Card(String name, Misc misc, int uses, Image img) {
+	public Card(String name, Misc misc, Image img) {
 		this.name = name;
 		this.misc = misc;
 		//s for swing
 		this.type = 'm';
-		this.uses = uses;
-		
+
 		this.itemImg = img;
 	}
 	
@@ -61,16 +57,6 @@ public class Card {
 	}
 	public char getType() {
 		return type;
-	}
-	
-	public int getUses() {
-		return this.uses;
-	}
-	public void setUses(int uses) {
-		this.uses = uses;
-	}
-	public void used() {
-		this.uses--;
 	}
 	
 	//card image

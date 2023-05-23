@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MazeTraversal implements Screen {
 
+	boolean start = true;
+	
 	final MazeGame game;
 
 	OrthographicCamera camera;
@@ -45,14 +47,17 @@ public class MazeTraversal implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 
-		maze = Generator.generateMaze();
+		if(game.start) {
+			maze = Generator.generateMaze();
 
-		visibleMaze = new char[59][59];
-		for (int i = 0; i < 59; i++) { 
-			for (int o = 0; o < 59; o++) {
-				visibleMaze[i][o] = '*';
-			}
-		}	    
+			visibleMaze = new char[59][59];
+			for (int i = 0; i < 59; i++) { 
+				for (int o = 0; o < 59; o++) {
+					visibleMaze[i][o] = '*';
+				}
+			}	    
+			game.start = false;
+		}
 		font = new BitmapFont();
 		setAllFixedWidth(font);
 	}

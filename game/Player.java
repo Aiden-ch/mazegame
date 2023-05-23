@@ -20,7 +20,7 @@ public class Player {
 	private ArrayList<EffectHandler> effects = new ArrayList<EffectHandler>(); 
 	//^^^ for buffs and debuffs
 	//private boolean damaged = false;
-	//private float invulTimer = 0.0f;
+	private float invulTimer = 0.0f;
 	
 	//animation
 	private Texture walkf1;
@@ -92,29 +92,13 @@ public class Player {
 	public void setYPos(float yPos) {
 		this.box.y = yPos;
 	}
- 	public void takeDamage(double damage) {
-// 		if(!damaged) {
-			this.health -= damage;
-//			invulTimer = 0.0f;
-//			damaged = true;
-//		} else {
-//			if(invulTimer >= 10.0f) {
-//				System.out.println("invul ended!");
-//				damaged = false;
-//			} else {
-//				if(invulTimer == 3f) {
-//					System.out.println("invul ending soon");
-//				}
-//			}
-//		}
- 	}
 	
 	public void addHealth(int health) {
 		this.health += health;
 	}
 	
 	public void move() {
-		//invulTimer += 0.5f;
+		invulTimer = Math.max(invulTimer-1/60f, 0);
 		
 		double xTarget = 0;
 		double yTarget = 0;
@@ -256,12 +240,13 @@ public class Player {
 	}
 	
 	public void takeDamage(double damage, float knockback, double angle) {
-		//if (buffer % 3600f == 0) {
+		if (invulTimer == 0) {
 			this.health -= damage;
-		//}
-		
-		this.velX += knockback * Math.cos(angle * Math.PI / 180);
-		this.velY += knockback * Math.sin(angle * Math.PI / 180);
+			
+			this.velX += knockback * Math.cos(angle * Math.PI / 180);
+			this.velY += knockback * Math.sin(angle * Math.PI / 180);
+			
+			invulTimer = 1f;
+		}
 	}
-	
 }

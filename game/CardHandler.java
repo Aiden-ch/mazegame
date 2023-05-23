@@ -27,16 +27,16 @@ public class CardHandler {
 	}
 	
 	//Initialize all cards
-	public void addCard(String name, RangedItem rait, int uses, Image img) {
-		Card raitCard = new Card(name, rait, uses, img);
+	public void addCard(String name, RangedItem rait, Image img) {
+		Card raitCard = new Card(name, rait, img);
 		allItems.add(raitCard);
 	}
-	public void addCard(String name, Melee mel, int uses, Image img) {
-		Card melCard = new Card(name, mel, uses, img);
+	public void addCard(String name, Melee mel, Image img) {
+		Card melCard = new Card(name, mel, img);
 		allItems.add(melCard);
 	}
-	public void addCard(String name, Misc misc, int uses, Image img) {
-		Card miscCard = new Card(name, misc, uses, img);
+	public void addCard(String name, Misc misc, Image img) {
+		Card miscCard = new Card(name, misc, img);
 		allItems.add(miscCard);
 	}
 	
@@ -50,16 +50,15 @@ public class CardHandler {
 		}
 		return -1;
 	}
-	public static void consumeCard(Card card, int index) {
-		if(card.getUses() <= 0) {		
-			hand.remove(index);
-			held = null;
-			if(held == null && hand.size() >= 1) {
-				System.out.println("new");
-				held = CardHandler.checkHand(1f);
+	public static void consumeCard(Card card) {
+		for(int i=0; i<hand.size(); i++) {
+			//System.out.println(hand.get(i).getName());
+			if(hand.get(i).getName().contains(card.getName())) {
+				System.out.println("removed");
+				hand.get(i).getImage().remove();
+				hand.remove(i);
+				held = null;
 			}
-		} else {
-			card.used();
 		}
 	}
 	
@@ -78,6 +77,10 @@ public class CardHandler {
 			return hand.get(cardNum);
 		}
 		return null;
+	}
+	
+	public static ArrayList<Card> getALL() {
+		return allItems;
 	}
 	
 	public static Card getHeld() {

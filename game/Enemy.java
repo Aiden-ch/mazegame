@@ -25,7 +25,7 @@ public class Enemy {
 	private boolean tookDamage = false;
 	private double timer = 0.0f;
 	
-	private double enKnockback = 10f;
+	private double enKnockback = 5f;
 	
 	public Enemy(Texture txte, Image enImg, float health, float maxSpeed, double damage) {
 		this.txte = txte;
@@ -68,7 +68,7 @@ public class Enemy {
 			this.box.y += velY;
 
 			if(player.getBox().overlaps(box) && health > 0) {
-				player.takeDamage(damage);
+				player.takeDamage(damage, (float)enKnockback, -180f + 180f/(float)Math.PI * (float)(Math.atan2(box.y-player.getYPos(), box.x-player.getImage().getWidth()/2-player.getXPos())));
 
 				knockback(-90f + 180f/(float)Math.PI * (float)(Math.atan2(box.y-player.getYPos(), box.x-player.getImage().getWidth()/2-player.getXPos())));
 			}
@@ -83,7 +83,7 @@ public class Enemy {
 			stage.addActor(enImg);
 		}
 		
-		timer += 0.5f;
+		timer += 3.f;
 	}
 	
 	public ArrayList<EffectHandler> getEffects() {
