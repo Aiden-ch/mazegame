@@ -2,11 +2,9 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Misc {
-	private Image mImg;
-	private Texture texture;
+	private Texture txte;
 	private String type;
 	
 	public Misc() {
@@ -14,14 +12,11 @@ public class Misc {
 	}
 	
 	public Misc(Texture txte) {
-		this.mImg = new Image(txte);
+		this.txte = txte;
 	}
 	
-	public Image getImage() {
-		return this.mImg;
-	}
 	public Texture getTexture() {
-		return this.texture;
+		return this.txte;
 	}
 	
 	public String getType() {

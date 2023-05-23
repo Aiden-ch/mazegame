@@ -108,11 +108,7 @@ public class MazeCombat implements Screen {
 //		
 //		items.addItem("Arrow", arrowProj, 5);
 //		
-//		speedPotion = new Texture("misc/speedpotion.png");
-//		speedPotionImg = new Image(speedPotion);
-//		Misc speedPotionMisc = new SpeedPot(speedPotion, speedPotionImg);
-//		
-//		items.addItem("Speed Potion", speedPotionMisc, 1);
+		
 		
 		sword = new Texture("melee/sword.png");
 		Melee swordMelee = new Melee(10.0, (float)Math.PI/2f, 3.0, 5.0, 5.0f, sword); 
@@ -120,7 +116,7 @@ public class MazeCombat implements Screen {
 		items.addCard("Sword", swordMelee, 1, swordImage);
 		
 		ruler = new Texture("melee/ruler.png");	
-		Melee rulerMelee = new Melee(1.0, (float)Math.PI, 10.0, 4.0, 5.0f, ruler); //smaller speed = faster
+		Melee rulerMelee = new Melee(1.0, (float)Math.PI, 10.0, 14.0, 5.0f, ruler); //smaller speed = faster
 		rulerBladeImg = new Image(new Texture("cards/ruler.png"));
 		items.addCard("Ruler Slash", rulerMelee, 1, rulerBladeImg);
 		
@@ -129,6 +125,12 @@ public class MazeCombat implements Screen {
 		Misc potionMisc = new HealthPot(potion);
 		
 		items.addCard("Health Potion", potionMisc, 2, new Image(potionCard));
+		
+		speedPotion = new Texture("misc/speedpotion.png");
+		speedPotionImg = new Image(new Texture("cards/speedpotion.png"));
+		Misc speedPotionMisc = new SpeedPot(speedPotion);
+		
+		items.addCard("Speed Potion", speedPotionMisc, 1, speedPotionImg);
 		
 		InventoryHandler.testing();
 		
