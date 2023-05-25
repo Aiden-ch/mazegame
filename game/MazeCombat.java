@@ -54,7 +54,6 @@ public class MazeCombat implements Screen {
 	Vector3 mouse_position;
 	
 	Enemy blobEnemy;
-	Image blobImage;
 	
 	Scroller scroll = new Scroller();
 	//InputMultiplexer multiplexer = new InputMultiplexer();
@@ -84,7 +83,8 @@ public class MazeCombat implements Screen {
 	Texture rulerBlade;
 	Image rulerBladeImg;
 	
-	Enemy trangle;
+	BossName trangle;
+	RangedEnemy triangle;
 	
 	//create
 	public MazeCombat(MazeGame gaeme) {
@@ -110,7 +110,6 @@ public class MazeCombat implements Screen {
 //		
 //		items.addItem("Arrow", arrowProj, 5);
 //		
-		
 		sword = new Texture("melee/sword.png");
 		Melee swordMelee = new Melee(10.0, (float)Math.PI/2f, 15.0, 1.0, 5.0f, sword); 
 		Image swordImage = new Image(new Texture("cards/basicblade.png"));
@@ -138,11 +137,13 @@ public class MazeCombat implements Screen {
 		Gdx.input.setInputProcessor(scroll);
 	
 		blob = new Texture("enemies/blob.png");
-		blobImage = new Image(blob);
-		blobEnemy = new Enemy(blob, blobImage, 15f, 2f, 2d);
+		blobEnemy = new Enemy(blob, 15f, 2f, 2d);
 		
-		trangle = new BossName(new Texture("enemies/triangle.png"), new Image(new Texture("enemies/triangle.png")), 50f, 3, 5);
-
+		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 50f, 3, 5);
+		
+		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 4, 5, 0);
+		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 10f, 1, 5, bolt);
+		
 		bimg = new Texture("background.png");
 		
 		heartTxte = new Texture("UI/heart.png");
@@ -208,11 +209,12 @@ public class MazeCombat implements Screen {
         }
 		
 		//enemy spawn
+        if(time <= 0.3f) {
+        	EnemyHandler.spawnBoss(trangle);
+        }
 		if(time % 50 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
-			//if(time == 1) {
-			EnemyHandler.spawn(trangle);//}
+			EnemyHandler.spawn(triangle);
 			numSummons--;
-			//System.out.println(numSummons);
 		}
 
 		//player movement

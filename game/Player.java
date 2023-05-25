@@ -16,7 +16,7 @@ public class Player {
 	private double speed = 5;
 	private float velX = 0;
 	private float velY = 0;
-	private float acceleration = 0.1f;
+	private float acceleration = 0.5f;
 	private ArrayList<EffectHandler> effects = new ArrayList<EffectHandler>(); 
 	//^^^ for buffs and debuffs
 	//private boolean damaged = false;
@@ -38,7 +38,7 @@ public class Player {
 	private Image pImg;
 	
 	public Player() {
-		health = 1500d;
+		health = 100d;
 		box = new Rectangle();
 		//animation
 		walkf1 = new Texture("intern/walkf1.png");

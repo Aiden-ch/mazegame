@@ -27,15 +27,19 @@ public class Enemy {
 	
 	private double enKnockback = 5f;
 	
-	public Enemy(Texture txte, Image enImg, float health, float maxSpeed, double damage) {
+	private char entype;
+	private Projectile proj;
+	
+	public Enemy(Texture txte, float health, float maxSpeed, double damage) {
 		this.txte = txte;
-		this.enImg = enImg;
 		this.health = health;
 		this.maxSpeed = maxSpeed;
 		this.damage = damage;
+		
+		entype = 'm'; //m for melee
 	}
 	
-	public Enemy(float xPos, float yPos, double health, double maxSpeed, double damage, Texture txte, Image enImg) {
+	public Enemy(float xPos, float yPos, double health, double maxSpeed, double damage, Texture txte) {
 		this.box = new Rectangle();
 		this.box.x = xPos;
 		this.box.y = yPos;
@@ -44,7 +48,7 @@ public class Enemy {
 		this.damage = damage;
 		
 		this.txte = txte;
-		this.enImg = enImg;
+		this.enImg = new Image(txte);
 		this.enImg.setPosition(xPos, yPos);
 		
 		this.box.width = enImg.getWidth()/2;
@@ -114,6 +118,15 @@ public class Enemy {
 	public double getDamage() {
 		return this.damage;
 	}
+	public Projectile getProj() {
+		return this.proj;
+	}
+	public char getType() {
+		return this.entype;
+	}
+	public void setType(char enType) {
+		this.entype = enType;
+	}
 	public double getTime() {
 		return this.timer;
 	}
@@ -140,6 +153,14 @@ public class Enemy {
 	}
 	public void setYPos(float amount) {
 		this.box.y = amount;
+	}
+	public void setImage(Texture txte) {
+		this.enImg.remove();
+		this.enImg = null;
+		this.enImg = new Image(txte);
+	}
+	public void setProj(Projectile proj) {
+		this.proj = proj;
 	}
 	
 	public void takeDamage(double damage, float knockback, float angle) {

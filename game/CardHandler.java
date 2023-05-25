@@ -73,7 +73,8 @@ public class CardHandler {
 			} else {
 				cardNum--;
 			}
-			System.out.println(cardNum);
+			//System.out.println(cardNum);
+			UIHandler.swapped();
 			return hand.get(cardNum);
 		}
 		return null;

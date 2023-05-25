@@ -84,7 +84,7 @@ public class MazeTraversal implements Screen {
 		if(encount) {
 			int encounter = (int)(Math.random() * 1000);
 			System.out.println(encounter);
-			if(encounter > 980) {
+			if(encounter > 900) {
 				game.combatScreen();
 			}
 		}
