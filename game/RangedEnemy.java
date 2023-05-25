@@ -7,6 +7,10 @@ import java.lang.Math;
 
 public class RangedEnemy extends Enemy {
 	
+	double maxCoolDown = 5;
+	double coolDown = maxCoolDown;
+	private ArrayList<Projectile> projectiles;
+	
 	public RangedEnemy(Texture txte, float health, float maxSpeed, double damage, Projectile proj) {
 		super(txte, health, maxSpeed, damage);
 		setProj(proj);
@@ -58,5 +62,64 @@ public class RangedEnemy extends Enemy {
 		
 		stage.addActor(getImage());
 		tickTime();
+	}
+	
+	public void rendoor(Player player, Stage stage) {
+		if(shooting) {
+			for(int i=0; i<projectiles.size(); i++) {
+				boolean destroy = false;
+				Projectile temp = projectiles.get(i);
+
+				//hit detection
+				if(player.getBox().overlaps(temp.getBox())) {
+					player.takeDamage(damage, (float)enKnockback, 180f/(float)Math.PI * (float)(Math.atan2(player.getYPos()-temp.getYPos(), player.getImage().getWidth()/2+player.getXPos()-temp.getXPos())));
+				}
+				
+				for(int j=0; j<EnemyHandler.getEnemies().size(); j++) {
+					if (tempem != this) {
+						Enemy tempem = EnemyHandler.getEnemies(j);
+						float enan = -90f + 180f/(float)Math.PI * (float)(Math.atan2(tempem.getYPos()-temp.getYPos(), tempem.getXPos()-temp.getImage().getWidth()/2-temp.getXPos()));
+
+						if(temp.getBox().overlaps(tempem.getBox())) {
+							tempem.takeDamage((float)temp.getDamage(), (float)temp.getKnockback(), enan);
+							destroy = true;
+						}
+					}
+				}
+
+				//out-of-bounds detection
+				if(temp.getXPos()<0-64-10 || temp.getYPos()<0-64-10 || temp.getXPos()>Gdx.graphics.getWidth()+64+10 
+						|| temp.getYPos()>Gdx.graphics.getHeight()+64+10 || destroy) {
+					temp.getImage().remove();
+					projectiles.remove(i);
+					i--;
+				} else {
+					projectiles.get(i).move();
+					stage.addActor(projectiles.get(i).getImage());
+				}
+			}
+		}
+	}
+	
+	public boolean update(Player player, Stage stage) {
+		tick = Math.max(tick - 0.2f, 0);
+		reloadTick = Math.max(reloadTick - 0.2f, 0);
+		if(coolDown == 0) {
+			double angle = spread*Math.PI/180d + Math.atan2(Gdx.graphics.getHeight()-getYPos()-player.getYPos(), 
+					player.getXPos()-getImage().getWidth()/2-getXPos());
+			double velX = Math.cos(angle);
+			double velY = Math.sin(angle);
+			Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
+			Image projImage = new Image(this.projectile.getTexture());
+			projImage.setOrigin(projImage.getWidth()/2.0f, 0);
+			projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
+			proj.setImage(projImage);
+			projectiles.add(proj);
+			
+			coolDown = maxCoolDown;
+		}
+		
+		coolDown = Math.max(0, coolDown - 1/60);
 	}
 }
