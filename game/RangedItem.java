@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class RangedItem {	
 	private double shootSpeed; //fire rate
 	private int maxShots; //how many projectiles fired at a time
+	private double maxSpread; //max angle range of shots in degrees
 	private double maxShotTime; //time between each shot at once 
 	private double shotTick;
 	private int magazine;
@@ -26,7 +27,7 @@ public class RangedItem {
 	private Projectile projectile;
 	private ArrayList<Projectile> projectiles;
 	
-	public RangedItem(Projectile proj, double shootSpeed, int shots, double maxShotTime, int magsize, double maxReload) {
+	public RangedItem(Projectile proj, double shootSpeed, int shots, double spread, double maxShotTime, int magsize, double maxReload) {
 		this.projectile = proj;
 		this.projectiles = new ArrayList<Projectile>();
 		this.shootSpeed = shootSpeed;
@@ -37,6 +38,7 @@ public class RangedItem {
 		this.tick = 0;
 		this.maxShotTime = maxShotTime;
 		this.shotTick = 0;
+		this.maxSpread = spread;
 		volleying = false;
 	}
 	
@@ -79,8 +81,13 @@ public class RangedItem {
 		}
 		if(volleying && currentShots < maxShots && shotTick == 0) {
 			currentShots++;
+			double spread = (Math.random()*maxSpread - maxSpread/2d);
+			double angle = spread*Math.PI/180d + Math.atan2(Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), 
+					Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos());
+			double velX = Math.cos(angle);
+			double velY = Math.sin(angle);
 			Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
-					Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos(), Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
+					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
 			Image projImage = new Image(this.projectile.getTexture());
 			projImage.setOrigin(projImage.getWidth()/2.0f, 0);
 			projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));

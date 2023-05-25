@@ -57,5 +57,8 @@ public class Trinket {
 	}
 	public void resupply() {
 		//extender
+		if(InventoryHandler.getStart()) {
+			CardHandler.getHand().add(new Card(getCard().getName(), getCard().getRanged(), getCard().getImage()));
+		} 
 	}
 }

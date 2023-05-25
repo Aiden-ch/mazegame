@@ -96,7 +96,7 @@ public class MazeCombat implements Screen {
 		
 		bomb = new Texture("projectiles/bomb.png");
 		bombProj = new Projectile(bomb, 10d, 15d, 0);
-		RangedItem bombCard = new RangedItem(bombProj, 4d, 1, 3, 5);
+		RangedItem bombCard = new RangedItem(bombProj, 4d, 3, 0, 1d, 3, 15);
 		
 		bombLauncher = new Texture("cards/bomblauncher.png");
 		bombLauncherImg = new Image(bombLauncher);
@@ -132,6 +132,16 @@ public class MazeCombat implements Screen {
 		
 		items.addCard("Speed Potion", speedPotionMisc, speedPotionImg);
 		
+		Projectile crystalProj = new Projectile(new Texture("projectiles/crystal.png"), 15, 5, 2);
+		RangedItem crystalCard = new RangedItem(crystalProj, 8d, 5, 50, 0d, 15, 25);
+
+		items.addCard("Crystal", crystalCard, new Image(new Texture("cards/crystalgun.png")));
+		
+		Projectile thornProj = new Projectile(new Texture("projectiles/thorn.png"), 20, 10, 3);
+		RangedItem rifleCard = new RangedItem(thornProj, 5d, 2, 10, 0.9d, 25, 2);
+
+		items.addCard("Rifle", rifleCard, new Image(new Texture("cards/makeshiftblaster.png")));
+		
 		InventoryHandler.testing();
 		
 		Gdx.input.setInputProcessor(scroll);
@@ -141,7 +151,7 @@ public class MazeCombat implements Screen {
 		
 		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 50f, 3, 5);
 		
-		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 4, 5, 0);
+		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 4, 5, 0 );
 		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 10f, 1, 5, bolt);
 		
 		bimg = new Texture("background.png");
@@ -179,6 +189,7 @@ public class MazeCombat implements Screen {
 		
 		//make sure to add actors and stuff after batch begins
 		gaeme.batch.begin();
+		
 		//background
 		gaeme.batch.draw(bimg, 0, 0);
 		
@@ -213,7 +224,7 @@ public class MazeCombat implements Screen {
         	EnemyHandler.spawnBoss(trangle);
         }
 		if(time % 50 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
-			EnemyHandler.spawn(triangle);
+			EnemyHandler.spawn(blobEnemy);
 			numSummons--;
 		}
 
@@ -238,11 +249,12 @@ public class MazeCombat implements Screen {
 			//System.out.println("dead");
 		}
 		
-		UIHandler.displayStats(player, gaeme.batch, stage);
-		
 		//for drawing
 		stage.act();
 		stage.draw();
+		
+		//HUD
+		UIHandler.displayStats(player, gaeme.batch, stage);
 		
 		//ending combat encounter
 		if(numSummons <= 0 && EnemyHandler.getEnemies().size() <= 0) {

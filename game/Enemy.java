@@ -131,7 +131,7 @@ public class Enemy {
 		return this.timer;
 	}
 	public void tickTime() {
-		this.timer += 0.5f;
+		this.timer += 1.5f;
 	}
 	public double getVelX() {
 		return this.velX;

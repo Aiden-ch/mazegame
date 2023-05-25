@@ -18,12 +18,17 @@ public class BossName extends Enemy {
 	//for animation
 	private int alternate = 0;
 	private double anitick = 0.0;
+	
+	//for stun
+	private Texture stunned;
+	private double stunTick = 0;
 
 	public BossName(Texture txte, float health, float maxSpeed, double damage) {
 		super(txte, health, maxSpeed, damage);
 		walk1 = new Texture("enemies/gg1.png");
 		walk2 = new Texture("enemies/gg2.png");
 		jump = new Texture("enemies/ggjump.png");
+		stunned = new Texture("enemies/ggstunned.png");
 	}
 
 	public BossName(float xPos, float yPos, double health, double maxSpeed, double damage, Texture txte) {
@@ -31,6 +36,7 @@ public class BossName extends Enemy {
 		walk1 = new Texture("enemies/gg1.png");
 		walk2 = new Texture("enemies/gg2.png");
 		jump = new Texture("enemies/ggjump.png");
+		stunned = new Texture("enemies/ggstunned.png");
 	}
 
 	@Override
@@ -39,7 +45,7 @@ public class BossName extends Enemy {
 			getImage().remove();
 			EnemyHandler.getEnemies().remove(index);
 		} else {
-			meleeCoolDown = Math.max(0, meleeCoolDown - 1/6d);
+			meleeCoolDown = Math.max(0, meleeCoolDown - 1/30d);
 			lungeCoolDown = Math.max(0, lungeCoolDown - 1d/60d);
 
 			double distance = Math.sqrt(Math.pow(getXPos() - player.getXPos(), 2) + Math.pow(getYPos() - player.getYPos(), 2));
@@ -58,7 +64,9 @@ public class BossName extends Enemy {
 				}
 			}
 			
-			if(lunging) {
+			if(stunTick > 0) {
+				setImage(stunned);
+			} else if(lunging) {
 				setImage(jump);
 			} else if (distance < 70) {
 				setVelX(getVelX() + Math.signum(getSpeed() * Math.cos(angle) - getVelX()) * 
@@ -90,8 +98,10 @@ public class BossName extends Enemy {
 								Math.abs(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 100)) - getVelY())));
 			}
 
-			setXPos(getXPos() + (float)getVelX());
-			setYPos(getYPos() + (float)getVelY());
+			if(stunTick == 0) {
+				setXPos(getXPos() + (float)getVelX());
+				setYPos(getYPos() + (float)getVelY());
+			}
 
 			if(player.getBox().overlaps(getBox())) {
 				if (lunging) {
@@ -112,21 +122,24 @@ public class BossName extends Enemy {
 				if(getXPos() < 0) {
 					setXPos(0);
 					lunging = false;
+					stunTick = 25;
 				}
 				if(getXPos() > Gdx.graphics.getWidth() - 64) {setXPos(Gdx.graphics.getWidth() - 64);
-					lunging = false;
+					lunging = false; stunTick = 25;
 				}
 				if(getYPos() < 0) {setYPos(0);
-					lunging = false;
+					lunging = false; stunTick = 25;
 				}
 				if(getYPos() > Gdx.graphics.getHeight() - 64) {setYPos(Gdx.graphics.getHeight() - 64);
-					lunging = false;
+					lunging = false; stunTick = 25;
 				}
 			}
+			stunTick = Math.max(0, stunTick-0.2f);
 			
 			getImage().setPosition(getXPos(), getYPos());
 
 			stage.addActor(getImage());
+			tickTime();
 		}
 	}
 
