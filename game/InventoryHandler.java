@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -31,7 +32,7 @@ public class InventoryHandler implements Screen {
 	OrthographicCamera camera;
 	
 	private static boolean start;
-	private boolean opened = true;
+	static boolean opened = true;
 	
 	public InventoryHandler(final MazeGame gaeme) {
 		this.game = gaeme;
@@ -41,8 +42,8 @@ public class InventoryHandler implements Screen {
 		
 		font = new BitmapFont();
 		
-		mouseBox.width = 30;
-		mouseBox.height = 30;
+		mouseBox.width = 10;
+		mouseBox.height = 10;
 	}
 	
 	public static boolean getStart() {
@@ -65,6 +66,7 @@ public class InventoryHandler implements Screen {
 		Trinket CrystalGun = new CrystalGun(CardHandler.allItems.get(5), 40f);
 		Trinket MakeshiftBlaster = new MakeshiftBlaster(CardHandler.allItems.get(6), 40f);
 		Trinket GiantsBane = new GiantsBane(CardHandler.allItems.get(7), 40f);
+		Trinket SpellGuide = new InternSpellguide(CardHandler.allItems.get(8), 40f);
 		
 		trinkets.add(BombLauncher);
 		trinkets.add(RulerBlade);
@@ -74,6 +76,7 @@ public class InventoryHandler implements Screen {
 		trinkets.add(CrystalGun);
 		trinkets.add(MakeshiftBlaster);
 		trinkets.add(GiantsBane);
+		trinkets.add(SpellGuide);
 	}
 	
 	public static void testing() {
@@ -116,45 +119,50 @@ public class InventoryHandler implements Screen {
 
 	//manipulating inventory
 	public void showTrinkets() {
+		eqptBoxes = new ArrayList<Rectangle>();
+		neBoxes = new ArrayList<Rectangle>();
 		
 		font.draw(game.batch, "Equipped:", 40, Gdx.graphics.getHeight() - 40);
 		font.draw(game.batch, "All collected trinkets:", 280, Gdx.graphics.getHeight() - 40);
 		for(int i=0; i<activeTrinkets.size(); i++) {
 			font.draw(game.batch, activeTrinkets.get(i).getName(), 40, Gdx.graphics.getHeight() - 80 - i*30);
-			if(opened) {
-				Rectangle temp = new Rectangle();
-				temp.width = 240;
-				temp.height = 30;
-				temp.x = 40;
-				temp.y = 80 + i*30;
-				eqptBoxes.add(temp);
-				
-				trinketYPos = temp.y;
-			}
+
+			Rectangle temp = new Rectangle();
+			temp.width = 240;
+			temp.height = 20;
+			temp.x = 40;
+			temp.y = 80 + i*30;
+			eqptBoxes.add(temp);
+
+			trinketYPos = temp.y;
+
 		}
 		for(int i=0; i<collectedTrinkets.size(); i++) {
 			font.draw(game.batch, collectedTrinkets.get(i).getName(), 280, Gdx.graphics.getHeight() - 80 - i*30);
-			if(opened) {
-				Rectangle temp = new Rectangle();
-				temp.width = 240;
-				temp.height = 30;
-				temp.x = 280;
-				temp.y = 80 + i*30;
-				neBoxes.add(temp);
-			}
+
+			Rectangle temp = new Rectangle();
+			temp.width = 240;
+			temp.height = 20;
+			temp.x = 280;
+			temp.y = 80 + i*30;
+			neBoxes.add(temp);
+
 		}
 	}
 	
 	static double timer = 0;
 	
-	static double trinketYPos = 50;
+	static double trinketYPos = 80;
 	
-	public void moveTrinkets() {
+	static Texture cursor = new Texture("UI/pointer.png");
+	
+	public void moveTrinkets(Batch batch) {
 		boolean removed = false;
 		
 		mouseBox.x = Gdx.input.getX();
 		mouseBox.y = Gdx.input.getY();
 		//System.out.println(mouseBox.x + "," + mouseBox.y);
+		batch.draw(cursor, mouseBox.x, Gdx.graphics.getHeight() - 64 - mouseBox.y);
 		
 		timer = Math.max(timer-0.5d, 0);
 		if(timer == 0) {
@@ -197,6 +205,8 @@ public class InventoryHandler implements Screen {
 	public void close() {
 		MazeTraversal.inInventory = false;
 		opened = true;
+		eqptBoxes = new ArrayList<Rectangle>();
+		neBoxes = new ArrayList<Rectangle>();
 		game.mazeScreen();
 	}
 	
@@ -213,7 +223,7 @@ public class InventoryHandler implements Screen {
 		}
 		//System.out.println(trinketYPos);
 		
-		moveTrinkets();
+		moveTrinkets(game.batch);
 		showTrinkets();
 		
 		buffer = Math.max(0, buffer - 0.5);

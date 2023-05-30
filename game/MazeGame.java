@@ -35,7 +35,7 @@ public class MazeGame extends Game {
 		CardHandler.addCard("Bomb", bombCard, bombLauncherImg);
 		
 		Texture sword = new Texture("melee/sword.png");
-		Melee swordMelee = new Melee(7.0, (float)Math.PI/2f, 15.0, 1.0, 5.0f, sword); 
+		Melee swordMelee = new Melee(7.0, (float)Math.PI/3f, 15.0, 1.0, 5.0f, sword); 
 		Image swordImage = new Image(new Texture("cards/basicblade.png"));
 		CardHandler.addCard("Sword", swordMelee, swordImage);
 		
@@ -58,7 +58,7 @@ public class MazeGame extends Game {
 		
 		//god gun
 		Projectile crystalProj = new Projectile(new Texture("projectiles/crystal.png"), 15, 5, 2);
-		RangedItem crystalCard = new RangedItem(crystalProj, 8d, 15, 70, 0d, 115, 0.1);
+		RangedItem crystalCard = new RangedItem(crystalProj, 8d, 55, 70, 0d, 115, 0.1);
 
 		CardHandler.addCard("Crystal", crystalCard, new Image(new Texture("cards/crystalgun.png")));
 		
@@ -68,12 +68,20 @@ public class MazeGame extends Game {
 
 		CardHandler.addCard("Rifle", rifleCard, new Image(new Texture("cards/makeshiftblaster.png")));
 		
-		Melee giantMelee = new Melee(5.0, (float)Math.PI/3, 3.0, 24.0, 15.0f, new Texture("melee/giantsbane.png")); //smaller speed = faster
+		Melee giantMelee = new Melee(5.0, (float)Math.PI*2f/3, 3.0, 24.0, 15.0f, new Texture("melee/giantsbane.png")); //smaller speed = faster
 		CardHandler.addCard("Giant's Bane", giantMelee, new Image(new Texture("cards/giantsbane.png")));
 		
-		InventoryHandler.testing();
+		//starter ranged
+		Projectile arcaneProj = new Projectile(new Texture("projectiles/arcanebolt.png"), 17, 3, 1);
+		RangedItem bookCard = new RangedItem(arcaneProj, 3.5d, 1, 15, 0.9d, 2, 1.1);
+		CardHandler.addCard("Guide", bookCard, new Image(new Texture("cards/internspellguide.png")));
 		
-		InventoryHandler.activeTrinkets.add(InventoryHandler.collectedTrinkets.get(1));
+		//InventoryHandler.testing();
+		InventoryHandler.initTrinkets();
+		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(1));
+		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(1));
+		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(8));
+		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(8));
 		
 		this.setScreen(new MazeTraversal(this));
 	}

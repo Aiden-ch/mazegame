@@ -105,7 +105,7 @@ public class Generator {
         if (maze[curPoint.getY()][curPoint.getX() + 1] == '#') count++;
         if (maze[curPoint.getY()][curPoint.getX() - 1] == '#') count++;
         
-        if (count == 3 && Math.random() < 0.15) maze[curPoint.getY()][curPoint.getX()] = '$';
+        if (count == 3 && Math.random() < 0.25) maze[curPoint.getY()][curPoint.getX()] = '$';
         
         if (maze[curPoint.getY() + 1][curPoint.getX()] == ' ') generateChests(new Pair(curPoint.getX(), curPoint.getY() + 1));
         if (maze[curPoint.getY() - 1][curPoint.getX()] == ' ') generateChests(new Pair(curPoint.getX(), curPoint.getY() - 1));

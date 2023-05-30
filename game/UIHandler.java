@@ -68,19 +68,22 @@ public class UIHandler {
 		if(tick > 0) {
 			font.draw(batch, CardHandler.getHeld().getName(), Gdx.graphics.getWidth()-128-150, 20);
 		}
-		if(CardHandler.getHeld().getRefresh() > 0) {
-			String out = "cooldown: " + (int)CardHandler.getHeld().getRefresh();
-			font.draw(batch, out, Gdx.graphics.getWidth()-128-150, 70);
-		}
-		if(CardHandler.getHeld().getCharges() >= 0) {
-			String out = "Magazine: " + (int)CardHandler.getHeld().getCharges();
-			font.draw(batch, out, Gdx.graphics.getWidth()-128-150, 120);
+		if(CardHandler.getHeld() != null) {
+			if(CardHandler.getHeld().getRefresh() > 0) {
+				String out = "cooldown: " + (int)CardHandler.getHeld().getRefresh();
+				font.draw(batch, out, Gdx.graphics.getWidth()-128-150, 70);
+			}
+			if(CardHandler.getHeld().getCharges() >= 0) {
+				String out = "Magazine: " + (int)CardHandler.getHeld().getCharges();
+				font.draw(batch, out, Gdx.graphics.getWidth()-128-150, 120);
+			}
 		}
 		if(EnemyHandler.bossOnField != null) {
 			String out = "Boss Health: " + (int)EnemyHandler.bossOnField.getHealth();
 			batch.draw(bossHeart, Gdx.graphics.getWidth()-150, Gdx.graphics.getHeight() - 100);
 			font.draw(batch, out, Gdx.graphics.getWidth()-150, Gdx.graphics.getHeight() - 70);
 		}
+		
 		batch.draw(reticle, Gdx.input.getX() - 32, Gdx.graphics.getHeight() - 32 - Gdx.input.getY());
 	}
 	public static void swapped() {

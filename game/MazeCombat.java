@@ -76,7 +76,7 @@ public class MazeCombat implements Screen {
 		
 		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 150f, 3, 5);
 		
-		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 4, 5, 0 );
+		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 8, 5, 0 );
 		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 10f, 5, 5, bolt);
 		
 		bimg = new Texture("background.png");
@@ -145,11 +145,13 @@ public class MazeCombat implements Screen {
         }
 		
 		//enemy spawn
-        if(time <= 0.3f) {
+        if(time <= 0.3f && Math.random() < 0.17d) {
         	EnemyHandler.spawnBoss(trangle);
         }
 		if(time % 50 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
-			EnemyHandler.spawn(triangle);
+			if(time % 100 <= 0.4) {
+				EnemyHandler.spawn(triangle);
+			}
 			EnemyHandler.spawn(blobEnemy);
 			numSummons--;
 		}
