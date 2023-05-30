@@ -82,18 +82,20 @@ public class MazeTraversal implements Screen {
 	public void encounter() {
 		//System.out.println(encount);
 		int encounter = (int)(Math.random() * 1000);
-		if (xPos > 20 && xPos < 38 && yPos > 20 && yPos < 38) return;
-		else if (yPos > 15 && yPos < 43 && yPos > 15 && yPos < 43) {
-			if(encounter > 970) {
-				game.combatScreen();
-			}
-		} else if (yPos > 10 && yPos < 48 && yPos > 10 && yPos < 48) {
-			if(encounter > 920) {
-				game.combatScreen();
-			}
-		} else {
-			if(encounter > 870) {
-				game.combatScreen();
+		if (encount) {
+			if (xPos > 20 && xPos < 38 && yPos > 20 && yPos < 38) return;
+			else if (yPos > 15 && yPos < 43 && yPos > 15 && yPos < 43) {
+				if(encounter > 970) {
+					game.combatScreen();
+				}
+			} else if (yPos > 10 && yPos < 48 && yPos > 10 && yPos < 48) {
+				if(encounter > 920) {
+					game.combatScreen();
+				}
+			} else {
+				if(encounter > 870) {
+					game.combatScreen();
+				}
 			}
 		}
 	}
