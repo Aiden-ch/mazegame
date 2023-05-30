@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class CardHandler {
 	//store all items
-	static ArrayList<Card> allItems;
+	static ArrayList<Card> allItems = new ArrayList<Card>();;
 	
 	//in combat
 	//currently held card
@@ -23,19 +23,18 @@ public class CardHandler {
 	
 	public CardHandler() {
 		cardNum = 0;
-		allItems = new ArrayList<Card>();
 	}
 	
 	//Initialize all cards
-	public void addCard(String name, RangedItem rait, Image img) {
+	public static void addCard(String name, RangedItem rait, Image img) {
 		Card raitCard = new Card(name, rait, img);
 		allItems.add(raitCard);
 	}
-	public void addCard(String name, Melee mel, Image img) {
+	public static void addCard(String name, Melee mel, Image img) {
 		Card melCard = new Card(name, mel, img);
 		allItems.add(melCard);
 	}
-	public void addCard(String name, Misc misc, Image img) {
+	public static void addCard(String name, Misc misc, Image img) {
 		Card miscCard = new Card(name, misc, img);
 		allItems.add(miscCard);
 	}

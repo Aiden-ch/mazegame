@@ -42,6 +42,13 @@ public class RangedItem {
 		volleying = false;
 	}
 	
+	public double getReloadTick() {
+		return this.reloadTick;
+	}
+	public int getMag() {
+		return this.magazine;
+	}
+	
 	public void rendoor(Player player, Stage stage) {
 		if(shooting) {
 			for(int i=0; i<projectiles.size(); i++) {

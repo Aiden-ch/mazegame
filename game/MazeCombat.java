@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.game.miscItems.*;
 
 //import java.util.ArrayList;
 
@@ -31,8 +30,6 @@ public class MazeCombat implements Screen {
 	//sprite stuff
 	SpriteBatch batch;
 	Texture bimg;
-	Texture bomb;
-	Image bombImage;
 	//enemy
 	Texture blob;
 	//camera
@@ -41,11 +38,7 @@ public class MazeCombat implements Screen {
 	Stage stage;
 	//player
 	Player player;
-	//shooting
-	Projectile bombProj;
 	CardHandler items = new CardHandler();
-	
-	Texture sword;
 	
 	float time = 0f;
 
@@ -58,30 +51,12 @@ public class MazeCombat implements Screen {
 	Scroller scroll = new Scroller();
 	//InputMultiplexer multiplexer = new InputMultiplexer();
 	
-	Texture arrow;
-	Image arrowImage;
-	Projectile arrowProj;
-	
-	Texture potion;
-	Image potionImg;
-	
-	Texture speedPotion;
-	Image speedPotionImg;
-	
 	Texture heartTxte;
 	Image heartImage;
 	
 	UIHandler UI;
 	
-	Texture bombLauncher;
-	Image bombLauncherImg;
-	
 	int numSummons = 10;
-	
-	Texture ruler;
-	Image rulerImg;
-	Texture rulerBlade;
-	Image rulerBladeImg;
 	
 	BossName trangle;
 	RangedEnemy triangle;
@@ -94,65 +69,15 @@ public class MazeCombat implements Screen {
 		batch = new SpriteBatch();
 		player = new Player();
 		
-		bomb = new Texture("projectiles/bomb.png");
-		bombProj = new Projectile(bomb, 10d, 15d, 0);
-		RangedItem bombCard = new RangedItem(bombProj, 4d, 3, 0, 1d, 3, 15);
-		
-		bombLauncher = new Texture("cards/bomblauncher.png");
-		bombLauncherImg = new Image(bombLauncher);
-		
-		items.addCard("Bomb", bombCard, bombLauncherImg);
-		
-//		arrow = new Texture("projectiles/arrow.png");
-//		arrowImage = new Image(arrow);
-//		arrowImage.setOrigin(arrow.getWidth()/2,arrow.getHeight()/2);
-//		arrowProj = new Projectile(arrow, arrowImage, 40d, 2d, 3);
-//		
-//		items.addItem("Arrow", arrowProj, 5);
-//		
-		sword = new Texture("melee/sword.png");
-		Melee swordMelee = new Melee(10.0, (float)Math.PI/2f, 15.0, 1.0, 5.0f, sword); 
-		Image swordImage = new Image(new Texture("cards/basicblade.png"));
-		items.addCard("Sword", swordMelee, swordImage);
-		
-		ruler = new Texture("melee/ruler.png");	
-		Melee rulerMelee = new Melee(1.0, (float)Math.PI, 10.0, 14.0, 5.0f, ruler); //smaller speed = faster
-		rulerBladeImg = new Image(new Texture("cards/ruler.png"));
-		items.addCard("Ruler Slash", rulerMelee, rulerBladeImg);
-		
-		potion = new Texture("misc/heartpotion.png");
-		Texture potionCard = new Texture("cards/heartpotion.png");
-		Misc potionMisc = new HealthPot(potion);
-		
-		items.addCard("Health Potion", potionMisc, new Image(potionCard));
-		
-		speedPotion = new Texture("misc/speedpotion.png");
-		speedPotionImg = new Image(new Texture("cards/speedpotion.png"));
-		Misc speedPotionMisc = new SpeedPot(speedPotion);
-		
-		items.addCard("Speed Potion", speedPotionMisc, speedPotionImg);
-		
-		Projectile crystalProj = new Projectile(new Texture("projectiles/crystal.png"), 15, 5, 2);
-		RangedItem crystalCard = new RangedItem(crystalProj, 8d, 5, 50, 0d, 15, 25);
-
-		items.addCard("Crystal", crystalCard, new Image(new Texture("cards/crystalgun.png")));
-		
-		Projectile thornProj = new Projectile(new Texture("projectiles/thorn.png"), 20, 10, 3);
-		RangedItem rifleCard = new RangedItem(thornProj, 5d, 2, 10, 0.9d, 25, 2);
-
-		items.addCard("Rifle", rifleCard, new Image(new Texture("cards/makeshiftblaster.png")));
-		
-		InventoryHandler.testing();
-		
 		Gdx.input.setInputProcessor(scroll);
 	
 		blob = new Texture("enemies/blob.png");
-		blobEnemy = new Enemy(blob, 15f, 2f, 2d);
+		blobEnemy = new Enemy(blob, 15f, 2f, 12d);
 		
-		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 50f, 3, 5);
+		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 150f, 3, 5);
 		
 		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 4, 5, 0 );
-		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 10f, 1, 5, bolt);
+		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 10f, 5, 5, bolt);
 		
 		bimg = new Texture("background.png");
 		
@@ -224,6 +149,7 @@ public class MazeCombat implements Screen {
         	EnemyHandler.spawnBoss(trangle);
         }
 		if(time % 50 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
+			EnemyHandler.spawn(triangle);
 			EnemyHandler.spawn(blobEnemy);
 			numSummons--;
 		}
@@ -237,7 +163,11 @@ public class MazeCombat implements Screen {
 		
 		//render and update enemies
 		for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
-			EnemyHandler.getEnemies().get(i).update(player, stage, i);			
+			Enemy temp = EnemyHandler.getEnemies().get(i);
+			temp.update(player, stage, i);
+			if(temp.getType() == 'r') {
+				temp.rendoor(player, stage);
+			}
 		}
 
 		//render player
@@ -290,16 +220,10 @@ public class MazeCombat implements Screen {
 
 	@Override
 	public void dispose() {
-		//potion.dispose();
-		bomb.dispose();
 		batch.dispose();
 		stage.dispose();
 		blob.dispose();
-		//sword.dispose();
-		//arrow.dispose();
-		//speedPotion.dispose();
 		heartTxte.dispose();
-		bombLauncher.dispose();
 	}
 
 }

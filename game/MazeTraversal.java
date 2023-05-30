@@ -103,8 +103,11 @@ public class MazeTraversal implements Screen {
 
 
 		mapState();
-		if(inInventory) {
+		if(Gdx.input.isKeyPressed(Input.Keys.T)) {
 			game.combatScreen();
+		}
+		if(inInventory) {
+			game.inventoryScreen();
 		} else if (inMap) {
 			//Gdx.graphics.setWindowedMode(1500, 1500);
 			font.getData().setScale(0.5f);
@@ -165,15 +168,12 @@ public class MazeTraversal implements Screen {
 		// See below for what true means.
 		//stage.getViewport().update(width, height, true);
 	}
-
+	
 	public static void mapState() {
 		int xVel = 0;
 		int yVel = 0;
 		if (Gdx.input.isKeyPressed(Input.Keys.I) && !inInventory && buffer <= 0f) {
 			inInventory = true;
-			buffer = 10f;
-		} else if (Gdx.input.isKeyPressed(Input.Keys.I) && inInventory && buffer <= 0f) {
-			inInventory = false;
 			buffer = 10f;
 		} else if ((Gdx.input.isKeyPressed(Input.Keys.M))) {
 			inMap = true;

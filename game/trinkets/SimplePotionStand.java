@@ -10,10 +10,10 @@ public class SimplePotionStand extends Trinket {
 	//health potion
 	//add potion card to hand every few seconds
 	public SimplePotionStand(Texture txte, Card card, float refreshTime) {
-		super(txte, card, refreshTime);
+		super(txte, card, refreshTime, "Simple Potion Stand");
 	}
 	public SimplePotionStand(Card card, float refreshTime) {
-		super(card, refreshTime);
+		super(card, refreshTime, "Simple Potion Stand");
 	}
 	
 	@Override

@@ -30,6 +30,9 @@ public class Enemy {
 	private char entype;
 	private Projectile proj;
 	
+	private double prevX;
+	private double prevY;
+	
 	public Enemy(Texture txte, float health, float maxSpeed, double damage) {
 		this.txte = txte;
 		this.health = health;
@@ -68,6 +71,9 @@ public class Enemy {
 					Math.min(Math.abs(acceleration * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x))), 
 							Math.abs(maxSpeed * Math.sin(Math.atan2(player.getYPos()-box.y, player.getXPos()-box.x)) - velY));
 
+			prevX = box.x;
+			prevY = box.y;
+			
 			this.box.x += velX;
 			this.box.y += velY;
 
@@ -76,6 +82,14 @@ public class Enemy {
 
 				knockback(-90f + 180f/(float)Math.PI * (float)(Math.atan2(box.y-player.getYPos(), box.x-player.getImage().getWidth()/2-player.getXPos())));
 			}
+//			for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
+//				if(getBox().overlaps(EnemyHandler.getEnemies(i).getBox()) && EnemyHandler.getEnemies(i).getBox() != getBox()) {
+//					//enemy collison
+//					box.x = (float)prevX;
+//					box.y = (float)prevY;
+//				}
+//			}
+			
 			
 			if(box.x < 0) box.x = 0;
 			if(box.x > Gdx.graphics.getWidth() - 64) box.x = (Gdx.graphics.getWidth() - 64);
@@ -87,7 +101,7 @@ public class Enemy {
 			stage.addActor(enImg);
 		}
 		
-		timer += 3.f;
+		tickTime();
 	}
 	
 	public ArrayList<EffectHandler> getEffects() {
@@ -131,7 +145,7 @@ public class Enemy {
 		return this.timer;
 	}
 	public void tickTime() {
-		this.timer += 1.5f;
+		this.timer += 0.5f;
 	}
 	public double getVelX() {
 		return this.velX;
@@ -161,6 +175,25 @@ public class Enemy {
 	}
 	public void setProj(Projectile proj) {
 		this.proj = proj;
+	}
+	public void takeDamage(double damage) {
+		this.health -= damage;
+	}
+	public void setPrevX(double x) {
+		this.prevX = x;
+	}
+	public void setPrevY(double y) {
+		this.prevY = y;
+	}
+	public double getPrevX() {
+		return this.prevX;
+	}
+	public double getPrevY() {
+		return this.prevY;
+	}
+	
+	public void rendoor(Player player, Stage stage) {
+		;
 	}
 	
 	public void takeDamage(double damage, float knockback, float angle) {

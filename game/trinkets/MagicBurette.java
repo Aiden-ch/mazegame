@@ -8,10 +8,10 @@ import com.mygdx.game.Trinket;
 
 public class MagicBurette extends Trinket {
 	public MagicBurette(Texture txte, Card card, float refreshTime) {
-		super(txte, card, refreshTime);
+		super(txte, card, refreshTime, "Magic Burette");
 	}
 	public MagicBurette(Card card, float refreshTime) {
-		super(card, refreshTime);
+		super(card, refreshTime, "Magic Burette");
 	}
 	
 	@Override

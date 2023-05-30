@@ -8,10 +8,10 @@ import com.mygdx.game.Trinket;
 
 public class BasicBlade extends Trinket {
 	public BasicBlade(Texture txte, Card item, float refreshTime) {
-		super(txte, item, refreshTime);
+		super(txte, item, refreshTime, "Basic Blade");
 	}
 	public BasicBlade(Card item, float refreshTime) {
-		super(item, refreshTime);
+		super(item, refreshTime, "Basic Blade");
 	}
 	
 	@Override
