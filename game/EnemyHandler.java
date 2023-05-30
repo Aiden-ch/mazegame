@@ -9,6 +9,7 @@ import java.lang.Math;
 public class EnemyHandler {
 	
 	private static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	static Enemy bossOnField;
 	
 	public static ArrayList<Enemy> getEnemies() {
 		return enemies;
@@ -61,6 +62,7 @@ public class EnemyHandler {
 		} else {
 			temp = new BossName((float)Math.random()*800, 480f, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());			
 		}
+		bossOnField = temp;
 		enemies.add(temp);
 		return temp.getImage();
 	}

@@ -8,10 +8,10 @@ import com.mygdx.game.Trinket;
 
 public class CrystalGun extends Trinket {
 	public CrystalGun(Texture txte, Card card, float refreshTime) {
-		super(txte, card, refreshTime);
+		super(txte, card, refreshTime, "Crystal Gun");
 	}
 	public CrystalGun(Card card, float refreshTime) {
-		super(card, refreshTime);
+		super(card, refreshTime, "Crystal Gun");
 	}
 	
 	@Override

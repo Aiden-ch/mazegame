@@ -12,16 +12,20 @@ public class Trinket {
 	private float refreshTime;
 	private float buffer = 0.0f;
 	
-	public Trinket(Texture txte, Card card, float refreshTime) {
+	private String name;
+	
+	public Trinket(Texture txte, Card card, float refreshTime, String name) {
 		trkImg = new Image(txte);
 		this.card = card;
 		this.refreshTime = refreshTime;
 		this.buffer = refreshTime;
+		this.name = name;
 	}
-	public Trinket(Card card, float refreshTime) {
+	public Trinket(Card card, float refreshTime, String anem) {
 		this.card = card;
 		this.refreshTime = refreshTime;
 		this.buffer = refreshTime;
+		this.name = anem;
 	}
 	
 	public Image getImage() {
@@ -29,6 +33,9 @@ public class Trinket {
 	}
 	public Card getCard() {
 		return this.card;
+	}
+	public String getName() {
+		return this.name;
 	}
 	public void setPrecedence(int num) {
 		this.perkPrecedence = num;

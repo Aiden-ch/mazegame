@@ -59,6 +59,23 @@ public class Card {
 		return type;
 	}
 	
+	//cooldown time 
+	public double getRefresh() {
+		if(rait != null) {
+			return rait.getReloadTick();
+		} else if(mel != null) {
+			return mel.getCoolDown();
+		}
+		return -1;
+	}
+	//ammo in mag for ranged items
+	public int getCharges() {
+		if(rait != null) {
+			return rait.getMag();
+		}
+		return -1;
+	}
+	
 	//card image
 	public Image getImage() {
 		return this.itemImg;

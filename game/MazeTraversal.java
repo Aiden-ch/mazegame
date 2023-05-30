@@ -80,12 +80,21 @@ public class MazeTraversal implements Screen {
 	}
 	
 	public void encounter() {
-		//System.out.println(encount);
-		if(encount) {
-			int encounter = (int)(Math.random() * 1000);
-			System.out.println(encounter);
-			if(encounter > 900) {
-				game.combatScreen();
+		int encounter = (int)(Math.random() * 1000);
+		if (encount) {
+			if (xPos > 20 && xPos < 38 && yPos > 20 && yPos < 38) return;
+			else if (yPos > 15 && yPos < 43 && yPos > 15 && yPos < 43) {
+				if(encounter > 990) {
+					game.combatScreen();
+				}
+			} else if (yPos > 10 && yPos < 48 && yPos > 10 && yPos < 48) {
+				if(encounter > 960) {
+					game.combatScreen();
+				}
+			} else {
+				if(encounter > 940) {
+					game.combatScreen();
+				}
 			}
 		}
 	}
@@ -103,8 +112,11 @@ public class MazeTraversal implements Screen {
 
 
 		mapState();
-		if(inInventory) {
+		if(Gdx.input.isKeyPressed(Input.Keys.T)) {
 			game.combatScreen();
+		}
+		if(inInventory) {
+			game.inventoryScreen();
 		} else if (inMap) {
 			//Gdx.graphics.setWindowedMode(1500, 1500);
 			font.getData().setScale(0.5f);
@@ -119,6 +131,28 @@ public class MazeTraversal implements Screen {
 			//Gdx.graphics.setWindowedMode(500, 500);
 			font.getData().setScale(2.5f);
 			if (maze[yPos][xPos] == 'e') return;
+			if (maze[yPos][xPos] == '$') {
+				maze[yPos][xPos] = ' ';
+				visibleMaze[yPos][xPos] = ' ';
+				
+				// add random item to inventory
+				if(InventoryHandler.collectedTrinkets.size() != InventoryHandler.trinkets.size()) {
+					int iter = (int)(Math.random() * (InventoryHandler.trinkets.size()-InventoryHandler.collectedTrinkets.size()));
+					for (int i = 0; i < InventoryHandler.trinkets.size(); i++) {
+						boolean temp = true;
+						for (int o = 0; o < InventoryHandler.collectedTrinkets.size(); o++) {
+							if (InventoryHandler.collectedTrinkets.get(o) == InventoryHandler.trinkets.get(i)) temp = false;
+						}
+						if (temp) iter--;
+						if (iter == -1) {
+							InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(i));
+							break;
+						}
+						// check whether trinket.get(i) is in collectedTrinkets
+					}
+//					InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get((int)(Math.random()*InventoryHandler.trinkets.size())));
+				}
+			}
 			//	       if (!inInventory) {
 			//	         if (!inFight) {
 			visibleMaze[yPos][xPos] = maze[yPos][xPos];
@@ -165,15 +199,12 @@ public class MazeTraversal implements Screen {
 		// See below for what true means.
 		//stage.getViewport().update(width, height, true);
 	}
-
+	
 	public static void mapState() {
 		int xVel = 0;
 		int yVel = 0;
 		if (Gdx.input.isKeyPressed(Input.Keys.I) && !inInventory && buffer <= 0f) {
 			inInventory = true;
-			buffer = 10f;
-		} else if (Gdx.input.isKeyPressed(Input.Keys.I) && inInventory && buffer <= 0f) {
-			inInventory = false;
 			buffer = 10f;
 		} else if ((Gdx.input.isKeyPressed(Input.Keys.M))) {
 			inMap = true;

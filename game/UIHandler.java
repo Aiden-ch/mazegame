@@ -14,6 +14,9 @@ public class UIHandler {
 	static Rectangle box;
 	static Rectangle cardbox;
 	
+	static Texture reticle;
+	static Texture bossHeart;
+	
 	static double tick = 0;
 	
 	public UIHandler() {
@@ -30,6 +33,8 @@ public class UIHandler {
 		cardbox.setSize(128, 128);
 		cardbox.setX(Gdx.graphics.getWidth() - 128f);
 		cardbox.setY(0f);
+		reticle = new Texture("UI/reticle.png");
+		bossHeart = new Texture("UI/bossHealth.png");
 	}
 	
 	public static void displayStats(Player player, SpriteBatch batch, Stage stage) {
@@ -50,11 +55,11 @@ public class UIHandler {
 		} else {
 			a2 = 1f;
 		}
-		for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
-			if(EnemyHandler.getEnemies(i).getBox().overlaps(cardbox)) {
-				a2 = 0.5f;
-			}
-		}
+//		for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
+//			if(EnemyHandler.getEnemies(i).getBox().overlaps(cardbox)) {
+//				a2 = 0.5f;
+//			}
+//		}
 		
 		if(CardHandler.getHand().size() > 0 && CardHandler.getHeld() != null) {
 			CardHandler.getHeld().getImage().setPosition(cardbox.x, cardbox.y);
@@ -63,6 +68,23 @@ public class UIHandler {
 		if(tick > 0) {
 			font.draw(batch, CardHandler.getHeld().getName(), Gdx.graphics.getWidth()-128-150, 20);
 		}
+		if(CardHandler.getHeld() != null) {
+			if(CardHandler.getHeld().getRefresh() > 0) {
+				String out = "cooldown: " + (int)CardHandler.getHeld().getRefresh();
+				font.draw(batch, out, Gdx.graphics.getWidth()-128-150, 70);
+			}
+			if(CardHandler.getHeld().getCharges() >= 0) {
+				String out = "Magazine: " + (int)CardHandler.getHeld().getCharges();
+				font.draw(batch, out, Gdx.graphics.getWidth()-128-150, 120);
+			}
+		}
+		if(EnemyHandler.bossOnField != null) {
+			String out = "Boss Health: " + (int)EnemyHandler.bossOnField.getHealth();
+			batch.draw(bossHeart, Gdx.graphics.getWidth()-150, Gdx.graphics.getHeight() - 100);
+			font.draw(batch, out, Gdx.graphics.getWidth()-150, Gdx.graphics.getHeight() - 70);
+		}
+		
+		batch.draw(reticle, Gdx.input.getX() - 32, Gdx.graphics.getHeight() - 32 - Gdx.input.getY());
 	}
 	public static void swapped() {
 		tick = 5;

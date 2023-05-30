@@ -9,10 +9,10 @@ public class BombLauncher extends Trinket {
 	//low count, low fire rate
 	//inventory item > adds bomb card
 	public BombLauncher(Texture txte, Card card, float refreshTime) {
-		super(txte, card, refreshTime);
+		super(txte, card, refreshTime, "Bomb Launcher");
 	}
 	public BombLauncher(Card card, float refreshTime) {
-		super(card, refreshTime);
+		super(card, refreshTime, "Bomb Launcher");
 	}
 	
 	@Override

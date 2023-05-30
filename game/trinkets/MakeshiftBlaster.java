@@ -8,10 +8,10 @@ import com.mygdx.game.Trinket;
 
 public class MakeshiftBlaster extends Trinket {
 	public MakeshiftBlaster(Texture txte, Card card, float refreshTime) {
-		super(txte, card, refreshTime);
+		super(txte, card, refreshTime, "Makeshift Blaster");
 	}
 	public MakeshiftBlaster(Card card, float refreshTime) {
-		super(card, refreshTime);
+		super(card, refreshTime, "Makeshift Blaster");
 	}
 	
 	@Override

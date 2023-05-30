@@ -35,6 +35,10 @@ public class Melee {
 		this.melImg.setOrigin((float)txte.getWidth()/2, 0);
 	}
 	
+	public double getCoolDown() {
+		return this.coolDown;
+	}
+	
 	public boolean update(Player player, Stage stage) {
 		//rotate the thing
 		if (swinging) {
