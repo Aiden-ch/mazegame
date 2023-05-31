@@ -157,11 +157,16 @@ public class MazeCombat implements Screen {
 		}
 
 		//player movement
-		player.move();
+		if(player.getHealth() > 0) {
+			player.move(gaeme.batch, stage);
+		}
 		
 		if(player.getEffects().size() > 0) {
 			EffectHandler.playerEffects(player);
 		}
+		
+		//particle effects
+		EffectHandler.display();
 		
 		//render and update enemies
 		for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
@@ -171,22 +176,13 @@ public class MazeCombat implements Screen {
 				temp.rendoor(player, stage);
 			}
 		}
-
-		//render player
-		if(player.getHealth() > 0) {
-			gaeme.batch.draw(player.player, player.getXPos(), player.getYPos());
-			//System.out.println(player.getXPos());
-			//System.out.println(player.getYPos());
-		} else {
-			//System.out.println("dead");
-		}
+		
+		//HUD
+		UIHandler.displayStats(player, gaeme.batch, stage);
 		
 		//for drawing
 		stage.act();
 		stage.draw();
-		
-		//HUD
-		UIHandler.displayStats(player, gaeme.batch, stage);
 		
 		//ending combat encounter
 		if(numSummons <= 0 && EnemyHandler.getEnemies().size() <= 0) {

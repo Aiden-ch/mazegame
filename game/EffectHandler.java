@@ -1,6 +1,60 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+
+//manage status effects on player and enemies
+//also manages visual effects
 public class EffectHandler {
+	
+	//to store effect that corresponds with tick ^^^
+	static ArrayList<EffectHandler> etp = new ArrayList<EffectHandler>();  //effect type pair
+	
+	private double xPos;
+	private double yPos;
+	private double radius;
+	
+	public double getXPos() {
+		return this.xPos;
+	}
+	public double getYPos() {
+		return this.yPos;
+	}
+	public double getRadius() {
+		return this.radius;
+	}
+	
+	//explosion effect
+	public EffectHandler(double xPos, double yPos, double radius) {
+		this.xPos = xPos;
+		this.yPos = yPos;
+		this.radius = radius;
+		this.effect = "explosion";
+		this.duration = 1;
+		etp.add(this);
+	}
+	public static void display() {
+		//System.out.println(etp.size());
+		for(int i=0; i<etp.size(); i++) {
+			EffectHandler temp = etp.get(i);
+			//System.out.println("explosion");
+			if(temp.getEffect().equals("explosion") && temp.getDuration() > 0) {
+				System.out.println("explosion");
+				ShapeRenderer sr = new ShapeRenderer();
+				sr.begin(ShapeType.Filled);
+				sr.setColor(255, 0, 0, 1);
+				sr.circle((float)temp.getXPos(), (float)temp.getYPos(), (float)temp.getRadius());
+				sr.end();
+				temp.setDuration(Math.max(0, temp.getDuration() - 0.2f));
+			} else if(temp.getDuration() == 0) {
+				etp.remove(i);
+				i--;
+			}
+		}
+	}
+	
 	private float duration;
 	private String effect;
 	

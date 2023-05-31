@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.miscItems.HealthPot;
 import com.mygdx.game.miscItems.SpeedPot;
+import com.mygdx.game.projItems.Bomb;
 
 
 public class MazeGame extends Game {
@@ -26,7 +27,7 @@ public class MazeGame extends Game {
 		
 		//initialize ALL trinkets and cards
 		Texture bomb = new Texture("projectiles/bomb.png");
-		Projectile bombProj = new Projectile(bomb, 10d, 15d, 0);
+		Projectile bombProj = new Bomb(bomb, 10d, 15d, 0, 65);
 		RangedItem bombCard = new RangedItem(bombProj, 4d, 3, 0, 1d, 3, 15);
 		
 		Texture bombLauncher = new Texture("cards/bomblauncher.png");
@@ -72,14 +73,14 @@ public class MazeGame extends Game {
 		CardHandler.addCard("Giant's Bane", giantMelee, new Image(new Texture("cards/giantsbane.png")));
 		
 		//starter ranged
-		Projectile arcaneProj = new Projectile(new Texture("projectiles/arcanebolt.png"), 17, 3, 1);
-		RangedItem bookCard = new RangedItem(arcaneProj, 3.5d, 1, 15, 0.9d, 2, 1.1);
+		Projectile arcaneProj = new Projectile(new Texture("projectiles/arcanebolt.png"), 17, 10, 1);
+		RangedItem bookCard = new RangedItem(arcaneProj, 3.5d, 1, 15, 0.9d, 1, 24.1);
 		CardHandler.addCard("Guide", bookCard, new Image(new Texture("cards/internspellguide.png")));
 		
 		//InventoryHandler.testing();
 		InventoryHandler.initTrinkets();
-		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(1));
-		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(1));
+		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(0));
+		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(0));
 		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(8));
 		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(8));
 		

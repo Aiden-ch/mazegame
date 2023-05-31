@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mygdx.game.projItems.Bomb;
 
 public class RangedItem {	
 	private double shootSpeed; //fire rate
@@ -62,7 +63,12 @@ public class RangedItem {
 
 					if(temp.getBox().overlaps(tempem.getBox())) {
 						tempem.takeDamage((float)temp.getDamage(), (float)temp.getKnockback(), enan);
-						destroy = true;
+						temp.hit();
+						if(temp.getPierce() > 0) {
+							temp.tickPierce();
+						} else {
+							destroy = true;
+						}
 					}
 				}
 
@@ -95,6 +101,16 @@ public class RangedItem {
 			double velY = Math.sin(angle);
 			Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
 					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
+			switch (projectile.getType()) {
+				case "r":
+					proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+							velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
+					break;
+				case "b":
+					proj = new Bomb(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+							velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback(), projectile.getRadius());
+					break;
+			}
 			Image projImage = new Image(this.projectile.getTexture());
 			projImage.setOrigin(projImage.getWidth()/2.0f, 0);
 			projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
