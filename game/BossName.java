@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import java.lang.Math;
 
@@ -16,6 +17,7 @@ public class BossName extends Enemy {
 	private Texture walk2;
 	private Texture jump;
 	//for animation
+	private Texture current;
 	private int alternate = 0;
 	private double anitick = 0.0;
 	
@@ -40,7 +42,7 @@ public class BossName extends Enemy {
 	}
 
 	@Override
-	public void update(Player player, Stage stage, int index) {
+	public void update(Player player, Stage stage, int index, Batch batch) {
 		if(getHealth() <= 0) {
 			getImage().remove();
 			EnemyHandler.getEnemies().remove(index);
@@ -57,17 +59,21 @@ public class BossName extends Enemy {
 					setImage(walk1);
 					alternate = 1;
 					anitick = 2;
+					current = walk1;
 				} else if(alternate == 1 && anitick == 0) {
 					setImage(walk2);
 					alternate = 0;
 					anitick = 2;
+					current = walk2;
 				}
 			}
 			
 			if(stunTick > 0) {
 				setImage(stunned);
+				current = stunned;
 			} else if(lunging) {
 				setImage(jump);
+				current = jump;
 			} else if (distance < 70) {
 				setVelX(getVelX() + Math.signum(getSpeed() * Math.cos(angle) - getVelX()) * 
 						Math.min(Math.abs(getAcceleration() * Math.cos(angle)), 
@@ -75,14 +81,14 @@ public class BossName extends Enemy {
 				setVelY(getVelY() + Math.signum(getSpeed() * Math.sin(angle) - getVelY()) * 
 						Math.min(Math.abs(getAcceleration() * Math.sin(angle)), 
 								Math.abs(getSpeed() * Math.sin(angle) - getVelY())));
-			} else if (distance < 90) {
+			} else if (distance < 160) {
 				setVelX(getVelX() + Math.signum(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (100 - distance)) - getVelX()) * 
 						Math.min(getAcceleration(), 
 								Math.abs(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (100 - distance)) - getVelX())));
 				setVelY(getVelY() + Math.signum(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (100 - distance)) - getVelY()) * 
 						Math.min(getAcceleration(), 
 								Math.abs(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (100 - distance)) - getVelY())));
-			} else if (distance < 125) {
+			} else if (distance < 225) {
 				if (lungeCoolDown == 0) {
 					setVelX(10 * Math.sin(90-angle));
 					setVelY(10 * Math.cos(90-angle));
@@ -136,9 +142,10 @@ public class BossName extends Enemy {
 			}
 			stunTick = Math.max(0, stunTick-0.2f);
 			
-			getImage().setPosition(getXPos(), getYPos());
+			//getImage().setPosition(getXPos(), getYPos());
+			batch.draw(current, getXPos(), getYPos());
 
-			stage.addActor(getImage());
+			//stage.addActor(getImage());
 			tickTime();
 		}
 	}

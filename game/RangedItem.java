@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.projItems.Bomb;
@@ -50,7 +51,7 @@ public class RangedItem {
 		return this.magazine;
 	}
 	
-	public void rendoor(Player player, Stage stage) {
+	public void rendoor(Player player, Stage stage, Batch batch) {
 		if(shooting) {
 			for(int i=0; i<projectiles.size(); i++) {
 				boolean destroy = false;
@@ -79,7 +80,8 @@ public class RangedItem {
 					projectiles.remove(i);
 					i--;
 				} else {
-					projectiles.get(i).move();
+					temp.move();
+					//batch.draw(temp.getTexture(), temp.getXPos(), temp.getYPos());
 					stage.addActor(projectiles.get(i).getImage());
 				}
 			}

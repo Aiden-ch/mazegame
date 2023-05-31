@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.Input;
@@ -39,7 +40,7 @@ public class Melee {
 		return this.coolDown;
 	}
 	
-	public boolean update(Player player, Stage stage) {
+	public boolean update(Player player, Stage stage, Batch batch) {
 		//rotate the thing
 		if (swinging) {
 			//hit detection

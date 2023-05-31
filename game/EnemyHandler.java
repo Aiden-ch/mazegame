@@ -37,13 +37,13 @@ public class EnemyHandler {
 			}
 		} else if(enemy.getType() == 'r') {
 			if(wall == 0) {
-				temp = new RangedEnemy(0f, (float)Math.random()*480, enemy.getHealth(), enemy.getSpeed(), enemy.getDamage(), enemy.getProj(), enemy.getTexture());
+				temp = new RangedEnemy(0f, (float)Math.random()*480, enemy.getHealth(), enemy.getSpeed(), enemy.getDamage(), enemy.getProj(), enemy.getTexture(), enemy.getCD());
 			} else if(wall == 1) {
-				temp = new RangedEnemy(800f, (float)Math.random()*480, enemy.getHealth(), enemy.getSpeed(), enemy.getDamage(), enemy.getProj(), enemy.getTexture());
+				temp = new RangedEnemy(800f, (float)Math.random()*480, enemy.getHealth(), enemy.getSpeed(), enemy.getDamage(), enemy.getProj(), enemy.getTexture(), enemy.getCD());
 			} else if(wall == 2) {
-				temp = new RangedEnemy((float)Math.random()*800, 0f, enemy.getHealth(), enemy.getSpeed(), enemy.getDamage(), enemy.getProj(), enemy.getTexture());
+				temp = new RangedEnemy((float)Math.random()*800, 0f, enemy.getHealth(), enemy.getSpeed(), enemy.getDamage(), enemy.getProj(), enemy.getTexture(), enemy.getCD());
 			} else {
-				temp = new RangedEnemy((float)Math.random()*800, 480f, enemy.getHealth(), enemy.getSpeed(), enemy.getDamage(), enemy.getProj(), enemy.getTexture());			
+				temp = new RangedEnemy((float)Math.random()*800, 480f, enemy.getHealth(), enemy.getSpeed(), enemy.getDamage(), enemy.getProj(), enemy.getTexture(), enemy.getCD());			
 			}
 		}
 		enemies.add(temp);

@@ -113,6 +113,5 @@ public class Projectile {
 	//effects and what not
 	public void hit() {
 		//extender
-		System.out.println("explosion");
 	}
 }
