@@ -44,7 +44,7 @@ public class EffectHandler {
 				System.out.println("explosion");
 				ShapeRenderer sr = new ShapeRenderer();
 				sr.begin(ShapeType.Filled);
-				sr.setColor(255, 0, 0, 1);
+				sr.setColor(1, 0.5f, 0, 1);
 				sr.circle((float)temp.getXPos(), (float)temp.getYPos(), (float)temp.getRadius());
 				sr.end();
 				temp.setDuration(Math.max(0, temp.getDuration() - 0.2f));

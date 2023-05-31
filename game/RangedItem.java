@@ -102,10 +102,6 @@ public class RangedItem {
 			Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
 					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
 			switch (projectile.getType()) {
-				case "r":
-					proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
-							velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
-					break;
 				case "b":
 					proj = new Bomb(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
 							velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback(), projectile.getRadius());

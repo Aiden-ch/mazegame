@@ -37,4 +37,7 @@ public class Bomb extends Projectile {
 			}
 		}
 	}
+	public double getRadius() {
+		return this.radius;
+	}
 }

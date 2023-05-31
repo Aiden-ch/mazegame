@@ -95,7 +95,7 @@ public class Projectile {
 		this.projImage = temp;
 	}
 	public double getRadius() {
-		return 0;
+		return 100;
 	}
 	
 	public void move() {
