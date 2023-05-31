@@ -163,7 +163,7 @@ public class Player {
 				   time++;
 			   }
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && blockTimer == 0 && !blocking && dashTimer == 0) {
+		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && blockTimer == 0 && !blocking && dashTimer == 0) {
 			blocking = true;
 			blockTimer = 1;
 		} else if((Gdx.input.isButtonPressed(Input.Buttons.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.V)) && dashTimer == 0 && !blocking) {
