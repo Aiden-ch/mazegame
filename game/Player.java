@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 //player character
@@ -37,6 +39,9 @@ public class Player {
 	String last = "up";
 	private Image pImg;
 	
+	private Texture block;
+	private Texture dash;
+	
 	public Player() {
 		health = 100d;
 		box = new Rectangle();
@@ -51,6 +56,9 @@ public class Player {
 		walkr2 = new Texture("intern/walkr2.png");
 		player = walkf1;
 		
+		block = new Texture("intern/block.png");
+		dash = new Texture("intern/speed.png");
+		
 		pImg = new Image(player);
 		pImg.setOrigin(player.getWidth()/2, player.getHeight()/2);
 		
@@ -60,45 +68,15 @@ public class Player {
 		box.height = pImg.getHeight()/2;
 	}
 	
-	public ArrayList<EffectHandler> getEffects() {
-		return this.effects;
-	}
-	public double getSpeed() {
-		return this.speed;
-	}
-	public void setSpeed(double speed) {
-		this.speed = speed;
-	}
+	private double dashTimer = 0;
+	private double blockTimer = 0;
 	
-	public float getXPos() {
-		return this.box.x;
-	}
-	public float getYPos() {
-		return this.box.y;
-	}
-	public Image getImage() {
-		return this.pImg;
-	}
-	public Rectangle getBox() {
-		return this.box;
-	}
-	public double getHealth() {
-		return this.health;
-	}
+	private boolean blocking = false;
 	
-	public void setXPos(float xPos) {
-		this.box.x = xPos;
-	}
-	public void setYPos(float yPos) {
-		this.box.y = yPos;
-	}
-	
-	public void addHealth(int health) {
-		this.health += health;
-	}
-	
-	public void move() {
+	public void move(Batch batch, Stage stage) {
 		invulTimer = Math.max(invulTimer-30/60f, 0);
+		dashTimer = Math.max(dashTimer-1/60f, 0);
+		blockTimer = Math.max(blockTimer-1/180f, 0);
 		
 		double xTarget = 0;
 		double yTarget = 0;
@@ -185,6 +163,14 @@ public class Player {
 				   time++;
 			   }
 		}
+		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && blockTimer == 0 && !blocking && dashTimer == 0) {
+			blocking = true;
+			blockTimer = 3;
+		} else if((Gdx.input.isButtonPressed(Input.Buttons.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SPACE)) && dashTimer == 0 && !blocking) {
+			dashTimer = 3;
+		}
+		
+		
 		if(!Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
 		   if(last.equals("down")) {
 			   player = walkf1;
@@ -219,7 +205,75 @@ public class Player {
 		pImg = new Image(player);
 		pImg.setOrigin(player.getWidth()/2, player.getHeight()/2);
 		pImg.setPosition(box.x, box.y);
+		batch.draw(player, box.x, box.y);
+		
+		if(dashTimer > 2.85) {
+			box.x += (velX * 1.5);
+			box.y += (velY * 1.5);
+			batch.draw(dash, box.x, box.y + 64);
+		}
+		if(blockTimer > 0.5) {
+			batch.draw(block, box.x, box.y);
+			velX = 0;
+			velY = 0;
+			invulTimer = 1;
+		} else if(blockTimer == 0 && blocking) {
+			invulTimer = 0;
+			blocking = false;
+		}
 	}
+	
+	public ArrayList<EffectHandler> getEffects() {
+		return this.effects;
+	}
+	public double getSpeed() {
+		return this.speed;
+	}
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+	
+	public float getXPos() {
+		return this.box.x;
+	}
+	public float getYPos() {
+		return this.box.y;
+	}
+	public Image getImage() {
+		return this.pImg;
+	}
+	public Rectangle getBox() {
+		return this.box;
+	}
+	public double getHealth() {
+		return this.health;
+	}
+	
+	public void setXPos(float xPos) {
+		this.box.x = xPos;
+	}
+	public void setYPos(float yPos) {
+		this.box.y = yPos;
+	}
+	
+	public void addHealth(int health) {
+		this.health += health;
+	}
+	
+	public double getDash() {
+		return this.dashTimer;
+	}
+	public double getBlock() {
+		return this.blockTimer;
+	}
+	public void setBlock(double time) {
+		this.blockTimer = time;
+	}
+	public void setDash(double time) {
+		this.dashTimer = time;
+	}
+	
+	
 	public float getVelX() {
 		return this.velX;
 	}
@@ -240,6 +294,7 @@ public class Player {
 	}
 	
 	public void takeDamage(double damage, float knockback, double angle) {
+		InventoryHandler.proc(damage, "gothit", this);
 		if (invulTimer == 0) {
 			this.health -= damage;
 			

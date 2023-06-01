@@ -20,6 +20,19 @@ public class Projectile {
 	private Image projImage;
 	private Texture projTexture;
 	
+	private String ptype = "r";
+	
+	public String getType() {
+		return this.ptype;
+	}
+	public void setType(String temp) {
+		this.ptype = temp;
+	}
+	
+	public double getRange() {
+		return 0;
+	}
+	
 	public Projectile(Texture txte, double speed, double damage, int pierce) {
 		projImage = new Image(txte);
 		projImage.setOrigin(txte.getWidth()/2, txte.getHeight()/2);
@@ -55,6 +68,9 @@ public class Projectile {
 	public double getPierce() {
 		return this.pierce;
 	}
+	public void tickPierce() {
+		this.pierce--;
+	}
 	public double getKnockback() {
 		return this.knockback;
 	}
@@ -67,6 +83,14 @@ public class Projectile {
 	public float getYPos() {
 		return this.box.y;
 	}
+	
+	public void setXPos(double x) {
+		this.box.x = (float)x;
+	}
+	public void setYPos(double y) {
+		this.box.y = (float)y;
+	}
+	
 	public double getSpeed() {
 		return this.speed;
 	}
@@ -81,6 +105,9 @@ public class Projectile {
 	}
 	public void setImage(Image temp) {
 		this.projImage = temp;
+	}
+	public double getRadius() {
+		return 100;
 	}
 	
 	public void move() {

@@ -79,20 +79,30 @@ public class MazeTraversal implements Screen {
 		}
 	}
 	
+	@Override
+	public void resize (int width, int height) {
+		// See below for what true means.
+	}
+	
+	static int level = 1;
+	
 	public void encounter() {
 		int encounter = (int)(Math.random() * 1000);
 		if (encount) {
 			if (xPos > 20 && xPos < 38 && yPos > 20 && yPos < 38) return;
 			else if (yPos > 15 && yPos < 43 && yPos > 15 && yPos < 43) {
 				if(encounter > 990) {
+					level = 3;
 					game.combatScreen();
 				}
 			} else if (yPos > 10 && yPos < 48 && yPos > 10 && yPos < 48) {
 				if(encounter > 960) {
+					level = 4;
 					game.combatScreen();
 				}
 			} else {
 				if(encounter > 940) {
+					level = 6;
 					game.combatScreen();
 				}
 			}
@@ -113,6 +123,7 @@ public class MazeTraversal implements Screen {
 
 		mapState();
 		if(Gdx.input.isKeyPressed(Input.Keys.T)) {
+			level = 6;
 			game.combatScreen();
 		}
 		if(inInventory) {
@@ -193,12 +204,6 @@ public class MazeTraversal implements Screen {
 	//	   private boolean inFight = false;
 
 	static String textForMaze = "";
-
-	@Override
-	public void resize (int width, int height) {
-		// See below for what true means.
-		//stage.getViewport().update(width, height, true);
-	}
 	
 	public static void mapState() {
 		int xVel = 0;

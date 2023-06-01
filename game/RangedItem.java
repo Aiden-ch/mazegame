@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mygdx.game.projItems.Bomb;
+import com.mygdx.game.projItems.Fire;
 
 public class RangedItem {	
 	private double shootSpeed; //fire rate
@@ -49,7 +52,7 @@ public class RangedItem {
 		return this.magazine;
 	}
 	
-	public void rendoor(Player player, Stage stage) {
+	public void rendoor(Player player, Stage stage, Batch batch) {
 		if(shooting) {
 			for(int i=0; i<projectiles.size(); i++) {
 				boolean destroy = false;
@@ -60,9 +63,20 @@ public class RangedItem {
 					Enemy tempem = EnemyHandler.getEnemies(j);
 					float enan = -90f + 180f/(float)Math.PI * (float)(Math.atan2(tempem.getYPos()-player.getYPos(), tempem.getXPos()-player.getImage().getWidth()/2-player.getXPos()));
 
-					if(temp.getBox().overlaps(tempem.getBox())) {
+					if(projectile.getType().equals("s")) {
+						if(temp.getRange() <= 0) {
+							destroy = true;
+						}
+					}
+					
+					if(temp.getBox().overlaps(tempem.getBox()) && !destroy) {
 						tempem.takeDamage((float)temp.getDamage(), (float)temp.getKnockback(), enan);
-						destroy = true;
+						temp.hit();
+						if(temp.getPierce() > 0) {
+							temp.tickPierce();
+						} else {
+							destroy = true;
+						}
 					}
 				}
 
@@ -73,7 +87,8 @@ public class RangedItem {
 					projectiles.remove(i);
 					i--;
 				} else {
-					projectiles.get(i).move();
+					temp.move();
+					//batch.draw(temp.getTexture(), temp.getXPos(), temp.getYPos());
 					stage.addActor(projectiles.get(i).getImage());
 				}
 			}
@@ -95,6 +110,16 @@ public class RangedItem {
 			double velY = Math.sin(angle);
 			Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
 					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
+			switch (projectile.getType()) {
+				case "b":
+					proj = new Bomb(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+							velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback(), projectile.getRadius());
+					break;
+				case "s":
+					proj = new Fire(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback(), projectile.getRange());
+					break;
+			}
 			Image projImage = new Image(this.projectile.getTexture());
 			projImage.setOrigin(projImage.getWidth()/2.0f, 0);
 			projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
@@ -115,10 +140,59 @@ public class RangedItem {
 			shooting = false;
 		}
 		if(magazine < magsize && reloadTick == 0) {
-			magazine++;
+			magazine+=maxShots;
 			reloadTick = maxReload;
 		}
 		
 		return false; //use to tick down uses on card
+	}
+	
+	public void update(Player player) {
+		tick = Math.max(tick - 0.2f, 0);
+		reloadTick = Math.max(reloadTick - 0.2f, 0);
+		if(volleying && currentShots < maxShots && shotTick == 0) {
+			currentShots++;
+			double spread = (Math.random()*maxSpread - maxSpread/2d);
+			double angle = spread*Math.PI/180d + Math.atan2(Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), 
+					Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos());
+			double velX = Math.cos(angle);
+			double velY = Math.sin(angle);
+			Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
+			switch (projectile.getType()) {
+				case "b":
+					proj = new Bomb(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+							velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback(), projectile.getRadius());
+					break;
+			}
+			Image projImage = new Image(this.projectile.getTexture());
+			projImage.setOrigin(projImage.getWidth()/2.0f, 0);
+			projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
+			proj.setImage(projImage);
+			projectiles.add(proj);
+			magazine--;
+			tick = shootSpeed;
+			shotTick = maxShotTime;
+			shooting = true;
+		} else if(currentShots >= maxShots) {
+			volleying = false;
+			currentShots = 0;
+		}
+		shotTick = Math.max(0, shotTick - 0.2);
+		
+		if(projectiles.size() == 0) {
+			shooting = false;
+		}
+		if(magazine < magsize && reloadTick == 0) {
+			magazine+=maxShots;
+			reloadTick = maxReload;
+		}
+	}
+	
+	public void setProj(Projectile proj) {
+		this.projectile = proj;
+	}
+	public Projectile getProj() {
+		return this.projectile;
 	}
 }

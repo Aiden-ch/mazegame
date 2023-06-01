@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -58,8 +59,9 @@ public class Enemy {
 		this.box.height = enImg.getHeight()/2;
 	}
 	
-	public void update(Player player, Stage stage, int index) {
+	public void update(Player player, Stage stage, int index, Batch batch) {
 		if(health <= 0) {
+			InventoryHandler.proc(-1, "kill", this);
 			enImg.remove();
 			EnemyHandler.getEnemies().remove(index);
 			index--;
@@ -82,13 +84,16 @@ public class Enemy {
 
 				knockback(-90f + 180f/(float)Math.PI * (float)(Math.atan2(box.y-player.getYPos(), box.x-player.getImage().getWidth()/2-player.getXPos())));
 			}
-//			for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
-//				if(getBox().overlaps(EnemyHandler.getEnemies(i).getBox()) && EnemyHandler.getEnemies(i).getBox() != getBox()) {
-//					//enemy collison
+			for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
+				if(getBox().overlaps(EnemyHandler.getEnemies(i).getBox()) && EnemyHandler.getEnemies(i).getBox() != getBox()) {
+					//enemy collison
 //					box.x = (float)prevX;
 //					box.y = (float)prevY;
-//				}
-//			}
+					enKnockback = 0.5f;
+					knockback(-90f + 180f/(float)Math.PI * (float)(Math.atan2(box.y-EnemyHandler.getEnemies(i).getYPos(), box.x-player.getImage().getWidth()/2-EnemyHandler.getEnemies(i).getXPos())));
+					enKnockback = 5;
+				}
+			}
 			
 			
 			if(box.x < 0) box.x = 0;
@@ -96,9 +101,10 @@ public class Enemy {
 			if(box.y < 0) box.y = 0;
 			if(box.y > Gdx.graphics.getHeight() - 64) box.y = (Gdx.graphics.getHeight() - 64);
 
-			enImg.setPosition(box.x, box.y);
+			//enImg.setPosition(box.x, box.y);
 
-			stage.addActor(enImg);
+			//stage.addActor(enImg);
+			batch.draw(this.txte, box.x, box.y);
 		}
 		
 		tickTime();
@@ -191,13 +197,19 @@ public class Enemy {
 	public double getPrevY() {
 		return this.prevY;
 	}
+	public void setKnockback(float temp) { 
+		enKnockback = temp;
+	}
+	public double getCD() {
+		return 0;
+	}
 	
 	public void rendoor(Player player, Stage stage) {
 		;
 	}
 	
 	public void takeDamage(double damage, float knockback, float angle) {
-		
+		InventoryHandler.proc(damage, "hit", this);
 		if(!tookDamage) {
 			this.health -= damage;
 

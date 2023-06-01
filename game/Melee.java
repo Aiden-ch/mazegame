@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.Input;
@@ -39,7 +40,7 @@ public class Melee {
 		return this.coolDown;
 	}
 	
-	public boolean update(Player player, Stage stage) {
+	public boolean update(Player player, Stage stage, Batch batch) {
 		//rotate the thing
 		if (swinging) {
 			//hit detection
@@ -72,6 +73,8 @@ public class Melee {
 			tick = 0;
 			coolDown = maxCoolDown;
 			
+			InventoryHandler.proc(-1, "swing", MazeCombat.player);
+			
 			stage.addActor(melImg);
 		}
 		
@@ -94,5 +97,17 @@ public class Melee {
 	public void setPosition(double xPos, double yPos) {
 		//update image
 		melImg.setPosition((float)xPos, (float)yPos);
+	}
+	public void setDamage(double num) {
+		this.damage = num;
+	}
+	public double getDamage() {
+		return this.damage;
+	}
+	public void setKnockback(double num) {
+		this.knockback = num;
+	}
+	public double getKnockback() {
+		return this.knockback;
 	}
 }

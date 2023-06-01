@@ -78,6 +78,20 @@ public class UIHandler {
 				font.draw(batch, out, Gdx.graphics.getWidth()-128-150, 120);
 			}
 		}
+		if(player.getBlock() > 0) {
+			String out = "Block: " + player.getBlock();
+			font.draw(batch, out, Gdx.graphics.getWidth()-128, 128+60);
+		} else {
+			String out = "Block: Ready";
+			font.draw(batch, out, Gdx.graphics.getWidth()-128, 128+60);
+		}
+		if(player.getDash() > 0) {
+			String out = "Dash: " + player.getDash();
+			font.draw(batch, out, Gdx.graphics.getWidth()-128, 128+30);
+		} else {
+			String out = "Dash: Ready";
+			font.draw(batch, out, Gdx.graphics.getWidth()-128, 128+30);
+		}
 		if(EnemyHandler.bossOnField != null) {
 			String out = "Boss Health: " + (int)EnemyHandler.bossOnField.getHealth();
 			batch.draw(bossHeart, Gdx.graphics.getWidth()-150, Gdx.graphics.getHeight() - 100);

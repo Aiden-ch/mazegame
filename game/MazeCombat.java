@@ -28,16 +28,16 @@ public class MazeCombat implements Screen {
 	static BitmapFont font = new BitmapFont();
 	
 	//sprite stuff
-	SpriteBatch batch;
+	public static SpriteBatch batch;
 	Texture bimg;
 	//enemy
 	Texture blob;
 	//camera
 	private OrthographicCamera camera;
 	//for moving
-	Stage stage;
+	public static Stage stage;
 	//player
-	Player player;
+	public static Player player;
 	CardHandler items = new CardHandler();
 	
 	float time = 0f;
@@ -56,7 +56,7 @@ public class MazeCombat implements Screen {
 	
 	UIHandler UI;
 	
-	int numSummons = 10;
+	int numSummons = 10 * MazeTraversal.level/6;
 	
 	BossName trangle;
 	RangedEnemy triangle;
@@ -72,12 +72,12 @@ public class MazeCombat implements Screen {
 		Gdx.input.setInputProcessor(scroll);
 	
 		blob = new Texture("enemies/blob.png");
-		blobEnemy = new Enemy(blob, 15f, 2f, 12d);
+		blobEnemy = new Enemy(blob, 35f, 2f, 5d);
 		
-		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 150f, 3, 5);
+		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 350f, 3, 5);
 		
-		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 8, 5, 0 );
-		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 10f, 5, 5, bolt);
+		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 8, 15, 0);
+		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 20f, 3, 15, bolt, 1.5);
 		
 		bimg = new Texture("background.png");
 		
@@ -90,6 +90,9 @@ public class MazeCombat implements Screen {
 		camera.position.x = Gdx.graphics.getWidth()/2; 
 	    camera.position.y = Gdx.graphics.getHeight()/2;
 		stage = new Stage(new ScreenViewport());
+		
+		//change numbers to check screen resolution
+		//resize(1920, 1080);
 	}
 
 	@Override
@@ -119,12 +122,11 @@ public class MazeCombat implements Screen {
 		gaeme.batch.draw(bimg, 0, 0);
 		
 		//handle initial hand
-		InventoryHandler.activate();
+		InventoryHandler.activate(player);
         if(time == 0.2f) {
         	CardHandler.chooseCard(CardHandler.checkHand(1));
         }
-        //TODO: handIndex change
-
+        
 		//attacking
 		//change items collected thing to connect to card draw and inventory
         if(CardHandler.getHand().size() > 0 && CardHandler.getHeld() != null) {
@@ -135,21 +137,21 @@ public class MazeCombat implements Screen {
         			CardHandler.consumeCard(CardHandler.getHeld());
         		}
         	} else if(CardHandler.getHeld().getType() == 's') {
-        		CardHandler.getHeld().getMel().update(player, stage);
+        		CardHandler.getHeld().getMel().update(player, stage, gaeme.batch);
         	}
         }
         for(int i=0; i<CardHandler.getALL().size(); i++) {
         	if(CardHandler.getALL().get(i).getType() == 'p') {
-        		CardHandler.getALL().get(i).getRanged().rendoor(player, stage);
+        		CardHandler.getALL().get(i).getRanged().rendoor(player, stage, gaeme.batch);
         	}
         }
 		
 		//enemy spawn
-        if(time <= 0.3f && Math.random() < 0.17d) {
+        if(time <= 0.3f && Math.random() < MazeTraversal.level*0.2d) {
         	EnemyHandler.spawnBoss(trangle);
         }
-		if(time % 50 <= 0.6 && numSummons > 0) { //change num after mod to change spawn speed
-			if(time % 100 <= 0.4) {
+		if(time > 1 && time % 50 * 5/MazeTraversal.level <= MazeTraversal.level*0.1 && numSummons > 0) { //change num after mod to change spawn speed
+			if(time % 25 * 5/MazeTraversal.level <= MazeTraversal.level*0.6) {
 				EnemyHandler.spawn(triangle);
 			}
 			EnemyHandler.spawn(blobEnemy);
@@ -157,36 +159,37 @@ public class MazeCombat implements Screen {
 		}
 
 		//player movement
-		player.move();
-		
-		if(player.getEffects().size() > 0) {
-			EffectHandler.playerEffects(player);
+		if(player.getHealth() > 0) {
+			player.move(gaeme.batch, stage);
+			if(player.getEffects().size() > 0) {
+				EffectHandler.playerEffects(player, gaeme.batch);
+			}
+		} else {
+			gaeme.deadScreen();
 		}
-		
+
 		//render and update enemies
 		for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
 			Enemy temp = EnemyHandler.getEnemies().get(i);
-			temp.update(player, stage, i);
+			temp.update(player, stage, i, gaeme.batch);
 			if(temp.getType() == 'r') {
 				temp.rendoor(player, stage);
 			}
+			if(temp.getEffects().size() > 0) {
+				EffectHandler.enemyEffects(temp, gaeme.batch);
+			}
 		}
-
-		//render player
-		if(player.getHealth() > 0) {
-			gaeme.batch.draw(player.player, player.getXPos(), player.getYPos());
-			//System.out.println(player.getXPos());
-			//System.out.println(player.getYPos());
-		} else {
-			//System.out.println("dead");
-		}
+		
+		//particle effects
+		EffectHandler.display();
+		
+		
+		//HUD
+		UIHandler.displayStats(player, gaeme.batch, stage);
 		
 		//for drawing
 		stage.act();
 		stage.draw();
-		
-		//HUD
-		UIHandler.displayStats(player, gaeme.batch, stage);
 		
 		//ending combat encounter
 		if(numSummons <= 0 && EnemyHandler.getEnemies().size() <= 0) {

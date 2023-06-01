@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -14,49 +15,55 @@ public class RangedEnemy extends Enemy {
 	double coolDown = 1;
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
-	public RangedEnemy(Texture txte, float health, float maxSpeed, double damage, Projectile proj) {
+	public RangedEnemy(Texture txte, float health, float maxSpeed, double damage, Projectile proj, double mCoolDown) {
 		super(txte, health, maxSpeed, damage);
 		super.setProj(proj);
 		setType('r');
+		this.maxCoolDown = mCoolDown;
 	}
 
-	public RangedEnemy(float xPos, float yPos, double health, double maxSpeed, double damage, Projectile proj, Texture txte) {
+	public RangedEnemy(float xPos, float yPos, double health, double maxSpeed, double damage, Projectile proj, Texture txte, double mCoolDown) {
 		super(xPos, yPos, health, maxSpeed, damage, txte);
 		super.setProj(proj);
 		setType('r');
+		this.maxCoolDown = mCoolDown;
 	}
 
-	public void update(Player player, Stage stage, int index) {
+	public void update(Player player, Stage stage, int index, Batch batch) {
 		if(getHealth() <= 0) {
 			getImage().remove();
 			EnemyHandler.getEnemies().remove(index);
 			index--;
+			for(int i=0; i<projectiles.size(); i++) {
+				projectiles.get(i).getImage().remove();
+			}
+			projectiles = new ArrayList<Projectile>();
 		} else {
 			double distance = Math.sqrt(Math.pow(getXPos() - player.getXPos(), 2) + Math.pow(getYPos() - player.getYPos(), 2));
 			double angle = Math.atan2(player.getYPos()-getYPos(), player.getXPos()-getXPos());
 
 			if (distance < 140) {
-				setVelX(getVelX() + Math.signum(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelX()) * 
+				setVelX(Math.max(-getSpeed(), Math.min(getSpeed(), getVelX() + Math.signum(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelX()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelX())));
-				setVelY(getVelY() + Math.signum(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelY()) * 
+								Math.abs(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelX())))));
+				setVelY(Math.max(-getSpeed(), Math.min(getSpeed(), getVelY() + Math.signum(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelY()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelY())));
+								Math.abs(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelY())))));
 			} else if (distance < 170) {
 				//       velX = 0;
-				setVelX(getVelX() - Math.signum(getVelX()) * 
+				setVelX(Math.max(-getSpeed(), Math.min(getSpeed(), getVelX() - Math.signum(getVelX()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(getVelX())));
-				setVelY(getVelY() - Math.signum(getVelY()) * 
+								Math.abs(getVelX())))));
+				setVelY(Math.max(-getSpeed(), Math.min(getSpeed(), getVelY() - Math.signum(getVelY()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(getVelY())));
+								Math.abs(getVelY())))));
 			} else {
-				setVelX(getVelX() + Math.signum(Math.cos(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelX()) * 
+				setVelX(Math.max(-getSpeed(), Math.min(getSpeed(), getVelX() + Math.signum(Math.cos(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelX()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(Math.cos(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelX())));
-				setVelY(getVelY() + Math.signum(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelY()) * 
+								Math.abs(Math.cos(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelX())))));
+				setVelY(Math.max(-getSpeed(), Math.min(getSpeed(), getVelY() + Math.signum(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelY()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelY())));
+								Math.abs(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelY())))));
 			}
 			
 			setPrevX(getXPos());
@@ -65,13 +72,14 @@ public class RangedEnemy extends Enemy {
 			setXPos((float)getXPos() + (float)getVelX());
 			setYPos((float)getYPos() + (float)getVelY());
 			
-//			for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
-//				if(getBox().overlaps(EnemyHandler.getEnemies(i).getBox()) && EnemyHandler.getEnemies(i).getBox() != getBox()) {
-//					//enemy collison
-//					setXPos((float)getPrevX());
-//					setYPos((float)getPrevY());
-//				}
-//			}
+			for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
+				if(getBox().overlaps(EnemyHandler.getEnemies(i).getBox()) && EnemyHandler.getEnemies(i).getBox() != getBox()) {
+					//enemy collison
+					setKnockback(0.5f);
+					knockback(-90f + 180f/(float)Math.PI * (float)(Math.atan2(getYPos()-EnemyHandler.getEnemies(i).getYPos(), getXPos()-player.getImage().getWidth()/2-EnemyHandler.getEnemies(i).getXPos())));
+					setKnockback(5);
+				}
+			}
 
 			shoot(player, stage);
 
@@ -80,9 +88,10 @@ public class RangedEnemy extends Enemy {
 			if(getYPos() < 0) setYPos(0);
 			if(getYPos() > Gdx.graphics.getHeight() - 64) setYPos(Gdx.graphics.getHeight() - 64);
 
-			getImage().setPosition(getXPos(), getYPos());
+			//getImage().setPosition(getXPos(), getYPos());
 
-			stage.addActor(getImage());
+			//stage.addActor(getImage());
+			batch.draw(getTexture(), getXPos(), getYPos());
 		}
 		tickTime();
 	}
@@ -111,6 +120,10 @@ public class RangedEnemy extends Enemy {
 				stage.addActor(projectiles.get(i).getImage());
 			}
 		}
+	}
+	
+	public double getCD() {
+		return this.maxCoolDown;
 	}
 	
 	public void shoot(Player player, Stage stage) {
