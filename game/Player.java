@@ -39,8 +39,8 @@ public class Player {
 	String last = "up";
 	private Image pImg;
 	
-	private Texture block;
-	private Texture dash;
+	public Texture block;
+	public Texture dash;
 	
 	public Player() {
 		health = 100d;
@@ -163,11 +163,11 @@ public class Player {
 				   time++;
 			   }
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && blockTimer == 0 && !blocking && dashTimer == 0) {
+		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && blockTimer == 0 && !blocking) {
 			blocking = true;
-			blockTimer = 1;
-		} else if((Gdx.input.isButtonPressed(Input.Buttons.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.V)) && dashTimer == 0 && !blocking) {
-			dashTimer = 1;
+			blockTimer = 3;
+		} else if((Gdx.input.isButtonPressed(Input.Buttons.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SPACE)) && dashTimer == 0) {
+			dashTimer = 3;
 		}
 		
 		
@@ -207,12 +207,12 @@ public class Player {
 		pImg.setPosition(box.x, box.y);
 		batch.draw(player, box.x, box.y);
 		
-		if(dashTimer > 0.85) {
+		if(dashTimer > 2.85) {
 			box.x += (velX * 1.5);
 			box.y += (velY * 1.5);
 			batch.draw(dash, box.x, box.y + 64);
 		}
-		if(blockTimer > 0.5) {
+		if(blockTimer > 2.5) {
 			batch.draw(block, box.x, box.y);
 			velX = 0;
 			velY = 0;
@@ -266,6 +266,12 @@ public class Player {
 	public double getBlock() {
 		return this.blockTimer;
 	}
+	public void setBlock(double time) {
+		this.blockTimer = time;
+	}
+	public void setDash(double time) {
+		this.dashTimer = time;
+	}
 	
 	
 	public float getVelX() {
@@ -288,6 +294,12 @@ public class Player {
 	}
 	
 	public void takeDamage(double damage, float knockback, double angle) {
+		if(knockback > 0 && damage > 0) {
+			InventoryHandler.proc(damage, "gothit", this);
+		} else {
+			InventoryHandler.proc(damage, "tapped", this);
+		}
+		
 		if (invulTimer == 0) {
 			this.health -= damage;
 			

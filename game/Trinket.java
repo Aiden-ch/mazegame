@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Trinket {
@@ -27,6 +28,9 @@ public class Trinket {
 		this.buffer = refreshTime;
 		this.name = anem;
 	}
+	public Trinket(String anem) {
+		this.name = anem;
+	}
 	
 	public Image getImage() {
 		return this.trkImg;
@@ -50,22 +54,33 @@ public class Trinket {
 		this.buffer = buffer;
 	}
 	public void tick() {
-		this.buffer += 0.2f; //change value to change speed of refreshes and procs
+		this.buffer = Math.max(buffer-0.2f, 0); //change value to change speed of refreshes and procs
 	}
 	public float getRefresh() {
 		return this.refreshTime;
 	}
 	
-	public void Perk() {
+	public void Perk(double num, String event, Player player) {
 		//extender
 	}
-	public void Passive() {
+	public void Perk(double num, String event, Enemy enemy) {
+		//extender
+	}
+	public void Passive(Batch batch) {
 		//extender
 	}
 	public void resupply() {
 		//extender
-		if(InventoryHandler.getStart()) {
-			CardHandler.getHand().add(new Card(getCard().getName(), getCard().getRanged(), getCard().getImage()));
-		} 
+	}
+	
+	private boolean willUpdate = false;
+	public void update() {
+		//extender
+	}
+	public void setUpdate(boolean temp) {
+		willUpdate = temp;
+	}
+	public boolean getUpdate() {
+		return this.willUpdate;
 	}
 }

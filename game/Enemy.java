@@ -22,6 +22,7 @@ public class Enemy {
 	private Image enImg;
 	
 	private double maxSpeed;
+	private double currentSpeed;
 	
 	private boolean tookDamage = false;
 	private double timer = 0.0f;
@@ -57,10 +58,13 @@ public class Enemy {
 		
 		this.box.width = enImg.getWidth()/2;
 		this.box.height = enImg.getHeight()/2;
+		
+		currentSpeed = maxSpeed;
 	}
 	
 	public void update(Player player, Stage stage, int index, Batch batch) {
 		if(health <= 0) {
+			InventoryHandler.proc(-1, "kill", this);
 			enImg.remove();
 			EnemyHandler.getEnemies().remove(index);
 			index--;
@@ -202,13 +206,19 @@ public class Enemy {
 	public double getCD() {
 		return 0;
 	}
+	public double getCurrentSpeed() {
+		return currentSpeed;
+	}
+	public void setCurrentSpeed(double num) {
+		currentSpeed = num;
+	}
 	
 	public void rendoor(Player player, Stage stage) {
 		;
 	}
 	
 	public void takeDamage(double damage, float knockback, float angle) {
-		
+		InventoryHandler.proc(damage, "hit", this);
 		if(!tookDamage) {
 			this.health -= damage;
 

@@ -73,6 +73,8 @@ public class Melee {
 			tick = 0;
 			coolDown = maxCoolDown;
 			
+			InventoryHandler.proc(-1, "swing", MazeCombat.player);
+			
 			stage.addActor(melImg);
 		}
 		
@@ -95,5 +97,17 @@ public class Melee {
 	public void setPosition(double xPos, double yPos) {
 		//update image
 		melImg.setPosition((float)xPos, (float)yPos);
+	}
+	public void setDamage(double num) {
+		this.damage = num;
+	}
+	public double getDamage() {
+		return this.damage;
+	}
+	public void setKnockback(double num) {
+		this.knockback = num;
+	}
+	public double getKnockback() {
+		return this.knockback;
 	}
 }

@@ -28,16 +28,16 @@ public class MazeCombat implements Screen {
 	static BitmapFont font = new BitmapFont();
 	
 	//sprite stuff
-	SpriteBatch batch;
+	public static SpriteBatch batch;
 	Texture bimg;
 	//enemy
 	Texture blob;
 	//camera
 	private OrthographicCamera camera;
 	//for moving
-	Stage stage;
+	public static Stage stage;
 	//player
-	Player player;
+	public static Player player;
 	CardHandler items = new CardHandler();
 	
 	float time = 0f;
@@ -56,7 +56,7 @@ public class MazeCombat implements Screen {
 	
 	UIHandler UI;
 	
-	int numSummons = 10 * MazeTraversal.level;
+	int numSummons = 10 * MazeTraversal.level/6;
 	
 	BossName trangle;
 	RangedEnemy triangle;
@@ -76,7 +76,7 @@ public class MazeCombat implements Screen {
 		
 		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 350f, 3, 5);
 		
-		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 8, 15, 0);
+		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 8, 15, 0, 0.5);
 		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 20f, 3, 15, bolt, 1.5);
 		
 		bimg = new Texture("background.png");
@@ -122,8 +122,9 @@ public class MazeCombat implements Screen {
 		gaeme.batch.draw(bimg, 0, 0);
 		
 		//handle initial hand
-		InventoryHandler.activate();
+		InventoryHandler.activate(gaeme.batch);
         if(time == 0.2f) {
+        	numSummons = 10 * MazeTraversal.level/6;
         	CardHandler.chooseCard(CardHandler.checkHand(1));
         }
         
@@ -149,10 +150,18 @@ public class MazeCombat implements Screen {
 		//enemy spawn
         if(time <= 0.3f && Math.random() < MazeTraversal.level*0.2d) {
         	EnemyHandler.spawnBoss(trangle);
+        	numSummons--;
         }
-		if(time > 10 && time % 50 * 5/MazeTraversal.level <= MazeTraversal.level*0.1 && numSummons > 0) { //change num after mod to change spawn speed
-			if(time % 25 * 5/MazeTraversal.level <= MazeTraversal.level*0.6) {
+		if(time > 1 && time % 50 <= MazeTraversal.level*0.1 && numSummons > 0) { //change num after mod to change spawn speed
+			if(time % 25 <= MazeTraversal.level*0.6) {
 				EnemyHandler.spawn(triangle);
+				numSummons--;
+			}
+			if(MazeTraversal.level >= 6 && time % 55 <= 0.2) {
+				if(EnemyHandler.bossOnField == null) {
+					EnemyHandler.spawn(trangle);
+					numSummons--;
+				}
 			}
 			EnemyHandler.spawn(blobEnemy);
 			numSummons--;
@@ -161,15 +170,13 @@ public class MazeCombat implements Screen {
 		//player movement
 		if(player.getHealth() > 0) {
 			player.move(gaeme.batch, stage);
+			if(player.getEffects().size() > 0) {
+				EffectHandler.playerEffects(player, gaeme.batch);
+			}
+		} else {
+			gaeme.deadScreen();
 		}
-		
-		if(player.getEffects().size() > 0) {
-			EffectHandler.playerEffects(player);
-		}
-		
-		//particle effects
-		EffectHandler.display();
-		
+
 		//render and update enemies
 		for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
 			Enemy temp = EnemyHandler.getEnemies().get(i);
@@ -177,7 +184,14 @@ public class MazeCombat implements Screen {
 			if(temp.getType() == 'r') {
 				temp.rendoor(player, stage);
 			}
+			if(temp.getEffects().size() > 0) {
+				EffectHandler.enemyEffects(temp, gaeme.batch);
+			}
 		}
+		
+		//particle effects
+		EffectHandler.display(gaeme.batch);
+		
 		
 		//HUD
 		UIHandler.displayStats(player, gaeme.batch, stage);
@@ -188,9 +202,9 @@ public class MazeCombat implements Screen {
 		
 		//ending combat encounter
 		if(numSummons <= 0 && EnemyHandler.getEnemies().size() <= 0) {
-			numSummons = 20;
 			dispose();
 			InventoryHandler.setStart(true);
+			CardHandler.reset();
 			gaeme.mazeScreen();
 		}
 		

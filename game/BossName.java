@@ -46,6 +46,7 @@ public class BossName extends Enemy {
 		if(getHealth() <= 0) {
 			getImage().remove();
 			EnemyHandler.getEnemies().remove(index);
+			EnemyHandler.bossOnField = null;
 		} else {
 			meleeCoolDown = Math.max(0, meleeCoolDown - 1/30d);
 			lungeCoolDown = Math.max(0, lungeCoolDown - 1d/60d);
@@ -81,14 +82,14 @@ public class BossName extends Enemy {
 				setVelY(getVelY() + Math.signum(getSpeed() * Math.sin(angle) - getVelY()) * 
 						Math.min(Math.abs(getAcceleration() * Math.sin(angle)), 
 								Math.abs(getSpeed() * Math.sin(angle) - getVelY())));
-			} else if (distance < 160) {
+			} else if (distance < 90) {
 				setVelX(getVelX() + Math.signum(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (100 - distance)) - getVelX()) * 
 						Math.min(getAcceleration(), 
 								Math.abs(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (100 - distance)) - getVelX())));
 				setVelY(getVelY() + Math.signum(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (100 - distance)) - getVelY()) * 
 						Math.min(getAcceleration(), 
 								Math.abs(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (100 - distance)) - getVelY())));
-			} else if (distance < 225) {
+			} else if (distance < 105) {
 				if (lungeCoolDown == 0) {
 					setVelX(10 * Math.sin(90-angle));
 					setVelY(10 * Math.cos(90-angle));

@@ -12,8 +12,8 @@ public class Bomb extends Projectile {
 	//blast radius
 	private double radius;
 	
-	public Bomb(Texture txte, double speed, double damage, int pierce, double radius) {
-		super(txte, speed, damage, pierce);
+	public Bomb(Texture txte, double speed, double damage, int pierce, double radius, double knockback) {
+		super(txte, speed, damage, pierce, knockback);
 		setType("b");
 		this.radius = radius;
 	}

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.game.projItems.Bomb;
+import com.mygdx.game.projItems.Fire;
 
 public class RangedItem {	
 	private double shootSpeed; //fire rate
@@ -16,7 +17,7 @@ public class RangedItem {
 	private double maxShotTime; //time between each shot at once 
 	private double shotTick;
 	private int magazine;
-	private int magsize;
+	private int magsize; //maximum ammo can be loaded
 	private double maxReload; //time takes to add new ammo
 	private double reloadTick;
 	private double tick;
@@ -47,8 +48,33 @@ public class RangedItem {
 	public double getReloadTick() {
 		return this.reloadTick;
 	}
+	public double getMaxReload() {
+		return this.maxReload;
+	}
+	public double getShootSpeed() {
+		return this.shootSpeed;
+	}
 	public int getMag() {
-		return this.magazine;
+		return this.magsize;
+	}
+	public void setMag(int num) {
+		this.magazine = num;
+		this.magsize = num;
+	}
+	public int getMaxShots() {
+		return this.maxShots;
+	}
+	public void setMaxShots(int num) {
+		this.maxShots = num;
+	}
+	public void setAccuracy(double spread) {
+		this.maxSpread = spread;
+	}
+	public void setShootSpeed(double speed) {
+		this.shootSpeed = speed;
+	}
+	public void setMaxReload(double reload) {
+		this.maxReload = reload;
 	}
 	
 	public void rendoor(Player player, Stage stage, Batch batch) {
@@ -62,7 +88,13 @@ public class RangedItem {
 					Enemy tempem = EnemyHandler.getEnemies(j);
 					float enan = -90f + 180f/(float)Math.PI * (float)(Math.atan2(tempem.getYPos()-player.getYPos(), tempem.getXPos()-player.getImage().getWidth()/2-player.getXPos()));
 
-					if(temp.getBox().overlaps(tempem.getBox())) {
+					if(projectile.getType().equals("s")) {
+						if(temp.getRange() <= 0) {
+							destroy = true;
+						}
+					}
+					
+					if(temp.getBox().overlaps(tempem.getBox()) && !destroy) {
 						tempem.takeDamage((float)temp.getDamage(), (float)temp.getKnockback(), enan);
 						temp.hit();
 						if(temp.getPierce() > 0) {
@@ -108,6 +140,10 @@ public class RangedItem {
 					proj = new Bomb(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
 							velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback(), projectile.getRadius());
 					break;
+				case "s":
+					proj = new Fire(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback(), projectile.getRange());
+					break;
 			}
 			Image projImage = new Image(this.projectile.getTexture());
 			projImage.setOrigin(projImage.getWidth()/2.0f, 0);
@@ -128,11 +164,60 @@ public class RangedItem {
 		if(projectiles.size() == 0) {
 			shooting = false;
 		}
-		if(magazine < magsize && reloadTick == 0) {
-			magazine++;
+		if(magazine < magsize && reloadTick == 0 && !volleying) {
+			magazine+=maxShots;
 			reloadTick = maxReload;
 		}
 		
 		return false; //use to tick down uses on card
+	}
+	
+	public void update(Player player) {
+		tick = Math.max(tick - 0.2f, 0);
+		reloadTick = Math.max(reloadTick - 0.2f, 0);
+		if(volleying && currentShots < maxShots && shotTick == 0) {
+			currentShots++;
+			double spread = (Math.random()*maxSpread - maxSpread/2d);
+			double angle = spread*Math.PI/180d + Math.atan2(Gdx.graphics.getHeight()-Gdx.input.getY()-player.getYPos(), 
+					Gdx.input.getX()-player.getImage().getWidth()/2-player.getXPos());
+			double velX = Math.cos(angle);
+			double velY = Math.sin(angle);
+			Projectile proj = new Projectile(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+					velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback());
+			switch (projectile.getType()) {
+				case "b":
+					proj = new Bomb(projectile.getTexture(), (float)player.getXPos(), (float)player.getYPos(),  
+							velX, velY, projectile.getSpeed(), projectile.getDamage(), projectile.getPierce(), projectile.getKnockback(), projectile.getRadius());
+					break;
+			}
+			Image projImage = new Image(this.projectile.getTexture());
+			projImage.setOrigin(projImage.getWidth()/2.0f, 0);
+			projImage.setRotation((float) (-90f + Math.atan2(proj.getVelocity().get(1), proj.getVelocity().get(0)) * 180f / (Math.PI)));
+			proj.setImage(projImage);
+			projectiles.add(proj);
+			magazine--;
+			tick = shootSpeed;
+			shotTick = maxShotTime;
+			shooting = true;
+		} else if(currentShots >= maxShots) {
+			volleying = false;
+			currentShots = 0;
+		}
+		shotTick = Math.max(0, shotTick - 0.2);
+		
+		if(projectiles.size() == 0) {
+			shooting = false;
+		}
+		if(magazine < magsize && reloadTick == 0) {
+			magazine+=maxShots;
+			reloadTick = maxReload;
+		}
+	}
+	
+	public void setProj(Projectile proj) {
+		this.projectile = proj;
+	}
+	public Projectile getProj() {
+		return this.projectile;
 	}
 }

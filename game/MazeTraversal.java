@@ -123,6 +123,7 @@ public class MazeTraversal implements Screen {
 
 		mapState();
 		if(Gdx.input.isKeyPressed(Input.Keys.T)) {
+			level = 6;
 			game.combatScreen();
 		}
 		if(inInventory) {

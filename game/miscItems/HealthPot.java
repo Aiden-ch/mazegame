@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mygdx.game.EffectHandler;
 import com.mygdx.game.Misc;
 import com.mygdx.game.Player;
 
@@ -23,8 +24,9 @@ public class HealthPot extends Misc {
 	public boolean consume(Player player) {
 		if(tick >= 3.0f) {
 			temp.setPosition(player.getXPos(), player.getYPos());
-			player.addHealth(10);
-			System.out.println("health: " + player.getHealth());
+			player.addHealth(20);
+			player.getEffects().add(new EffectHandler(2, "regen"));
+			//System.out.println("health: " + player.getHealth());
 			tick = 0;
 			return true;
 		} 

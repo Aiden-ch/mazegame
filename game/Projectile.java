@@ -29,7 +29,14 @@ public class Projectile {
 		this.ptype = temp;
 	}
 	
-	public Projectile(Texture txte, double speed, double damage, int pierce) {
+	public double getRange() {
+		return 0;
+	}
+	public void setRange(double num) {
+		;
+	}
+	
+	public Projectile(Texture txte, double speed, double damage, int pierce, double knockback) {
 		projImage = new Image(txte);
 		projImage.setOrigin(txte.getWidth()/2, txte.getHeight()/2);
 		this.projTexture = txte;
@@ -61,8 +68,14 @@ public class Projectile {
 	public double getDamage() {
 		return damage;
 	}
+	public void setDamage(double num) {
+		damage = num;
+	}
 	public double getPierce() {
 		return this.pierce;
+	}
+	public void setPierce(double num) {
+		pierce = num;
 	}
 	public void tickPierce() {
 		this.pierce--;
@@ -79,8 +92,19 @@ public class Projectile {
 	public float getYPos() {
 		return this.box.y;
 	}
+	
+	public void setXPos(double x) {
+		this.box.x = (float)x;
+	}
+	public void setYPos(double y) {
+		this.box.y = (float)y;
+	}
+	
 	public double getSpeed() {
 		return this.speed;
+	}
+	public void setSpeed(double num) {
+		this.speed = num;
 	}
 	public ArrayList<Double> getVelocity() {
 		return velocity;

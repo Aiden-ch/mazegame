@@ -25,6 +25,12 @@ public class CardHandler {
 		cardNum = 0;
 	}
 	
+	public static void reset() {
+		hand = new ArrayList<Card>();
+		held = null;
+		cardNum = 0;
+	}
+	
 	//Initialize all cards
 	public static void addCard(String name, RangedItem rait, Image img) {
 		Card raitCard = new Card(name, rait, img);
