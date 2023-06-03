@@ -129,6 +129,9 @@ public class Enemy {
 	public double getHealth() {
 		return this.health;
 	}
+	public void setHealth(double num) {
+		this.health = num;
+	}
 	public Texture getTexture() {
 		return this.txte;
 	}

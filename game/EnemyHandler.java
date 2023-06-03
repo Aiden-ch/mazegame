@@ -24,6 +24,7 @@ public class EnemyHandler {
 	//add theme parameter for different enemy types
 	public static Image spawn(Enemy enemy) {
 		int wall = (int)(Math.random()*4);
+		//if(MazeCombat.player.) maybe add more spawns when player clsoe to wall to discourage kiting
 		Enemy temp = null;
 		if(enemy.getType() == 'm') {
 			if(wall == 0) {
@@ -50,17 +51,33 @@ public class EnemyHandler {
 		return temp.getImage();
 	}
 	
-	public static Image spawnBoss(BossName boss) {
+	public static Image spawnBoss(GoldenGuardian boss) {
 		int wall = (int)(Math.random()*4);
 		Enemy temp;
 		if(wall == 0) {
-			temp = new BossName(0f, (float)Math.random()*480, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
+			temp = new GoldenGuardian(0f, (float)Math.random()*480, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
 		} else if(wall == 1) {
-			temp = new BossName(800f, (float)Math.random()*480, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
+			temp = new GoldenGuardian(800f, (float)Math.random()*480, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
 		} else if(wall == 2) {
-			temp = new BossName((float)Math.random()*800, 0f, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
+			temp = new GoldenGuardian((float)Math.random()*800, 0f, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
 		} else {
-			temp = new BossName((float)Math.random()*800, 480f, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());			
+			temp = new GoldenGuardian((float)Math.random()*800, 480f, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());			
+		}
+		bossOnField = temp;
+		enemies.add(temp);
+		return temp.getImage();
+	}
+	public static Image spawnBoss(InkShade boss) {
+		int wall = (int)(Math.random()*4);
+		Enemy temp;
+		if(wall == 0) {
+			temp = new InkShade(0f, (float)Math.random()*480, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
+		} else if(wall == 1) {
+			temp = new InkShade(800f, (float)Math.random()*480, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
+		} else if(wall == 2) {
+			temp = new InkShade((float)Math.random()*800, 0f, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());
+		} else {
+			temp = new InkShade((float)Math.random()*800, 480f, boss.getHealth(), boss.getSpeed(), boss.getDamage(), boss.getTexture());			
 		}
 		bossOnField = temp;
 		enemies.add(temp);

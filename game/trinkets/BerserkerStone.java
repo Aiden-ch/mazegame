@@ -16,7 +16,7 @@ public class BerserkerStone extends Trinket {
 	@Override
 	public void Perk(double num, String event, Player player) {
 		if(event.equals("gothit")) {
-			System.out.println("pouch");
+			//System.out.println("pouch");
 			player.takeDamage(num, 0, 0);
 		}
 	}

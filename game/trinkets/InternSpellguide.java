@@ -22,5 +22,8 @@ public class InternSpellguide extends Trinket {
 		if(InventoryHandler.getStart()) {
 			CardHandler.getHand().add(new Card(getCard().getName(), getCard().getRanged(), getCard().getImage()));
 		} 
+		if(CardHandler.getHeld() != null && !CardHandler.getHeld().getName().equals("Guide")) {
+			getCard().getRanged().reload();
+		}
 	}
 }

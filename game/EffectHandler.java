@@ -165,10 +165,12 @@ public class EffectHandler {
 				if(enemy.getEffects().get(i).getDuration() <= 0) {
 					enemy.getEffects().remove(i);
 					enemy.setCurrentSpeed(enemy.getSpeed());
+					enemy.setKnockback(5);
 					i--;
 				} else {
 					enemy.getEffects().get(i).setDuration(enemy.getEffects().get(i).getDuration() - 1f/60f);
 					enemy.setCurrentSpeed(0);
+					enemy.setKnockback(100);
 					batch.draw(new Texture("effects/stunned.png"), enemy.getXPos(), enemy.getYPos());
 				}
 				break;

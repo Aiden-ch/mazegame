@@ -96,13 +96,13 @@ public class MazeTraversal implements Screen {
 					game.combatScreen();
 				}
 			} else if (yPos > 10 && yPos < 48 && yPos > 10 && yPos < 48) {
-				if(encounter > 960) {
-					level = 4;
+				if(encounter > 970) {
+					level = 5;
 					game.combatScreen();
 				}
 			} else {
 				if(encounter > 940) {
-					level = 6;
+					level = 8;
 					game.combatScreen();
 				}
 			}
@@ -123,7 +123,7 @@ public class MazeTraversal implements Screen {
 
 		mapState();
 		if(Gdx.input.isKeyPressed(Input.Keys.T)) {
-			level = 6;
+			level = 11;
 			game.combatScreen();
 		}
 		if(inInventory) {

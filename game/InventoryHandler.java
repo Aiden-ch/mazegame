@@ -66,7 +66,7 @@ public class InventoryHandler implements Screen {
 		//initialize ALL cards
 		Texture bomb = new Texture("projectiles/bomb.png");
 		Projectile bombProj = new Bomb(bomb, 9d, 30d, 0, 85, 2);
-		RangedItem bombCard = new RangedItem(bombProj, 4d, 1, 0, 1d, 3, 25);
+		RangedItem bombCard = new RangedItem(bombProj, 4d, 1, 0, 1d, 3, 35);
 
 		Texture bombLauncher = new Texture("cards/bomblauncher.png");
 		Image bombLauncherImg = new Image(bombLauncher);
@@ -95,14 +95,12 @@ public class InventoryHandler implements Screen {
 
 		CardHandler.addCard("Speed Potion", speedPotionMisc, speedPotionImg);
 
-		//god gun
-		Projectile crystalProj = new Projectile(new Texture("projectiles/crystal.png"), 15, 8, 2, 0.5);
+		Projectile crystalProj = new Fire(new Texture("projectiles/crystal.png"), 15, 8, 2, 0.5, 180);
 		RangedItem crystalCard = new RangedItem(crystalProj, 8d, 7, 50, 0d, 49, 30.1);
 
 		CardHandler.addCard("Crystal", crystalCard, new Image(new Texture("cards/crystalgun.png")));
 
-		//god gun
-		Projectile thornProj = new Projectile(new Texture("projectiles/thorn.png"), 10, 7, 3, 0.8);
+		Projectile thornProj = new Fire(new Texture("projectiles/thorn.png"), 10, 7, 3, 0.8, 520);
 		RangedItem rifleCard = new RangedItem(thornProj, 0.5d, 2, 10, 0.9d, 36, 18.1);
 
 		CardHandler.addCard("Rifle", rifleCard, new Image(new Texture("cards/makeshiftblaster.png")));
@@ -111,7 +109,7 @@ public class InventoryHandler implements Screen {
 		CardHandler.addCard("Giant's Bane", giantMelee, new Image(new Texture("cards/giantsbane.png")));
 
 		//starter ranged
-		Projectile arcaneProj = new Projectile(new Texture("projectiles/arcanebolt.png"), 17, 3, 1, 0.2);
+		Projectile arcaneProj = new Fire(new Texture("projectiles/arcanebolt.png"), 17, 3, 1, 0.2, 800);
 		RangedItem bookCard = new RangedItem(arcaneProj, 4d, 1, 15, 0.9d, 1, 0.1);
 		CardHandler.addCard("Guide", bookCard, new Image(new Texture("cards/internspellguide.png")));
 
@@ -193,8 +191,8 @@ public class InventoryHandler implements Screen {
 		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(1));
 		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(8));
 		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(8));
-		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(9));
-		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(9));
+//		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(9));
+//		InventoryHandler.collectedTrinkets.add(InventoryHandler.trinkets.get(9));
 
 		//for testing
 		//		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(14));
@@ -297,7 +295,7 @@ public class InventoryHandler implements Screen {
 				}
 			}
 			for(int i=0; i<collectedTrinkets.size(); i++) {
-				if(mouseBox.overlaps(neBoxes.get(i)) && Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !removed) {
+				if(mouseBox.overlaps(neBoxes.get(i)) && Gdx.input.isButtonPressed(Input.Buttons.LEFT) && !removed  && activeTrinkets.size() < 6) {
 					boolean found = false;
 					for(int j=0; j<activeTrinkets.size(); j++) {
 						if(activeTrinkets.get(j).getName().equals(collectedTrinkets.get(i).getName())) {

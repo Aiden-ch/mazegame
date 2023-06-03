@@ -25,6 +25,9 @@ public class FrostGun extends Trinket {
 		if(InventoryHandler.getStart()) {
 			CardHandler.getHand().add(new Card(getCard().getName(), getCard().getRanged(), getCard().getImage()));
 		} 
+		if(CardHandler.getHeld() != null && !CardHandler.getHeld().getName().equals("Frost Gun")) {
+			getCard().getRanged().reload();
+		}
 	}
 	@Override
 	public void Perk(double num, String event, Enemy enemy) {

@@ -17,7 +17,7 @@ public class AncientShield extends Trinket {
 	
 	@Override
 	public void Passive(Batch batch) {
-		if(MazeCombat.player.getBlock() > 2.5) {
+		if(MazeCombat.player.getBlock() > 1.5) {
 			for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
 				if(EnemyHandler.getEnemies(i).getBox().overlaps(MazeCombat.player.getBox())) {
 					EnemyHandler.getEnemies(i).getEffects().add(new EffectHandler(2,"stunned"));

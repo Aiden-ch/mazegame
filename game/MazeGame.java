@@ -20,9 +20,9 @@ public class MazeGame extends Game {
 		//Gdx.graphics.setWindowedMode(800, 480);
 
 		InventoryHandler.testing();
-		//InventoryHandler.initTrinkets();
-		//InventoryHandler.initStarter();
-		
+//		InventoryHandler.initTrinkets();
+//		InventoryHandler.initStarter();
+//		
 		this.setScreen(new MazeTraversal(this));
 	}
 	

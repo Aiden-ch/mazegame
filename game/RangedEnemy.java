@@ -42,14 +42,14 @@ public class RangedEnemy extends Enemy {
 			double distance = Math.sqrt(Math.pow(getXPos() - player.getXPos(), 2) + Math.pow(getYPos() - player.getYPos(), 2));
 			double angle = Math.atan2(player.getYPos()-getYPos(), player.getXPos()-getXPos());
 
-			if (distance < 140) {
-				setVelX(Math.max(-getSpeed(), Math.min(getSpeed(), getVelX() + Math.signum(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelX()) * 
+			if (distance < 220) {
+				setVelX(Math.max(-getSpeed(), Math.min(getSpeed(), getVelX() + Math.signum(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (250 - distance)) - getVelX()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelX())))));
-				setVelY(Math.max(-getSpeed(), Math.min(getSpeed(), getVelY() + Math.signum(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelY()) * 
+								Math.abs(Math.cos(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (250 - distance)) - getVelX())))));
+				setVelY(Math.max(-getSpeed(), Math.min(getSpeed(), getVelY() + Math.signum(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (250 - distance)) - getVelY()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (125 - distance)) - getVelY())))));
-			} else if (distance < 170) {
+								Math.abs(Math.sin(angle + Math.PI) * Math.min(getSpeed(), 0.6 * (250 - distance)) - getVelY())))));
+			} else if (distance < 280) {
 				//       velX = 0;
 				setVelX(Math.max(-getSpeed(), Math.min(getSpeed(), getVelX() - Math.signum(getVelX()) * 
 						Math.min(getAcceleration(), 
@@ -58,12 +58,12 @@ public class RangedEnemy extends Enemy {
 						Math.min(getAcceleration(), 
 								Math.abs(getVelY())))));
 			} else {
-				setVelX(Math.max(-getSpeed(), Math.min(getSpeed(), getVelX() + Math.signum(Math.cos(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelX()) * 
+				setVelX(Math.max(-getSpeed(), Math.min(getSpeed(), getVelX() + Math.signum(Math.cos(angle) * Math.min(getSpeed(), 0.6 * (distance - 250)) - getVelX()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(Math.cos(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelX())))));
-				setVelY(Math.max(-getSpeed(), Math.min(getSpeed(), getVelY() + Math.signum(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelY()) * 
+								Math.abs(Math.cos(angle) * Math.min(getSpeed(), 0.6 * (distance - 250)) - getVelX())))));
+				setVelY(Math.max(-getSpeed(), Math.min(getSpeed(), getVelY() + Math.signum(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 250)) - getVelY()) * 
 						Math.min(getAcceleration(), 
-								Math.abs(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 125)) - getVelY())))));
+								Math.abs(Math.sin(angle) * Math.min(getSpeed(), 0.6 * (distance - 250)) - getVelY())))));
 			}
 			
 			setPrevX(getXPos());

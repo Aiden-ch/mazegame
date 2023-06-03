@@ -19,5 +19,8 @@ public class MakeshiftBlaster extends Trinket {
 		if(InventoryHandler.getStart()) {
 			CardHandler.getHand().add(new Card(getCard().getName(), getCard().getRanged(), getCard().getImage()));
 		} 
+		if(CardHandler.getHeld() != null && !CardHandler.getHeld().getName().equals("Rifle")) {
+			getCard().getRanged().reload();
+		}
 	}
 }

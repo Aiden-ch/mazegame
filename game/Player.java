@@ -15,6 +15,7 @@ public class Player {
 	//game features
 	private Rectangle box;
 	private double health;
+	private double maxHealth = 100;
 	private double speed = 5;
 	private float velX = 0;
 	private float velY = 0;
@@ -43,7 +44,7 @@ public class Player {
 	public Texture dash;
 	
 	public Player() {
-		health = 100d;
+		health = maxHealth;
 		box = new Rectangle();
 		//animation
 		walkf1 = new Texture("intern/walkf1.png");
@@ -72,6 +73,13 @@ public class Player {
 	private double blockTimer = 0;
 	
 	private boolean blocking = false;
+	
+	public void setMaxHealth(double num) {
+		this.maxHealth = num;
+	}
+	public double getMaxHealth() {
+		return this.maxHealth;
+	}
 	
 	public void move(Batch batch, Stage stage) {
 		invulTimer = Math.max(invulTimer-30/60f, 0);
@@ -165,7 +173,7 @@ public class Player {
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && blockTimer == 0 && !blocking) {
 			blocking = true;
-			blockTimer = 3;
+			blockTimer = 2;
 		} else if((Gdx.input.isButtonPressed(Input.Buttons.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SPACE)) && dashTimer == 0) {
 			dashTimer = 3;
 		}
@@ -212,10 +220,10 @@ public class Player {
 			box.y += (velY * 1.5);
 			batch.draw(dash, box.x, box.y + 64);
 		}
-		if(blockTimer > 2.5) {
+		if(blockTimer > 1.5) {
 			batch.draw(block, box.x, box.y);
-			velX = 0;
-			velY = 0;
+			velX *= 0.75;
+			velY *= 0.75;
 			invulTimer = 1;
 		} else if(blockTimer == 0 && blocking) {
 			invulTimer = 0;

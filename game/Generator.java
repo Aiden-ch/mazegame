@@ -10,7 +10,7 @@ public class Generator {
     private static char[][] start = {{' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
                                      {' ', '#', ' ', ' ', ' ', '#', ' '}, 
                                      {' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-                                     {' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+                                     {' ', ' ', '$', ' ', '$', ' ', ' '}, 
                                      {' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
                                      {' ', '#', ' ', ' ', ' ', '#', ' '}, 
                                      {' ', ' ', ' ', ' ', ' ', ' ', ' '}};
@@ -52,19 +52,19 @@ public class Generator {
             maze[curPoint.getY()][curPoint.getX()] = ' ';
             
             if (!visited[min(57, curPoint.getY() + 1)][curPoint.getX()]) {
-                if (Math.random() < 0.63 || maze[curPoint.getY() + 1][curPoint.getX()] == ' ') bfs.add(new Pair(curPoint.getX(), curPoint.getY() + 1));
+                if (Math.random() < 0.64 || maze[curPoint.getY() + 1][curPoint.getX()] == ' ') bfs.add(new Pair(curPoint.getX(), curPoint.getY() + 1));
                 visited[curPoint.getY() + 1][curPoint.getX()] = true;
             }
             if (!visited[max(1, curPoint.getY() - 1)][curPoint.getX()]) {
-                if (Math.random() < 0.63 || maze[curPoint.getY() - 1][curPoint.getX()] == ' ') bfs.add(new Pair(curPoint.getX(), curPoint.getY() - 1));
+                if (Math.random() < 0.64 || maze[curPoint.getY() - 1][curPoint.getX()] == ' ') bfs.add(new Pair(curPoint.getX(), curPoint.getY() - 1));
                 visited[curPoint.getY() - 1][curPoint.getX()] = true;
             }
             if (!visited[curPoint.getY()][min(57, curPoint.getX() + 1)]) {
-                if (Math.random() < 0.63 || maze[curPoint.getY()][curPoint.getX() + 1] == ' ') bfs.add(new Pair(curPoint.getX() + 1, curPoint.getY()));
+                if (Math.random() < 0.64 || maze[curPoint.getY()][curPoint.getX() + 1] == ' ') bfs.add(new Pair(curPoint.getX() + 1, curPoint.getY()));
                 visited[curPoint.getY()][curPoint.getX() + 1] = true;
             }
             if (!visited[curPoint.getY()][max(1, curPoint.getX() - 1)]) {
-                if (Math.random() < 0.6 || maze[curPoint.getY()][curPoint.getX() - 1] == ' ') bfs.add(new Pair(curPoint.getX() - 1, curPoint.getY()));
+                if (Math.random() < 0.64 || maze[curPoint.getY()][curPoint.getX() - 1] == ' ') bfs.add(new Pair(curPoint.getX() - 1, curPoint.getY()));
                 visited[curPoint.getY()][curPoint.getX() - 1] = true;
             }
         }
@@ -104,8 +104,9 @@ public class Generator {
         if (maze[curPoint.getY() - 1][curPoint.getX()] == '#') count++;
         if (maze[curPoint.getY()][curPoint.getX() + 1] == '#') count++;
         if (maze[curPoint.getY()][curPoint.getX() - 1] == '#') count++;
-        
+
         if (count == 3 && Math.random() < 0.25) maze[curPoint.getY()][curPoint.getX()] = '$';
+        if (count == 2 && Math.random() < 0.1) maze[curPoint.getY()][curPoint.getX()] = '$';
         
         if (maze[curPoint.getY() + 1][curPoint.getX()] == ' ') generateChests(new Pair(curPoint.getX(), curPoint.getY() + 1));
         if (maze[curPoint.getY() - 1][curPoint.getX()] == ' ') generateChests(new Pair(curPoint.getX(), curPoint.getY() - 1));

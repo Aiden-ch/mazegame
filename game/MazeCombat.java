@@ -58,8 +58,10 @@ public class MazeCombat implements Screen {
 	
 	int numSummons = 10 * MazeTraversal.level/6;
 	
-	BossName trangle;
+	GoldenGuardian trangle;
 	RangedEnemy triangle;
+	
+	InkShade shade;
 	
 	//create
 	public MazeCombat(MazeGame gaeme) {
@@ -72,12 +74,14 @@ public class MazeCombat implements Screen {
 		Gdx.input.setInputProcessor(scroll);
 	
 		blob = new Texture("enemies/blob.png");
-		blobEnemy = new Enemy(blob, 35f, 2f, 5d);
+		blobEnemy = new Enemy(blob, 35f, 1.3f, 5d);
 		
-		trangle = new BossName(new Texture("enemies/goldenguardian.png"), 350f, 3, 5);
+		trangle = new GoldenGuardian(new Texture("enemies/goldenguardian.png"), 350f, 2, 5);
 		
-		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 8, 15, 0, 0.5);
-		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 20f, 3, 15, bolt, 1.5);
+		Projectile bolt = new Projectile(new Texture("projectiles/arrow.png"), 8, 10, 0, 0.5);
+		triangle = new RangedEnemy(new Texture("enemies/triangle.png"), 25f, 1.7f, 1, bolt, 1.15);
+		
+		shade = new InkShade(new Texture("enemies/isl.png"), 200, 1, 30);
 		
 		bimg = new Texture("background.png");
 		
@@ -124,7 +128,9 @@ public class MazeCombat implements Screen {
 		//handle initial hand
 		InventoryHandler.activate(gaeme.batch);
         if(time == 0.2f) {
-        	numSummons = 10 * MazeTraversal.level/6;
+        	numSummons = 10 * MazeTraversal.level/2;
+        	blobEnemy.setHealth(35 * MazeTraversal.level/5);
+        	trangle.setHealth(350 * MazeTraversal.level/5);
         	CardHandler.chooseCard(CardHandler.checkHand(1));
         }
         
@@ -148,24 +154,35 @@ public class MazeCombat implements Screen {
         }
 		
 		//enemy spawn
-        if(time <= 0.3f && Math.random() < MazeTraversal.level*0.2d) {
-        	EnemyHandler.spawnBoss(trangle);
-        	numSummons--;
+        if(MazeTraversal.level < 11) {
+        	if(time <= 0.3f && Math.random() < MazeTraversal.level*0.04d) {
+        		double choice = Math.random();
+        		if(choice < 0.25) {
+        			EnemyHandler.spawnBoss(shade);
+        		} else {
+        			EnemyHandler.spawnBoss(trangle);
+        		}
+            	numSummons--;
+            }
+    		if(time > 1 && time % 50 <= MazeTraversal.level*0.1 && numSummons > 0) { //change num after mod to change spawn speed
+    			if(time % 25 <= MazeTraversal.level*0.2 && MazeTraversal.level >= 7) {
+    				EnemyHandler.spawn(triangle);
+    				numSummons--;
+    			}
+    			if(MazeTraversal.level >= 6 && time % 55 <= 0.2) {
+    				if(EnemyHandler.bossOnField == null) {
+    					EnemyHandler.spawn(trangle);
+    					numSummons--;
+    				}
+    			}
+    			EnemyHandler.spawn(blobEnemy);
+    			numSummons--;
+    		}
+        } else {
+        	if(time <= 0.3f) {
+        		EnemyHandler.spawnBoss(shade);
+        	}
         }
-		if(time > 1 && time % 50 <= MazeTraversal.level*0.1 && numSummons > 0) { //change num after mod to change spawn speed
-			if(time % 25 <= MazeTraversal.level*0.6) {
-				EnemyHandler.spawn(triangle);
-				numSummons--;
-			}
-			if(MazeTraversal.level >= 6 && time % 55 <= 0.2) {
-				if(EnemyHandler.bossOnField == null) {
-					EnemyHandler.spawn(trangle);
-					numSummons--;
-				}
-			}
-			EnemyHandler.spawn(blobEnemy);
-			numSummons--;
-		}
 
 		//player movement
 		if(player.getHealth() > 0) {
@@ -205,6 +222,16 @@ public class MazeCombat implements Screen {
 			dispose();
 			InventoryHandler.setStart(true);
 			CardHandler.reset();
+			for(int i=0; i<CardHandler.getHand().size(); i++) {
+				if(CardHandler.getHand().get(i).getType() == 'p') {
+					for(int j=0; j<CardHandler.getHand().get(i).getRanged().getProjs().size(); j++) {
+						CardHandler.getHand().get(i).getRanged().getProjs().get(j).getImage().remove();
+					}
+				}
+			}
+			if(player.getHealth() > player.getMaxHealth() - 20) {
+				player.setMaxHealth(player.getMaxHealth() + 20);
+			}
 			gaeme.mazeScreen();
 		}
 		

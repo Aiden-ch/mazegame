@@ -55,7 +55,7 @@ public class RangedItem {
 		return this.shootSpeed;
 	}
 	public int getMag() {
-		return this.magsize;
+		return this.magazine;
 	}
 	public void setMag(int num) {
 		this.magazine = num;
@@ -118,6 +118,11 @@ public class RangedItem {
 				}
 			}
 		}
+	}
+	
+	public void reload() {
+		tick = Math.max(tick - 0.2f, 0);
+		reloadTick = Math.max(reloadTick - 0.2f, 0);
 	}
 	
 	public boolean update(Player player, Stage stage) {
@@ -219,5 +224,8 @@ public class RangedItem {
 	}
 	public Projectile getProj() {
 		return this.projectile;
+	}
+	public ArrayList<Projectile> getProjs() {
+		return this.projectiles;
 	}
 }
