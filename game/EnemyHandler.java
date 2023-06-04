@@ -78,6 +78,8 @@ public class EnemyHandler {
 		return temp.getImage();
 	}
 	
+	public static char bosstype;
+	
 	public static Image spawnBoss(GoldenGuardian boss) {
 		int wall = (int)(Math.random()*4);
 		Enemy temp;
@@ -92,6 +94,7 @@ public class EnemyHandler {
 		}
 		bossOnField = temp;
 		enemies.add(temp);
+		bosstype = 'g';
 		return temp.getImage();
 	}
 	public static Image spawnBoss(InkShade boss) {
@@ -108,6 +111,7 @@ public class EnemyHandler {
 		}
 		bossOnField = temp;
 		enemies.add(temp);
+		bosstype = 'i';
 		return temp.getImage();
 	}
 }

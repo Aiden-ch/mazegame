@@ -104,6 +104,7 @@ public class RangedItem {
 						}
 						if(temp.getPierce() > 0) {
 							temp.tickPierce();
+							while(temp.getBox().overlaps(tempem.getBox())) temp.move();
 						} else {
 							destroy = true;
 						}

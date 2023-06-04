@@ -207,6 +207,10 @@ public class InventoryHandler implements Screen {
 		for(int i=0; i<trinkets.size(); i++) {
 			collectedTrinkets.add(trinkets.get(i));
 		}
+		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(19));
+		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(14));
+		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(11));
+		InventoryHandler.activeTrinkets.add(InventoryHandler.trinkets.get(8));
 	}
 
 	//trinket calls all handled here

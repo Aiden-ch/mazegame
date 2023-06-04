@@ -302,7 +302,7 @@ public class Player {
 	}
 	
 	public void takeDamage(double damage, float knockback, double angle) {
-		if(knockback > 0 && damage > 0) {
+		if((knockback > 0 && damage > 0) && !blocking) {
 			InventoryHandler.proc(damage, "gothit", this);
 		} else {
 			InventoryHandler.proc(damage, "tapped", this);

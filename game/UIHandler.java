@@ -38,23 +38,23 @@ public class UIHandler {
 	}
 	
 	public static void displayStats(Player player, SpriteBatch batch, Stage stage) {
-		float a;
-		float a2;
+//		float a;
+//		float a2;
 		String health = "\n" + (int)player.getHealth();
-		if(player.getBox().overlaps(box)) {
-			a = 0.5f;
-		} else {
-			a = 1f;
-		}
-		heartImage.draw(batch, a);
+//		if(player.getBox().overlaps(box)) {
+//			a = 0.5f;
+//		} else {
+//			a = 1f;
+//		}
+		heartImage.draw(batch, 1);
 		font.draw(batch, health, 45, Gdx.graphics.getHeight() - 30);
 		
 		tick = Math.max(0, tick - 0.2);
-		if(player.getBox().overlaps(cardbox)) {
-			a2 = 0.5f;
-		} else {
-			a2 = 1f;
-		}
+//		if(player.getBox().overlaps(cardbox)) {
+//			a2 = 0.5f;
+//		} else {
+//			a2 = 1f;
+//		}
 //		for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
 //			if(EnemyHandler.getEnemies(i).getBox().overlaps(cardbox)) {
 //				a2 = 0.5f;
@@ -63,7 +63,7 @@ public class UIHandler {
 		
 		if(CardHandler.getHand().size() > 0 && CardHandler.getHeld() != null) {
 			CardHandler.getHeld().getImage().setPosition(cardbox.x, cardbox.y);
-			CardHandler.getHeld().getImage().draw(batch, a2);
+			CardHandler.getHeld().getImage().draw(batch, 1);
 		}
 		if(tick > 0) {
 			font.draw(batch, CardHandler.getHeld().getName(), Gdx.graphics.getWidth()-128-150, 20);

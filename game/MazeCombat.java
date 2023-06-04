@@ -148,6 +148,9 @@ public class MazeCombat implements Screen {
         	trangle.setHealth(350 * MazeTraversal.level/5);
         	CardHandler.chooseCard(CardHandler.checkHand(1));
         }
+		
+		//HUD
+		UIHandler.displayStats(player, gaeme.batch, stage);
         
 		//attacking
 		//change items collected thing to connect to card draw and inventory
@@ -170,7 +173,7 @@ public class MazeCombat implements Screen {
 		
 		//enemy spawn
         if(MazeTraversal.level < 11) {
-        	if(time <= 0.3f && Math.random() < MazeTraversal.level*0.04d) {
+        	if(time <= 0.3f && Math.random() < MazeTraversal.level*0.04d && MazeTraversal.level > 6) {
         		double choice = Math.random();
         		if(choice < 0.35) {
         			EnemyHandler.spawnBoss(shade);
@@ -196,7 +199,8 @@ public class MazeCombat implements Screen {
     		}
         } else {
         	if(time <= 0.3f) {
-        		
+        		EnemyHandler.spawnBoss(trangle);
+        		EnemyHandler.spawnBoss(shade);
         		EnemyHandler.spawn(shieldo);
         		EnemyHandler.spawn(shieldo);
         		EnemyHandler.spawn(fae);
@@ -232,10 +236,6 @@ public class MazeCombat implements Screen {
 		
 		//particle effects
 		EffectHandler.display(gaeme.batch);
-		
-		
-		//HUD
-		UIHandler.displayStats(player, gaeme.batch, stage);
 		
 		//for drawing
 		stage.act();

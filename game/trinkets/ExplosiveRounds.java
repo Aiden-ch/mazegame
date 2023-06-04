@@ -22,7 +22,7 @@ public class ExplosiveRounds extends Trinket {
 			for(int i=0; i<EnemyHandler.getEnemies().size(); i++) {
 				Enemy tempem = EnemyHandler.getEnemies(i);
 				if(Intersector.overlaps(blast, tempem.getBox())) {
-					tempem.takeDamage(10);
+					tempem.takeDamage(5);
 				}
 			}
 		}

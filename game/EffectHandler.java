@@ -185,6 +185,38 @@ public class EffectHandler {
 					batch.draw(new Texture("effects/healing.png"), enemy.getXPos(), enemy.getYPos());
 				}
 				break;
+			case "inkystrength":
+				if(enemy.getEffects().get(i).getDuration() <= 0) {
+					enemy.setCurrentSpeed(enemy.getSpeed());
+					enemy.setDamage(enemy.getDamage() * 0.5);
+					if(enemy.getHealth() > 10) {
+						enemy.takeDamage(10);
+					}
+					enemy.getEffects().remove(i);
+					i--;
+				} else if (enemy.getEffects().get(i).getDuration() == 4.9) { 
+					enemy.setCurrentSpeed(enemy.getCurrentSpeed() * 2);
+					enemy.setDamage(enemy.getDamage() * 2);
+				} else {
+					enemy.getEffects().get(i).setDuration(enemy.getEffects().get(i).getDuration() - 1f/60f);
+					batch.draw(new Texture("effects/darkstrength.png"), enemy.getXPos(), enemy.getYPos() + 64);
+				}
+				break;
+			case "gold":
+				if(enemy.getEffects().get(i).getDuration() <= 0) {
+					enemy.setDamage(enemy.getDamage() / 1.5);
+					enemy.takeDamage(enemy.getHealth() / 2);
+					enemy.getEffects().remove(i);
+					i--;
+				} else if (enemy.getEffects().get(i).getDuration() == 100) { 
+					enemy.setDamage(enemy.getDamage() * 1.5);
+					enemy.setHealth(enemy.getHealth() * 2);
+					enemy.getEffects().get(i).setDuration(enemy.getEffects().get(i).getDuration() - 1f/60f);
+				} else {
+					enemy.getEffects().get(i).setDuration(enemy.getEffects().get(i).getDuration() - 1f/60f);
+					batch.draw(new Texture("effects/goldensplendor.png"), enemy.getXPos(), enemy.getYPos() + 32);
+				}
+				break;
 			//add more effects
 			}
 		}
