@@ -3,8 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-
-import enemies.Enemy;
+import com.mygdx.game.enemies.Enemy;
 
 public class Trinket {
 	//inventory things that give items to use in combat

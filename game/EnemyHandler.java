@@ -3,13 +3,12 @@ package com.mygdx.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-
-import enemies.Enemy;
-import enemies.GoldenGuardian;
-import enemies.Healer;
-import enemies.InkShade;
-import enemies.RangedEnemy;
-import enemies.Shielder;
+import com.mygdx.game.enemies.Enemy;
+import com.mygdx.game.enemies.GoldenGuardian;
+import com.mygdx.game.enemies.Healer;
+import com.mygdx.game.enemies.InkShade;
+import com.mygdx.game.enemies.RangedEnemy;
+import com.mygdx.game.enemies.Shielder;
 
 import java.lang.Math;
 

@@ -4,9 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.MazeCombat;
 import com.mygdx.game.RangedItem;
 import com.mygdx.game.Trinket;
+import com.mygdx.game.enemies.Enemy;
 import com.mygdx.game.projItems.Bomb;
-
-import enemies.Enemy;
 
 public class RocketReciprocator extends Trinket {
 	//launches rocket when player hits an enemy

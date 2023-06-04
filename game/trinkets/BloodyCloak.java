@@ -3,8 +3,7 @@ package com.mygdx.game.trinkets;
 import com.mygdx.game.EffectHandler;
 import com.mygdx.game.MazeCombat;
 import com.mygdx.game.Trinket;
-
-import enemies.Enemy;
+import com.mygdx.game.enemies.Enemy;
 
 public class BloodyCloak extends Trinket {
 	//resets dash after every kill

@@ -5,8 +5,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.mygdx.game.EffectHandler;
 import com.mygdx.game.EnemyHandler;
 import com.mygdx.game.Trinket;
-
-import enemies.Enemy;
+import com.mygdx.game.enemies.Enemy;
 
 public class ExplosiveRounds extends Trinket {
 	public ExplosiveRounds() {

@@ -10,13 +10,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import enemies.Enemy;
-import enemies.GoldenGuardian;
-import enemies.Healer;
-import enemies.InkShade;
-import enemies.RangedEnemy;
-import enemies.Shielder;
+import com.mygdx.game.enemies.Enemy;
+import com.mygdx.game.enemies.GoldenGuardian;
+import com.mygdx.game.enemies.Healer;
+import com.mygdx.game.enemies.InkShade;
+import com.mygdx.game.enemies.RangedEnemy;
+import com.mygdx.game.enemies.Shielder;
 
 //import java.util.ArrayList;
 

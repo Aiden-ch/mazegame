@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
-import enemies.Enemy;
+import com.mygdx.game.enemies.Enemy;
 
 //manage status effects on player and enemies
 //also manages visual effects

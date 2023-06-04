@@ -12,13 +12,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mygdx.game.enemies.Enemy;
 import com.mygdx.game.miscItems.HealthPot;
 import com.mygdx.game.miscItems.SpeedPot;
 import com.mygdx.game.projItems.Bomb;
 import com.mygdx.game.projItems.Fire;
 import com.mygdx.game.trinkets.*;
-
-import enemies.Enemy;
 
 public class InventoryHandler implements Screen {
 	static ArrayList<Trinket> activeTrinkets = new ArrayList<Trinket>(); //stores trinkets you are using

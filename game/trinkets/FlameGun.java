@@ -6,8 +6,7 @@ import com.mygdx.game.CardHandler;
 import com.mygdx.game.EffectHandler;
 import com.mygdx.game.InventoryHandler;
 import com.mygdx.game.Trinket;
-
-import enemies.Enemy;
+import com.mygdx.game.enemies.Enemy;
 
 public class FlameGun extends Trinket {
 

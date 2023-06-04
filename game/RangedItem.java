@@ -7,10 +7,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mygdx.game.enemies.Enemy;
 import com.mygdx.game.projItems.Bomb;
 import com.mygdx.game.projItems.Fire;
-
-import enemies.Enemy;
 
 public class RangedItem {	
 	private double shootSpeed; //fire rate
